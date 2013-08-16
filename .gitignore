@@ -9,5 +9,5 @@ local_settings.py
 .settings
 
 # OCGIS output directory
-ncpp/static/ncpp/ocgis
-static
+ncpp/static/ncpp/ocgis/
+static/
