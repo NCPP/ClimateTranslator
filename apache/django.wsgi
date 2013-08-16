@@ -1,6 +1,6 @@
 import sys
 
-sys.path.insert(0, '/usr/NCPP')
+sys.path.insert(0, '/usr/ClimateTranslator')
 import settings
 
 import django.core.management
