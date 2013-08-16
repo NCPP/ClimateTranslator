@@ -1,0 +1,56 @@
+{% extends "ncpp/common/base.html" %}
+
+{% block extrahead %}
+
+	<script language="javascript">
+	// FIXME: function to unescape HTML entities
+	String.prototype.unescapeHtml = function () {
+	    var temp = document.createElement("div");
+	    temp.innerHTML = this;
+	    var result = temp.childNodes[0].nodeValue;
+	    temp.removeChild(temp.firstChild);
+	    return result;
+	}
+	</script>
+
+{% endblock %}
+
+{% block main %}
+	
+  <!-- do not display anything unless user is authenticated -->
+  {% if user.is_authenticated %}
+		
+	<!-- body -->
+	<div class="box">
+		<h2>ClimateTranslator Workflow: Step {{ wizard.steps.step1 }} of {{ wizard.steps.count }}</h2>
+		Disclaimer: the ClimateTranslator and underlying OpenClimateGIS software are <i>beta</i> versions.
+		<form action="" method="post">
+			{% csrf_token %}
+			{{ wizard.management_form }}
+			
+			
+			{% if wizard.steps.current == '0' %}
+				{% include "ncpp/climate_translator/form0.html" %}
+			{% endif %}
+			
+			{% if wizard.steps.current == '1' %}
+				{% include "ncpp/climate_translator/form1.html" %}
+			{% endif %}
+						
+			{% if wizard.steps.current == '2' %}
+				{% include "ncpp/climate_translator/form2.html" %}
+			{% endif %}
+			
+			<br/>
+			{% if wizard.steps.prev %}
+				<button name="wizard_goto_step" type="submit" value="{{ wizard.steps.first }}">Restart</button>
+				<button name="wizard_goto_step" type="submit" value="{{ wizard.steps.prev }}">&lt; Back</button>
+			{% endif %}
+			<input type="submit" value="Next &gt;"/>
+		
+		</form>
+	</div>
+	
+	{% endif %}
+	
+{% endblock %}

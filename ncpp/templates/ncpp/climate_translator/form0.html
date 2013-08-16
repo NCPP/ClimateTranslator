@@ -1,0 +1,316 @@
+<!-- Form to select the dataset -->
+
+<!-- YUI libraries -->
+<script src="http://yui.yahooapis.com/2.9.0/build/yahoo/yahoo-min.js"></script>
+<script src="http://yui.yahooapis.com/2.9.0/build/event/event-min.js"></script>
+<script src="http://yui.yahooapis.com/2.9.0/build/connection/connection_core-min.js"></script>
+
+<!-- custom javascript code -->
+<script language="javascript">
+
+	// function to populate the form widget with the dataset choices
+	function populateDatasets() {
+
+		// dataset options
+		var options = new Array();
+		options[0] = ["","-- Please Select --"];
+		
+		// retrieve current dataset category selection
+		datasetCategorySelect = document.getElementById("id_0-dataset_category");
+		if (datasetCategorySelect.value!=null && datasetCategorySelect.value!='') {
+			
+			// FIXME: parse only once ?
+			var datasets = JSON.parse("{{datasets}}".unescapeHtml());			
+			jsonData = datasets[datasetCategorySelect.value];
+			for (var dt in jsonData) {
+				options.push( [dt, dt] );
+			}
+	
+		} 
+		
+		showOptions("id_0-dataset", options, [ "{{wizard.form.dataset.value}}" ]);
+		
+	}
+	
+	// function to populate the form widget with the variable choices
+	function populateVariables() {
+
+		// variable options
+		var options = new Array();
+		options[0] = ["","-- Please Select --"];
+		
+		// retrieve current selection for dataset category  and dataset
+		datasetCategorySelect = document.getElementById("id_0-dataset_category");
+		datasetSelect = document.getElementById("id_0-dataset");
+		if (   datasetCategorySelect.value!=null && datasetCategorySelect.value!='' 
+			&& datasetSelect.value!=null && datasetSelect.value!='') {
+			
+			var datasets = JSON.parse("{{datasets}}".unescapeHtml());			
+			jsonData = datasets[datasetCategorySelect.value][datasetSelect.value];
+			
+			if (jsonData['type']=='datasets') {
+				// datasets: must make variable selection
+				for (var variable in jsonData) {
+					if (variable != 'type') {
+						options.push( [variable, variable] )
+					}
+				}
+			} else if (jsonData['type']=='package') {
+				
+				// package: no variable selection necessary
+				options[0] = ["","-- No selection necessary --"];
+				
+				// but populate date/times from package information
+				datetime_start = jsonData["time_range"][0];
+				datetime_stop = jsonData["time_range"][1];
+				_populateDateTimes(datetime_start, datetime_stop);
+			
+			}
+	
+		} 
+				
+		showOptions("id_0-variable", options, [ "{{wizard.form.variable.value}}" ]);
+		
+	}
+		
+	// function to populate the geometries widget
+	function populateGeometries() {
+		
+		geometryTypeSelect = document.getElementById("id_0-geometry");
+	    if (geometryTypeSelect.value!=null && geometryTypeSelect.value!='') {
+	       
+	      // execute ajax call to retrieve the available geometries
+	      url = '/ncpp/climate_translator/geometries?type='+encodeURIComponent(geometryTypeSelect.value);
+	      var transaction = YAHOO.util.Connect.asyncRequest('GET', url, geometryCallback, null);
+	
+	    } else {
+	      
+	      // populate geometry widget with no options
+	      var options = new Array();
+	      options[0] = ["","-- Please Select --"];
+	      showOptions("id_0-geometry_id", options, []);
+	      
+	    }
+	
+	}
+	
+	// function to populate a select widget with options,
+	// and maintain any previous selection
+	function showOptions(widgetId, options, selectedValues) {
+
+		selectWidget = document.getElementById(widgetId);
+		selectWidget.options.length = 0;
+		for (var i = 0; i < options.length; i++) {
+			var option = new Option(options[i][1], options[i][0]); // label, value
+			for (var j=0; j<selectedValues.length; j++) {
+				if (options[i][0] == selectedValues[j]) option.selected = true;	
+			}
+			selectWidget.add( option );
+		}
+				
+	}
+		
+	// function to populate the start, stop times
+	function populateDateTimes() {
+			
+		// retrieve current selection for dataset category  and dataset
+		datasetCategorySelect = document.getElementById("id_0-dataset_category");
+		datasetSelect = document.getElementById("id_0-dataset");
+		variableSelect = document.getElementById("id_0-variable");
+		if (   datasetCategorySelect.value!=null && datasetCategorySelect.value!='' 
+			&& datasetSelect.value!=null && datasetSelect.value!=''
+			&& variableSelect.value!=null && variableSelect.value!='') {	
+			
+				var datasets = JSON.parse("{{datasets}}".unescapeHtml());
+				jsonData = jsonData = datasets[datasetCategorySelect.value][datasetSelect.value][variableSelect.value]["time_range"];		
+				if (jsonData!=null) { // type='datasets'
+					_populateDateTimes(jsonData[0], jsonData[1]);
+				}
+		
+		}
+
+	}
+	
+	// function to populate the start, stop times
+	function _populateDateTimes(datetime_start, datetime_stop) {
+		startDateTimeText = document.getElementById("id_0-datetime_start");
+		startDateTimeText.value = datetime_start;
+		stopDateTimeText = document.getElementById("id_0-datetime_stop");
+		stopDateTimeText.value = datetime_stop;
+	}
+	
+	// function to populate the geometry choices
+	function showGeometries(geometries) {
+
+		var options = new Array();
+		for (var i = 0; i < geometries.length; i++) {			
+			options.push( [geometries[i][1], geometries[i][0]] );
+		}
+		// must parse current selection of shapes (a concatenated string) into array of strings
+		var selectedValues = new Array();
+		var shapes = "{{wizard.form.geometry_id.value}}";
+		if (shapes!="None") {
+			shapes = shapes.unescapeHtml();
+			shapes = shapes.substring(1,shapes.length-1);
+			shapes = shapes.split(",");
+			for (var i=0; i<shapes.length; i++) {
+				// u'Arkansas'
+				shape =  shapes[i].trim();
+				selectedValues[i] = shape.substring(2, shape.length-1);
+			}
+		}
+		showOptions("id_0-geometry_id", options, selectedValues);
+
+	}
+	
+	// function called if Ajax request failed
+	var handleFailure = function(o) {
+		alert("An Error Occurred!"
+		     +"\nHTTP Status Code: "+o.status
+		     +"\nMessage: "+o.statusText);
+	}
+	
+	// function called if Ajax request to inspect dataset succeded
+	var handleGeometrySuccess = function(o) {
+
+		// parse JSON response into object		
+		var jsonResponse = eval('(' + o.responseText + ')');
+
+		// populate geometry choices
+		showGeometries(jsonResponse.geometries);
+
+	}
+
+	// function called after geometry Ajax request returns
+	var geometryCallback = {
+	  success: handleGeometrySuccess,
+	  failure: handleFailure,
+	  cache: false,
+	  timeout: 5000,
+	  argument: [],
+	};
+	
+	function init() {
+				
+		populateDatasets();
+		populateVariables();
+		populateGeometries();
+		
+	}
+	
+	// reload all widgets every time
+	window.onload = init;
+
+		
+</script>
+       
+<fieldset class="fieldset_box">
+	<legend class="fieldset_legend">Data Selection</legend>	
+	Please select a <i>dataset category</i>, a <i>dataset</i>, and a <i>variable</i>
+	<br/>(when selecting a <i>dataset package</i>, a <i>variable</i> selection is not necessary).
+	<p/>&nbsp;
+	
+	<table class="horizontalTable">
+		<tr>
+			<th>Dataset Category</th>
+			<td>{{ wizard.form.dataset_category }}
+				<br/>&nbsp;<span class="error">{{ wizard.form.dataset_category.errors }}</span></td>
+		</tr>
+		<tr>
+			<th>Dataset</th>
+			<td>{{ wizard.form.dataset }}
+				<br/>&nbsp;<span class="error">{{ wizard.form.dataset.errors }}</span></td>
+		</tr>
+		<tr>
+			<th>Variable</th>
+			<td>{{ wizard.form.variable }}
+				<br/>&nbsp;<span class="error">{{ wizard.form.variable.errors }}</span></td>
+		</tr>
+	</table>
+</fieldset>
+
+<fieldset class="fieldset_box">
+	<legend class="fieldset_legend">Geo-Spatial Selection</legend>	
+	Optionally, you may select either a <i>shape</i> geometry, a <i>bounding box</i>, or a <i>point</i>.
+	<br/>If no selection is made,the full dataset geo-spatial extent will be processed.
+	<p/>&nbsp;
+	
+	<table class="horizontalTable">
+		<tr>
+			<th>Shape:</th>
+			<td>Type:</td>
+			<td>{{ wizard.form.geometry }}</td>
+			<td>Geometry:</td>
+			<td style="width:100%; text-align:left;"> {{ wizard.form.geometry_id }}
+				<br/><span class="error">{{ wizard.form.geometry_id.errors }}</span>
+			</td>
+		</tr>
+		<tr>
+			<th nowrap="nowrap">Bounding Box:</th>
+			<td colspan="4" nowrap="nowrap">
+				Latitude min: {{ wizard.form.latmin }} max: {{ wizard.form.latmax }}
+				Longitude min: {{ wizard.form.lonmin }} max: {{ wizard.form.lonmax }}
+			</td>	
+		</tr>
+		<tr>
+			<td></td>
+			<td colspan="4"><span class="error">{{ wizard.form.latmin.errors }}</span>
+							<span class="error">{{ wizard.form.latmax.errors }}</span>
+							<span class="error">{{ wizard.form.lonmin.errors }}</span>
+							<span class="error">{{ wizard.form.lonmax.errors }}</span>
+			</td>
+		</tr>
+		<tr>
+			<th>Point:</th>
+			<td colspan="4">Latitude: {{ wizard.form.lat }}
+							Longitude: {{ wizard.form.lon }}
+						<br/><span class="error">{{ wizard.form.geometry.errors }}</span>
+			</td>	
+		</tr>
+		<tr>
+			<td></td>
+			<td colspan="4"><span class="error">{{ wizard.form.lat.errors }}</span>
+							<span class="error">{{ wizard.form.lon.errors }}</span>
+			</td>
+		</tr>
+		
+	</table>
+</fieldset>
+
+<fieldset class="fieldset_box">
+	<legend class="fieldset_legend">Temporal Selection</legend>
+	Optionally, you may specify a <i>time range</i> (i.e. a start and stop time), 
+	and/or a <i>time selection</i> (one or more months, and/or one or more years).
+	If both are specified, the <i>time range</i> must contain the <i>time selection</i>.
+	<br/>If neither <i>time range</i> or <i>time selection</i> is specified,the full dataset temporal extent will be processed.
+	<p/>&nbsp;
+	
+	<table class="horizontalTable">
+		<tr>
+			<th>Time Range: Start</th>
+			<td>
+				{{ wizard.form.datetime_start }} <b>Stop</b> {{ wizard.form.datetime_stop }} &nbsp; [Format: YYYY-MM-DD HH:MM:SS]
+				<br/>
+				<span class="error">{{ wizard.form.datetime_start.errors }} &nbsp; {{ wizard.form.datetime_stop.errors }}
+			</td>
+		</tr>
+		<tr>
+			<th>Time Selection: Months</th>
+			<td nowrap="nowrap">
+			{% for box in wizard.form.timeregion_month %}
+				{{ box }}
+			{% endfor %}
+			</td>
+		</tr>
+		<tr>
+			<th nowrap="nowrap">Time Selection: Years</th>
+			<td>{{ wizard.form.timeregion_year }}
+				&nbsp;[Format: YYYY, YYYY, ... or YYYY-YYYY]
+			</td>
+		</tr>
+		<tr>
+			<th></th>
+			<td><span class="error">{{ wizard.form.timeregion_year.errors }}</span></td>
+		</tr>
+	</table>
+</fieldset>

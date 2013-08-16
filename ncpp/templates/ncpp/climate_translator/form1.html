@@ -1,0 +1,163 @@
+<!-- Form to select the dataset -->
+
+<!-- custom javascript code -->
+<script language="javascript">
+
+	function populateParameters() {
+		
+		// parse calculations JSON from server
+		calculations = JSON.parse("{{calculations}}".unescapeHtml());
+		
+		calcSelect = document.getElementById("id_1-calc");
+		var html1 = ""	
+		var html2 = ""
+		if (calcSelect.value!=null && calcSelect.value!='') {
+		
+			// update calculation description					
+			var calc = calculations[calcSelect.value]
+			calcDescription = document.getElementById("calcDescription")
+			for (i=0; i<calc["description"].length; i++) {
+				if (i==0) html1 += "<b>"+calc["description"][i] +"</b></br>";
+				else html1 += calc["description"][i] +"</br>";
+			}
+		
+			// update calculation parameters
+			// parameter 1: <input id="id_1-par1" type="text" name="1-par1" size="6" />			
+			calcParameters = document.getElementById("calcParameters");
+			if (calc["keywords"]!=null) {
+				html2 += "<div style='float:left'><table>"
+				for (var i=0; i<calc["keywords"].length; i++) {					
+					var keyword = calc["keywords"][i];
+					var name = keyword["name"];
+					var type = keyword["type"];
+					var values = keyword["values"];
+					
+					html2 += "<tr>";
+					if (i==0) html2 += "<td>Parameters:</td>";
+					else html2 += "<td>&nbsp;</td>";
+					html2 += "<th>"+name+":</th>"
+					var j = i+1;
+					var value = "";
+					var errors = "";
+					// only show previous values, errors if calc selection hasn't changed
+					if (calcSelect.value=='{{ wizard.form.calc.value }}') {
+					    if (j==1) {
+					    	 value = '{{ wizard.form.par1.value }}';
+					    	 errors = '{{ wizard.form.par1.errors }}';
+					    } else if (j==2) {
+					    	value = '{{ wizard.form.par2.value }}';
+					    	errors = '{{ wizard.form.par2.errors }}';
+					    } else if (j==3) {
+					    	value = '{{ wizard.form.par3.value }}';
+					    	errors = '{{ wizard.form.par3.errors }}';
+						}
+					}
+					if (values) {
+						// use select widget						
+						html2 += '<td><select id="id_1-par'+j+'" name="1-par'+j+'">';
+						for (var k=0; k<values.length; k++) {
+							var selected = "";
+							if (values[k]==value) selected = ' selected="selected"';
+							html2 += '<option value="'+values[k]+'"'+selected+'>'+values[k]+'</option>';
+						}
+						html2 += '</select></td>';
+					} else {
+						// use text widget
+						html2 += '<td><input id="id_1-par'+j+'" type="text" name="1-par'+j+'" size="6" value="'+value+'"/></td>';
+					}
+					html2 += '<td><span class="error">'+errors+'</span>';
+					html2 += "</tr>"
+				}
+				html2 += "</table></div>"
+			}
+		
+		} // calcultaion != None
+		
+		calcDescription.innerHTML = html1;
+		calcParameters.innerHTML = html2;
+		
+	}
+	
+	// load parameters widget every time
+	window.onload = populateParameters;
+
+</script>
+
+<fieldset class="fieldset_box">
+	<legend class="fieldset_legend">Calculation</legend>	
+	Optionally, you may select a calculation to be executed on the data.
+	<br/>If no calculation is selected, a subset of the data will be returned.
+	<p/>&nbsp;
+         
+	<table class="horizontalTable">
+		<tr>
+			<th>Calculation</th>
+			<td>
+				<div style="float:left">
+				<table>
+					<tr>
+						<td class="head">{{ wizard.form.calc }}</td>
+						<td class="long">
+							<span id="calcDescription"></span>
+							<span id="calcParameters"></span>
+						</td>
+					</tr>
+				</table>
+			    </div>
+			 </td>
+		</tr>
+		<tr>
+			<th>Calculation Group</th>
+			<td>{{ wizard.form.calc_group }}
+				&nbsp;If performing a computation, you MUST select one or more temporal grouping for the data
+			     <br/><span class="error">{{ wizard.form.calc_group.errors }}</span></td>
+		</tr>
+		<tr>
+			<th>Aggregate</th>
+			<td>{{ wizard.form.aggregate }} Check to combine selected geometries into a single geometry using area-weighted spatial aggregation.
+			<br/><span class="error">{{ wizard.form.aggregate.errors }}</span></td>
+		</tr>
+		<tr>
+			<th>Calculate Raw ?</th>
+			<td>{{ wizard.form.calc_raw }}
+				&nbsp;Check to execute the calculation on raw, unaggregated values
+			     <br/><span class="error">{{ wizard.form.calc_raw.errors }}</span></td>
+		</tr>
+	</table>
+
+</fieldset>
+
+<fieldset class="fieldset_box">
+	<legend class="fieldset_legend">Output Format</legend>	
+	<table class="horizontalTable">
+		<tr>
+			<th nowrap="nowrap"><b>Spatial Operation</b></th>
+			<td> {{ wizard.form.spatial_operation }}
+				<br/><span class="error">{{ wizard.form.spatial_operation.errors }}</span>
+			</td>
+		</tr>
+		<tr>
+			<th>&nbsp;</th>
+			<td>
+				     <i>Intersect:</i> Source geometries touching or overlapping selection geometries are returned.
+				<br/><i>Clip:</i> A full geometric intersection is performed between source and selection geometries. 
+				</td>
+		</tr>
+		<tr>
+			<th nowrap="nowrap"><b>Output Format</b></th>
+			<td>{{ wizard.form.output_format }}<br/><span class="error">{{ wizard.form.output_format.errors }}</span></td>
+		</tr>
+		<tr>
+			<th><b>File Output Prefix</b></th>
+			<td>{{ wizard.form.prefix }}
+			<br/>Optionally, change the prefix for the output data file (use only letters, numbers and '_').
+			<br/><span class="error">{{ wizard.form.prefix.errors }}</span></td>
+		</tr>
+		<tr>
+			<th nowrap="nowrap"><b>Include Auxiliary Files ?</b></th>
+			<td>{{ wizard.form.with_auxiliary_files }} &nbsp;Check to return a compressed file that includes auxiliary files.
+			<br/><span class="error">{{ wizard.form.with_auxiliary_files.errors }}</span></td>
+		</tr>
+		
+	</table>
+</fieldset>

@@ -1,0 +1,58 @@
+{% extends "ncpp/common/base.html" %}
+
+{% block extrahead %}
+	<script type="text/JavaScript">
+	<!--
+	function timedRefresh(timeoutPeriod) {
+		setTimeout("location.reload(true);", timeoutPeriod);
+	}
+	window.onload = timedRefresh(5000);
+	//   -->
+</script>
+{% endblock %}
+
+{% block main %}
+  <div class="box">
+
+	<h2>Job Identifier: {{ job.id }}</h2>
+	<p/>
+	
+	<table class="horizontalTable">
+		
+		<!-- job data -->
+		{% for tuple in job_data %}
+			{% if tuple.0 == 'Supporting Information' %}
+				<th nowrap="nowrap">Supporting Information:</th>
+				<td>{% for info in tuple.1 %}{% if forloop.counter > 1 %}, {% endif %}{{ info }}{% endfor %}</td>
+			{% else %}
+				{% if tuple.1 != None %}
+					<tr><th nowrap="nowrap">{{ tuple.0 }} :</th><td>{{ tuple.1 }}</td></tr>
+				{% endif %}
+			{% endif %}
+		{% endfor %}
+
+		<!-- job status -->
+		<tr><th nowrap="nowrap">User :</th><td>{{ job.user.username }}</td></tr>
+		<tr><th nowrap="nowrap"><span class="highlight">Status</span> :</th><td><span class="highlight">{{ job.status }}</span></td></tr>
+		<tr><th nowrap="nowrap">Submission Date :</th><td>{{ job.submissionDateTime }}</td></tr>
+		<tr><th nowrap="nowrap">Last Update Date :</th><td>{{ job.updateDateTime }}</td></tr>
+		<tr><th nowrap="nowrap">Error:</th><td>{{ job.error }}</td></tr>
+	
+	</table>
+	<p/>
+	
+	<!-- links -->
+	<a href="{% url 'job_request' job.id job.class_name %}">Display Job Request</a>
+	&nbsp;
+	<a href="{% url 'job_response' job.id job.class_name %}">Display Job Response</a>
+	&nbsp;
+	<a href="{% url 'jobs_list' user job.class_name %}">Jobs List</a>
+	&nbsp;
+	{% if job.status == 'Process Succeeded' %}
+		<a href="{{ job.url }}">Download Output</a>
+	{% endif %}	
+		
+  </div>
+  <p/>
+  <div style="text-align:center">This page will automatically reload every 5 seconds.</div>
+{% endblock %}

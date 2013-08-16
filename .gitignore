@@ -1,0 +1,13 @@
+*.log
+*.pot
+*.pyc
+local_settings.py
+
+# Eclipse configuration files
+.project
+.pydevproject
+.settings
+
+# OCGIS output directory
+ncpp/static/ncpp/ocgis
+static
