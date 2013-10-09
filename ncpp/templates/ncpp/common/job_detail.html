@@ -33,7 +33,13 @@
 
 		<!-- job status -->
 		<tr><th nowrap="nowrap">User :</th><td>{{ job.user.username }}</td></tr>
-		<tr><th nowrap="nowrap"><span class="highlight">Status</span> :</th><td><span class="highlight">{{ job.status }}</span></td></tr>
+		<tr><th nowrap="nowrap">
+			{% if job.status == 'Process Succeeded' %}
+				<span class="success">Status</span> :</th><td><span class="success">{{ job.status }}</span>
+			{% else %}
+				<span class="highlight">Status</span> :</th><td><span class="highlight">{{ job.status }}</span>
+			{% endif %}
+		</td></tr>
 		<tr><th nowrap="nowrap">Submission Date :</th><td>{{ job.submissionDateTime }}</td></tr>
 		<tr><th nowrap="nowrap">Last Update Date :</th><td>{{ job.updateDateTime }}</td></tr>
 		<tr><th nowrap="nowrap">Error:</th><td>{{ job.error }}</td></tr>
