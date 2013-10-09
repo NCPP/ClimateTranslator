@@ -273,6 +273,12 @@
 							<span class="error">{{ wizard.form.lon.errors }}</span>
 			</td>
 		</tr>
+		<tr>
+			<th nowrap="nowrap">Aggregate Selection ?</th>
+			<td colspan="4">{{ wizard.form.agg_selection }}
+				&nbsp;If checked, the selection geometries will be aggregated prior to any spatial operations.
+			     <br/><span class="error">{{ wizard.form.agg_selection.errors }}</span></td>
+		</tr>
 		
 	</table>
 </fieldset>

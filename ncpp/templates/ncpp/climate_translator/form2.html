@@ -19,6 +19,8 @@
 	{% if job_data.lat != None and job_data.lon != None %}
 		<tr><th nowrap="nowrap">Point:</th><td> Latitude: {{ job_data.lat }} Longitude: {{ job_data.lon }}</td></tr>
 	{% endif %}
+	<tr><th nowrap="nowrap">Aggregate Selection:</th><td>{{ job_data.agg_selection }}</td></tr>
+	
 	{% if job_data.datetime_start %}
 		<tr><th nowrap="nowrap">Start Date Time:</th><td>{{ job_data.datetime_start }}</td></tr>
 	{% endif %}

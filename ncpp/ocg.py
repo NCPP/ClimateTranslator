@@ -63,7 +63,7 @@ class OCG(object):
             args['geom'] = [openClimateGisJob.lonmin, openClimateGisJob.lonmax, openClimateGisJob.latmin,  openClimateGisJob.latmax]
         elif hasText(openClimateGisJob.lat) and hasText(openClimateGisJob.lon):
             args['geom'] = [openClimateGisJob.lon, openClimateGisJob.lat]
-
+        args['agg_selection'] = openClimateGisJob.agg_selection
         if openClimateGisJob.datetime_start is not None and openClimateGisJob.datetime_stop is not None:
             args['time_range'] = [openClimateGisJob.datetime_start, openClimateGisJob.datetime_stop]
         else:
@@ -160,6 +160,7 @@ class OCG(object):
             ops = ocgis.OcgOperations(dataset=dataset, 
                                       geom=args['geom'],
                                       select_ugid=args['select_ugid'],
+                                      agg_selection=args['agg_selection'],
                                       aggregate=args['aggregate'], 
                                       spatial_operation=args['spatial_operation'], 
                                       calc=args['calc'], 

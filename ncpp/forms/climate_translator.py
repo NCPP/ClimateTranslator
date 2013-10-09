@@ -57,6 +57,8 @@ class ClimateTranslatorForm1(Form):
     lat = FloatField(required=False, min_value=-90, max_value=+90, widget=TextInput(attrs={'size':6}))
     lon = FloatField(required=False, min_value=-180, max_value=+180, widget=TextInput(attrs={'size':6}))   
     
+    agg_selection = BooleanField(initial=False, required=False)
+    
     datetime_start = DateTimeField(required=False, widget=TextInput(attrs={'size':24}))
     datetime_stop = DateTimeField(required=False, widget=TextInput(attrs={'size':24}))
     

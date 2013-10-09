@@ -39,6 +39,7 @@ class OpenClimateGisJob(Job):
     spatial_operation = models.CharField(max_length=50, verbose_name='Spatial Operation', blank=False)
     
     aggregate = models.BooleanField(verbose_name='Aggregate ?')
+    agg_selection = models.BooleanField(verbose_name='Aggregate selection geometry ?', default=False)
     output_format = models.CharField(max_length=20, verbose_name='Output Format', blank=False)
     prefix = models.CharField(max_length=50, verbose_name='Prefix', blank=False, default='ocgis_output')
     with_auxiliary_files = models.BooleanField(verbose_name='Include auxiliary files ?')
@@ -133,6 +134,8 @@ class OpenClimateGisJob(Job):
             job_data.append( ('Latitude', self.lat) )
         if hasText(self.lon):
             job_data.append( ('Longitude', self.lon) )
+            
+        job_data.append( ('Aggregate Selection', self.agg_selection) )
         
         job_data.append( ('Start Date Time', self.datetime_start) )
         job_data.append( ('Stop Date Time', self.datetime_stop) )

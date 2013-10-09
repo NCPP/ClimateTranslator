@@ -65,6 +65,8 @@ class ClimateTranslatorWizard(SessionWizardView):
                         job_data['lat'] = float( cleaned_data['lat'] )
                     if cleaned_data.has_key('lon') and cleaned_data['lon'] is not None:
                         job_data['lon'] = float( cleaned_data['lon'] )
+                    if cleaned_data.has_key('agg_selection'):
+                        job_data['agg_selection'] = bool(cleaned_data['agg_selection'])
                     if cleaned_data.has_key('datetime_start') and cleaned_data['datetime_start'] is not None:
                         job_data['datetime_start'] = cleaned_data['datetime_start']
                     if cleaned_data.has_key('datetime_stop') and cleaned_data['datetime_stop'] is not None:
@@ -129,6 +131,7 @@ class ClimateTranslatorWizard(SessionWizardView):
                                                lonmax=form_data['lonmax'],
                                                lat=form_data['lat'],
                                                lon=form_data['lon'],
+                                               agg_selection=form_data['agg_selection'],
                                                datetime_start=form_data['datetime_start'],
                                                datetime_stop=form_data['datetime_stop'],
                                                timeregion_month=",".join(form_data['timeregion_month']),
