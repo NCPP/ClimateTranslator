@@ -302,9 +302,11 @@
 			<td>
 				Category: {{ wizard.form.geometry_category }}
 				<br/>Sub-Category: {{ wizard.form.geometry_subcategory }}
+				<br/><span class="error">{{ wizard.form.geometry_category.errors }}</span>
+				<br/><span class="error">{{ wizard.form.geometry_subcategory.errors }}</span>
 			</td>
 			<td style="width:100%; text-align:left;"> 
-			    ID: {{ wizard.form.geometry_id }}
+			    Shape: {{ wizard.form.geometry_id }}
 				<br/><span class="error">{{ wizard.form.geometry_id.errors }}</span>
 			</td>
 		</tr>
@@ -327,7 +329,8 @@
 			<th>Point:</th>
 			<td colspan="2">Latitude: {{ wizard.form.lat }}
 							Longitude: {{ wizard.form.lon }}
-						<br/><span class="error">{{ wizard.form.geometry_category.errors }}</span>
+				<br/><span class="error">{{ wizard.form.lat.errors }}</span>
+				<br/><span class="error">{{ wizard.form.lon.errors }}</span>
 			</td>	
 		</tr>
 		<tr>

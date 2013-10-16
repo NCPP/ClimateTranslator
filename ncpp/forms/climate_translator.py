@@ -104,11 +104,11 @@ class ClimateTranslatorForm1(Form):
         elif ngeometries==1:
             if geometry =='shape':
               if not hasText(self.cleaned_data['geometry_category']):
-                  self._errors["geometry_id"] = self.error_class(["Please select a geometry category."]) 
+                  self._errors["geometry_category"] = self.error_class(["Please select a geometry category."]) 
               if not hasText(self.cleaned_data['geometry_subcategory']):
-                  self._errors["geometry_id"] = self.error_class(["Please select a geometry sub-category."]) 
+                  self._errors["geometry_subcategory"] = self.error_class(["Please select a geometry sub-category."]) 
               if len(self.cleaned_data['geometry_id'])==0:
-                  self._errors["geometry_id"] = self.error_class(["Please select a geometry ID."])
+                  self._errors["geometry_id"] = self.error_class(["Please select a geometry shape."])
             elif geometry == 'box':
                 if (   not 'latmin' in self.cleaned_data or not hasText(self.cleaned_data['latmin']) 
                     or not 'latmax' in self.cleaned_data or not hasText(self.cleaned_data['latmax'])
