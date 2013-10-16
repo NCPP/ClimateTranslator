@@ -49,10 +49,10 @@ class ClimateTranslatorWizard(SessionWizardView):
                         job_data['dataset'] = cleaned_data['dataset'] 
                     if cleaned_data.has_key('variable'):
                         job_data['variable'] = cleaned_data['variable']  
-                    if cleaned_data.has_key('geometry') and hasText(cleaned_data['geometry']):
-                        job_data['geometry'] = cleaned_data['geometry']
-                    if cleaned_data.has_key('geometry_subtype') and hasText(cleaned_data['geometry_subtype']):
-                        job_data['geometry_subtype'] = cleaned_data['geometry_subtype']                        
+                    if cleaned_data.has_key('geometry_category') and hasText(cleaned_data['geometry_category']):
+                        job_data['geometry_category'] = cleaned_data['geometry_category']
+                    if cleaned_data.has_key('geometry_subcategory') and hasText(cleaned_data['geometry_subcategory']):
+                        job_data['geometry_subcategory'] = cleaned_data['geometry_subcategory']                        
                     if cleaned_data.has_key('geometry_id') and len( cleaned_data['geometry_id'] )>0:
                         job_data['geometry_id'] = formatListForDisplay(cleaned_data['geometry_id'])
                     if cleaned_data.has_key('latmin') and cleaned_data['latmin'] is not None:
@@ -124,8 +124,8 @@ class ClimateTranslatorWizard(SessionWizardView):
                                                dataset_category=form_data['dataset_category'],
                                                dataset=form_data['dataset'],
                                                variable=form_data['variable'],
-                                               geometry=str(form_data['geometry']),
-                                               geometry_subtype=str(form_data['geometry_subtype']),
+                                               geometry_category=str(form_data['geometry_category']),
+                                               geometry_subcategory=str(form_data['geometry_subcategory']),
                                                # must transform list of integers into string
                                                geometry_id = ",".join(form_data['geometry_id']) if len(form_data['geometry_id'])>0 else None,
                                                latmin=form_data['latmin'],
@@ -161,15 +161,15 @@ def get_geometries(request):
     '''Ajax method to return a JSON document containing geoentry subtypes or geometry ids.'''
     
     response_data = {}
-    type = request.GET.get('type', None)
+    category = request.GET.get('category', None)
     
-    # 2nd request: type, subtype --> geometries
-    if 'subtype' in request.GET:
-        subtype = request.GET.get('subtype', None)
-        response_data['geometries'] = ocgisGeometries.getGeometries(type, subtype)
+    # 2nd request: category, subcategory --> geometries
+    if 'subcategory' in request.GET:
+        subcategory = request.GET.get('subcategory', None)
+        response_data['geometries'] = ocgisGeometries.getGeometries(category, subcategory)
         
     # 1st request: type --> subtypes
     else:
-        response_data['geometries'] = ocgisGeometries.getSubTypes(type)
+        response_data['geometries'] = ocgisGeometries.getSubCategories(category)
     
     return HttpResponse(simplejson.dumps(response_data), mimetype='application/json')

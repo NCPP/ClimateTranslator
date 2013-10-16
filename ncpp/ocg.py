@@ -52,12 +52,12 @@ class OCG(object):
         #                           file_only=False, headers=None)
         args['geom'] = None
         args['select_ugid'] = None
-        if hasText(openClimateGisJob.geometry):
-            args['geom'] = self.ocgisGeometries.getCategoryKey( openClimateGisJob.geometry )
+        if hasText(openClimateGisJob.geometry_category):
+            args['geom'] = self.ocgisGeometries.getCategoryKey( openClimateGisJob.geometry_category )
             args['select_ugid'] = []
             # must transform back from string to list of integers
             for geom in openClimateGisJob.geometry_id.split(","):
-                args['select_ugid'].append( self.ocgisGeometries.getGuid(openClimateGisJob.geometry, openClimateGisJob.geometry_subtype, str(geom)))
+                args['select_ugid'].append( self.ocgisGeometries.getGuid(openClimateGisJob.geometry_category, openClimateGisJob.geometry_subcategory, str(geom)))
         elif (    hasText(openClimateGisJob.latmin) and hasText(openClimateGisJob.latmax) 
               and hasText(openClimateGisJob.lonmin) and hasText(openClimateGisJob.lonmax)):
             args['geom'] = [openClimateGisJob.lonmin, openClimateGisJob.lonmax, openClimateGisJob.latmin,  openClimateGisJob.latmax]

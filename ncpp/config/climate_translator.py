@@ -99,26 +99,21 @@ class Geometries(ConfigBase):
                 tuples.append( (category, category) )
         return tuples
     
-    def getSubTypes(self, type):
+    def getSubCategories(self, category):
         
         tuples = []
-        for k,v in self.geometries[type]['geometries'].items():
-            #tuples.append( (int(v), k) )
+        for k,v in self.geometries[category]['geometries'].items():
             tuples.append( (k,k) )
         return sorted(tuples, key=lambda t: t[1])
     
-    def getGeometries(self, type, subtype):
+    def getGeometries(self, category, subcategory):
         
         tuples = []
-        for k,v in self.geometries[type]['geometries'][subtype].items():
-            #tuples.append( (int(v), k) )
+        for k,v in self.geometries[category]['geometries'][subcategory].items():
             tuples.append( (k,k) )
         return sorted(tuples, key=lambda t: t[1])
     
     def getGuid(self, category, subcategory, geometry):
-        print 'category=%s' % category
-        print 'subcategory=%s' % subcategory
-        print 'geometry=%s' % geometry
         return self.geometries[category]['geometries'][subcategory][geometry]
     
     def getCategoryKey(self, category):

@@ -45,10 +45,10 @@ class ClimateTranslatorForm1(Form):
                                   widget=Select(attrs={'onchange': 'populateDateTimes();'}))
     
     # geometry selection
-    geometry = ChoiceField(choices=ocgisGeometries.getChoices(), required=False, 
-                           widget=Select(attrs={'onchange': 'populateGeometrySubTypes();'}))
-    geometry_subtype = DynamicChoiceField(choices=[ NO_VALUE_OPTION ], required=False, 
-                                          widget=Select(attrs={'onchange': 'populateGeometries();'}))
+    geometry_category = ChoiceField(choices=ocgisGeometries.getChoices(), required=False, 
+                                    widget=Select(attrs={'onchange': 'populateGeometrySubCategories();'}))
+    geometry_subcategory = DynamicChoiceField(choices=[ NO_VALUE_OPTION ], required=False, 
+                                          widget=Select(attrs={'onchange': 'populateGeometryIds();'}))
     geometry_id = DynamicMultipleChoiceField(choices=[ NO_VALUE_OPTION ], required=False, widget=SelectMultiple(attrs={'size':6}))
     
     latmin = FloatField(required=False, min_value=-90, max_value=+90, widget=TextInput(attrs={'size':6}))
@@ -84,7 +84,7 @@ class ClimateTranslatorForm1(Form):
         # validate geometry
         ngeometries = 0
         geometry = None
-        if (hasText(self.cleaned_data['geometry']) or len(self.cleaned_data['geometry_id']) ):
+        if (hasText(self.cleaned_data['geometry_category']) or hasText(self.cleaned_data['geometry_subcategory']) or len(self.cleaned_data['geometry_id']) ):
             ngeometries += 1
             geometry = 'shape'
         # NOTE: invalid float values in form result in cleaned_data not being populated for that key
@@ -99,14 +99,16 @@ class ClimateTranslatorForm1(Form):
              ngeometries += 1
              geometry = 'point'
         if ngeometries > 1:
-            self._errors["geometry"] = self.error_class(["Please choose only one geometry: shape, bounding box or point."]) 
+            self._errors["geometry_category"] = self.error_class(["Please choose only one geometry: shape, bounding box or point."]) 
        
         elif ngeometries==1:
             if geometry =='shape':
-              if not hasText(self.cleaned_data['geometry']):
-                  self._errors["geometry_id"] = self.error_class(["Please select a shape type."]) 
+              if not hasText(self.cleaned_data['geometry_category']):
+                  self._errors["geometry_id"] = self.error_class(["Please select a geometry category."]) 
+              if not hasText(self.cleaned_data['geometry_subcategory']):
+                  self._errors["geometry_id"] = self.error_class(["Please select a geometry sub-category."]) 
               if len(self.cleaned_data['geometry_id'])==0:
-                  self._errors["geometry_id"] = self.error_class(["Please select a shape geometry."])
+                  self._errors["geometry_id"] = self.error_class(["Please select a geometry ID."])
             elif geometry == 'box':
                 if (   not 'latmin' in self.cleaned_data or not hasText(self.cleaned_data['latmin']) 
                     or not 'latmax' in self.cleaned_data or not hasText(self.cleaned_data['latmax'])

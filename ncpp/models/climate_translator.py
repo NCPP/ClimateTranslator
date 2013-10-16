@@ -15,8 +15,8 @@ class OpenClimateGisJob(Job):
     dataset_category = models.CharField(max_length=200, verbose_name='Dataset Category', blank=False)
     dataset = models.CharField(max_length=200, verbose_name='Dataset', blank=False)
     variable = models.CharField(max_length=200, verbose_name='Variable', blank=True, null=True)
-    geometry = models.CharField(max_length=200, verbose_name='Geometry', null=True, blank=True)
-    geometry_subtype = models.CharField(max_length=200, verbose_name='Geometry sub-type', null=True, blank=True)
+    geometry_category = models.CharField(max_length=200, verbose_name='Geometry Category', null=True, blank=True)
+    geometry_subcategory = models.CharField(max_length=200, verbose_name='Geometry Sub-Category', null=True, blank=True)
     geometry_id = models.CharField(max_length=200, verbose_name='Geometry ID', null=True, blank=True)
     latmin = models.FloatField(verbose_name='Latitude Minimum', blank=True, null=True)
     latmax = models.FloatField(verbose_name='Latitude Maximum', blank=True, null=True)
@@ -118,12 +118,12 @@ class OpenClimateGisJob(Job):
         job_data.append( ('Dataset', self.dataset) )       
         if hasText(self.variable):
             job_data.append( ('Variable', self.variable) )
-        if hasText(self.geometry):
-            job_data.append( ('Shape Type', self.geometry) )
-        if hasText(self.geometry_subtype):
-            job_data.append( ('Shape Sub-Type', self.geometry_subtype) )
+        if hasText(self.geometry_category):
+            job_data.append( ('Geometry Category', self.geometry_category) )
+        if hasText(self.geometry_subcategory):
+            job_data.append( ('Geometry Sub-Category', self.geometry_subcategory) )
         if self.geometry_id is not None and len(self.geometry_id)>0:
-            job_data.append( ('Shape Geometry', self.geometry_id.replace(",",", ")) )
+            job_data.append( ('Geometry', self.geometry_id.replace(",",", ")) )
         if hasText(self.latmin):
             job_data.append( ('Latitude Minimum', self.latmin) )
         if hasText(self.latmax):
