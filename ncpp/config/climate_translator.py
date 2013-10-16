@@ -75,7 +75,7 @@ class Calculations(ConfigBase):
         
 ocgisCalculations = Calculations()   
 
-class Geometries(ConfigBase):
+class Geometries():
     """Class holding Climate Translator supported geometries."""
     
     def __init__(self, filepath):
@@ -88,7 +88,7 @@ class Geometries(ConfigBase):
             print "Error reading geometry file: %s" % GEOMETRIES_FILEPATH
             raise e
         
-    def getChoices(self):
+    def getCategories(self):
         # no option selected
         tuples = [ NO_VALUE_OPTION ]
         # first option is US States

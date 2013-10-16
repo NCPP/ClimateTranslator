@@ -45,7 +45,7 @@ class ClimateTranslatorForm1(Form):
                                   widget=Select(attrs={'onchange': 'populateDateTimes();'}))
     
     # geometry selection
-    geometry_category = ChoiceField(choices=ocgisGeometries.getChoices(), required=False, 
+    geometry_category = ChoiceField(choices=ocgisGeometries.getCategories(), required=False, 
                                     widget=Select(attrs={'onchange': 'populateGeometrySubCategories();'}))
     geometry_subcategory = DynamicChoiceField(choices=[ NO_VALUE_OPTION ], required=False, 
                                           widget=Select(attrs={'onchange': 'populateGeometryIds();'}))

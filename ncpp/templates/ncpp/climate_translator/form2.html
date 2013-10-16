@@ -7,7 +7,7 @@
 	<tr><th nowrap="nowrap">Dataset:</th><td>{{ job_data.dataset }}</td></tr>
 	{% if job_data.variable %} <tr><th nowrap="nowrap">Variable:</th><td>{{ job_data.variable }}</td></tr> {% endif %}
 	{% if job_data.geometry_category %}
-		{% if job_data.geometry_subcategory %} 
+		{% if job_data.geometry_subcategory != 'null' %} 
 			<tr><th nowrap="nowrap">Geometry:</th><td>{{ job_data.geometry_category }} &gt; {{ job_data.geometry_subcategory }} &gt; {{ job_data.geometry_id }}</td></tr>
 		{% else %}
 			<tr><th nowrap="nowrap">Geometry:</th><td>{{ job_data.geometry_category }} &gt; {{ job_data.geometry_id }}</td></tr>
