@@ -6,7 +6,8 @@ from django.contrib.auth.models import User
 
 from ncpp.models.common import JOB_STATUS
 from ncpp.models.climate_translator import OpenClimateGisJob
-from ncpp.config.climate_translator import ocgisChoices, Config, ocgisConfig, ocgisGeometries, ocgisCalculations
+from ncpp.config.climate_translator import ocgisChoices, Config, ocgisConfig, ocgisCalculations
+from ncpp.config.geometries import ocgisGeometries
 from ncpp.config import ocgisDatasets
 from ncpp.utils import get_full_class_name, str2bool, hasText, formatListForDisplay
 from ncpp.utils import get_month_string
