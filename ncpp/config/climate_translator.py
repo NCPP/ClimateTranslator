@@ -101,10 +101,20 @@ class Geometries(ConfigBase):
     
     def getSubCategories(self, category):
         
-        # no option selected
-        tuples = [ (NO_VALUE_OPTION[1], NO_VALUE_OPTION[0]) ]
-        for k,v in self.geometries[category]['geometries'].items():
-            tuples.append( (k,k) )
+        subcategories = self.geometries[category]['geometries']
+        
+        # multiple sub-categories
+        if len(subcategories)>1:                   
+            tuples = [ (NO_VALUE_OPTION[1], NO_VALUE_OPTION[0]) ] # no option selected
+            for k,v in subcategories.items():
+                tuples.append( (k,k) )       
+                
+        # only one sub-category     
+        else:
+            tuples = []
+            for k,v in subcategories.items():
+                tuples.append( ("-- No Selection Required --", k) )            
+          
         return sorted(tuples, key=lambda t: t[1])
     
     def getGeometries(self, category, subcategory):
