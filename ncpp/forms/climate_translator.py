@@ -46,7 +46,9 @@ class ClimateTranslatorForm1(Form):
     
     # geometry selection
     geometry = ChoiceField(choices=ocgisGeometries.getChoices(), required=False, 
-                           widget=Select(attrs={'onchange': 'populateGeometries();'}))
+                           widget=Select(attrs={'onchange': 'populateGeometrySubTypes();'}))
+    geometry_subtype = DynamicChoiceField(choices=[ NO_VALUE_OPTION ], required=False, 
+                                          widget=Select(attrs={'onchange': 'populateGeometries();'}))
     geometry_id = DynamicMultipleChoiceField(choices=[ NO_VALUE_OPTION ], required=False, widget=SelectMultiple(attrs={'size':6}))
     
     latmin = FloatField(required=False, min_value=-90, max_value=+90, widget=TextInput(attrs={'size':6}))

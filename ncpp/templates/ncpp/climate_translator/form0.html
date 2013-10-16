@@ -72,15 +72,41 @@
 		showOptions("id_0-variable", options, [ "{{wizard.form.variable.value}}" ]);
 		
 	}
-		
-	// function to populate the geometries widget
-	function populateGeometries() {
+	
+	// function to populate the geometry sub-type
+	function populateGeometrySubTypes() {
 		
 		geometryTypeSelect = document.getElementById("id_0-geometry");
 	    if (geometryTypeSelect.value!=null && geometryTypeSelect.value!='') {
 	       
 	      // execute ajax call to retrieve the available geometries
 	      url = '/ncpp/climate_translator/geometries?type='+encodeURIComponent(geometryTypeSelect.value);
+	      var transaction = YAHOO.util.Connect.asyncRequest('GET', url, geometrySubTypeCallback, null);
+	
+	    } else {
+	      
+	      // populate geometry widget with no options
+	      var options = new Array();
+	      options[0] = ["","-- Please Select --"];
+	      showOptions("id_0-geometry_subtype", options, []);
+	      
+	    }
+		
+	}
+		
+	// function to populate the geometries widget
+	function populateGeometries() {
+		
+		geometryTypeSelect = document.getElementById("id_0-geometry");
+		geometrySubTypeSelect = document.getElementById("id_0-geometry_subtype");
+	    if (   geometryTypeSelect.value!=null && geometryTypeSelect.value!=''
+	    	&& geometrySubTypeSelect.value!=null && geometrySubTypeSelect.value!='' ) {
+	       
+	      // execute ajax call to retrieve the available geometries
+	      url = '/ncpp/climate_translator/geometries'
+	    	 +  '?type='+encodeURIComponent(geometryTypeSelect.value)
+	    	 +  '&subtype='+encodeURIComponent(geometrySubTypeSelect.value)
+	    		                      ;
 	      var transaction = YAHOO.util.Connect.asyncRequest('GET', url, geometryCallback, null);
 	
 	    } else {
@@ -163,6 +189,31 @@
 
 	}
 	
+	// function to populate the geometry choices
+	function showGeometrySubTypes(geometries) {
+
+		var options = new Array();
+		for (var i = 0; i < geometries.length; i++) {			
+			options.push( [geometries[i][1], geometries[i][0]] );
+		}
+		// must parse current selection of shapes (a concatenated string) into array of strings
+		var selectedValues = new Array();
+		var shapes = "{{wizard.form.geometry_subtype.value}}";
+		alert("shapes="+shapes);
+		if (shapes!="None") {
+			shapes = shapes.unescapeHtml();
+			shapes = shapes.substring(1,shapes.length-1);
+			shapes = shapes.split(",");
+			for (var i=0; i<shapes.length; i++) {
+				// u'Arkansas'
+				shape =  shapes[i].trim();
+				selectedValues[i] = shape.substring(2, shape.length-1);
+			}
+		}
+		showOptions("id_0-geometry_subtype", options, selectedValues);
+
+	}
+	
 	// function called if Ajax request failed
 	var handleFailure = function(o) {
 		alert("An Error Occurred!"
@@ -180,7 +231,27 @@
 		showGeometries(jsonResponse.geometries);
 
 	}
+	
+	// function called if Ajax request to retrieve geometry sub-types succeded
+	var handleGeometrySubTypeSuccess = function(o) {
 
+		// parse JSON response into object		
+		var jsonResponse = eval('(' + o.responseText + ')');
+
+		// populate geometry choices
+		showGeometrySubTypes(jsonResponse.geometries);
+
+	}
+
+	// function called after geometry Ajax request returns
+	var geometrySubTypeCallback = {
+	  success: handleGeometrySubTypeSuccess,
+	  failure: handleFailure,
+	  cache: false,
+	  timeout: 5000,
+	  argument: [],
+	};
+	
 	// function called after geometry Ajax request returns
 	var geometryCallback = {
 	  success: handleGeometrySuccess,
@@ -239,7 +310,11 @@
 		<tr>
 			<th>Shape:</th>
 			<td>Type:</td>
-			<td>{{ wizard.form.geometry }}</td>
+			<td>
+				{{ wizard.form.geometry }}
+				&nbsp;Sub-Type
+				{{ wizard.form.geometry_subtype }}
+			</td>
 			<td>Geometry:</td>
 			<td style="width:100%; text-align:left;"> {{ wizard.form.geometry_id }}
 				<br/><span class="error">{{ wizard.form.geometry_id.errors }}</span>

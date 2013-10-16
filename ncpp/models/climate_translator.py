@@ -16,6 +16,7 @@ class OpenClimateGisJob(Job):
     dataset = models.CharField(max_length=200, verbose_name='Dataset', blank=False)
     variable = models.CharField(max_length=200, verbose_name='Variable', blank=True, null=True)
     geometry = models.CharField(max_length=200, verbose_name='Geometry', null=True, blank=True)
+    geometry_subtype = models.CharField(max_length=200, verbose_name='Geometry sub-type', null=True, blank=True)
     geometry_id = models.CharField(max_length=200, verbose_name='Geometry ID', null=True, blank=True)
     latmin = models.FloatField(verbose_name='Latitude Minimum', blank=True, null=True)
     latmax = models.FloatField(verbose_name='Latitude Maximum', blank=True, null=True)
@@ -119,6 +120,8 @@ class OpenClimateGisJob(Job):
             job_data.append( ('Variable', self.variable) )
         if hasText(self.geometry):
             job_data.append( ('Shape Type', self.geometry) )
+        if hasText(self.geometry_subtype):
+            job_data.append( ('Shape Sub-Type', self.geometry_subtype) )
         if self.geometry_id is not None and len(self.geometry_id)>0:
             job_data.append( ('Shape Geometry', self.geometry_id.replace(",",", ")) )
         if hasText(self.latmin):

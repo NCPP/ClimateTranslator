@@ -7,7 +7,11 @@
 	<tr><th nowrap="nowrap">Dataset:</th><td>{{ job_data.dataset }}</td></tr>
 	{% if job_data.variable %} <tr><th nowrap="nowrap">Variable:</th><td>{{ job_data.variable }}</td></tr> {% endif %}
 	{% if job_data.geometry %}
-		<tr><th nowrap="nowrap">Geometry:</th><td>{{ job_data.geometry }}: {{ job_data.geometry_id }}</td></tr>
+		{% if job_data.geometry_subtype %} 
+			<tr><th nowrap="nowrap">Geometry:</th><td>{{ job_data.geometry }}: {{ job_data.geometry_subtype }}: {{ job_data.geometry_id }}</td></tr>
+		{% else %}
+			<tr><th nowrap="nowrap">Geometry:</th><td>{{ job_data.geometry }}: {{ job_data.geometry_id }}</td></tr>
+		{% endif %}
 	{% endif %}
 	{% if job_data.latmin or job_data.latmax or job_data.lonmin or job_data.lonmax %}
 		<tr><th nowrap="nowrap">Bounding Box:</th>

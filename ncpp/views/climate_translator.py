@@ -51,6 +51,8 @@ class ClimateTranslatorWizard(SessionWizardView):
                         job_data['variable'] = cleaned_data['variable']  
                     if cleaned_data.has_key('geometry') and hasText(cleaned_data['geometry']):
                         job_data['geometry'] = cleaned_data['geometry']
+                    if cleaned_data.has_key('geometry_subtype') and hasText(cleaned_data['geometry_subtype']):
+                        job_data['geometry_subtype'] = cleaned_data['geometry_subtype']                        
                     if cleaned_data.has_key('geometry_id') and len( cleaned_data['geometry_id'] )>0:
                         job_data['geometry_id'] = formatListForDisplay(cleaned_data['geometry_id'])
                     if cleaned_data.has_key('latmin') and cleaned_data['latmin'] is not None:
@@ -122,7 +124,8 @@ class ClimateTranslatorWizard(SessionWizardView):
                                                dataset_category=form_data['dataset_category'],
                                                dataset=form_data['dataset'],
                                                variable=form_data['variable'],
-                                               geometry=form_data['geometry'],
+                                               geometry=str(form_data['geometry']),
+                                               geometry_subtype=str(form_data['geometry_subtype']),
                                                # must transform list of integers into string
                                                geometry_id = ",".join(form_data['geometry_id']) if len(form_data['geometry_id'])>0 else None,
                                                latmin=form_data['latmin'],
@@ -155,10 +158,18 @@ class ClimateTranslatorWizard(SessionWizardView):
         return HttpResponseRedirect(reverse('job_detail', args=[job.id, get_full_class_name(job)]))    
     
 def get_geometries(request):
-    
-    type = request.GET.get('type', None)
+    '''Ajax method to return a JSON document containing geoentry subtypes or geometry ids.'''
     
     response_data = {}
-    response_data['geometries'] = ocgisGeometries.getGeometries(type)
+    type = request.GET.get('type', None)
+    
+    # 2nd request: type, subtype --> geometries
+    if 'subtype' in request.GET:
+        subtype = request.GET.get('subtype', None)
+        response_data['geometries'] = ocgisGeometries.getGeometries(type, subtype)
+        
+    # 1st request: type --> subtypes
+    else:
+        response_data['geometries'] = ocgisGeometries.getSubTypes(type)
     
     return HttpResponse(simplejson.dumps(response_data), mimetype='application/json')
