@@ -308,27 +308,25 @@
 	<table class="horizontalTable">
 		<tr>
 			<th>Geometry:</th>
-			<td>Category:</td>
 			<td>
-				{{ wizard.form.geometry_category }}
-				&nbsp;Sub-Category
-				{{ wizard.form.geometry_subcategory }}
+				Category: {{ wizard.form.geometry_category }}
+				<br/>Sub-Category: {{ wizard.form.geometry_subcategory }}
 			</td>
-			<td>ID:</td>
-			<td style="width:100%; text-align:left;"> {{ wizard.form.geometry_id }}
+			<td style="width:100%; text-align:left;"> 
+			    ID: {{ wizard.form.geometry_id }}
 				<br/><span class="error">{{ wizard.form.geometry_id.errors }}</span>
 			</td>
 		</tr>
 		<tr>
 			<th nowrap="nowrap">Bounding Box:</th>
-			<td colspan="4" nowrap="nowrap">
+			<td colspan="3" nowrap="nowrap">
 				Latitude min: {{ wizard.form.latmin }} max: {{ wizard.form.latmax }}
 				Longitude min: {{ wizard.form.lonmin }} max: {{ wizard.form.lonmax }}
 			</td>	
 		</tr>
 		<tr>
 			<td></td>
-			<td colspan="4"><span class="error">{{ wizard.form.latmin.errors }}</span>
+			<td colspan="2"><span class="error">{{ wizard.form.latmin.errors }}</span>
 							<span class="error">{{ wizard.form.latmax.errors }}</span>
 							<span class="error">{{ wizard.form.lonmin.errors }}</span>
 							<span class="error">{{ wizard.form.lonmax.errors }}</span>
@@ -336,20 +334,20 @@
 		</tr>
 		<tr>
 			<th>Point:</th>
-			<td colspan="4">Latitude: {{ wizard.form.lat }}
+			<td colspan="2">Latitude: {{ wizard.form.lat }}
 							Longitude: {{ wizard.form.lon }}
 						<br/><span class="error">{{ wizard.form.geometry_category.errors }}</span>
 			</td>	
 		</tr>
 		<tr>
 			<td></td>
-			<td colspan="4"><span class="error">{{ wizard.form.lat.errors }}</span>
+			<td colspan="2"><span class="error">{{ wizard.form.lat.errors }}</span>
 							<span class="error">{{ wizard.form.lon.errors }}</span>
 			</td>
 		</tr>
 		<tr>
 			<th nowrap="nowrap">Aggregate Selection ?</th>
-			<td colspan="4">{{ wizard.form.agg_selection }}
+			<td colspan="2">{{ wizard.form.agg_selection }}
 				&nbsp;If checked, the selection geometries will be aggregated prior to any spatial operations.
 			     <br/><span class="error">{{ wizard.form.agg_selection.errors }}</span></td>
 		</tr>

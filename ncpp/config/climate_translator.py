@@ -101,7 +101,8 @@ class Geometries(ConfigBase):
     
     def getSubCategories(self, category):
         
-        tuples = []
+        # no option selected
+        tuples = [ (NO_VALUE_OPTION[1], NO_VALUE_OPTION[0]) ]
         for k,v in self.geometries[category]['geometries'].items():
             tuples.append( (k,k) )
         return sorted(tuples, key=lambda t: t[1])
