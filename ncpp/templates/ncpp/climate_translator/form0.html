@@ -196,21 +196,8 @@
 		for (var i = 0; i < geometries.length; i++) {			
 			options.push( [geometries[i][1], geometries[i][0]] );
 		}
-		// must parse current selection of shapes (a concatenated string) into array of strings
-		var selectedValues = new Array();
-		var shapes = "{{wizard.form.geometry_subcategory.value}}";
-		if (shapes!="None") {
-			shapes = shapes.unescapeHtml();
-			shapes = shapes.substring(1,shapes.length-1);
-			shapes = shapes.split(",");
-			for (var i=0; i<shapes.length; i++) {
-				// u'Arkansas'
-				shape =  shapes[i].trim();
-				selectedValues[i] = shape.substring(2, shape.length-1);
-			}
-		}
-		showOptions("id_0-geometry_subcategory", options, selectedValues);
-
+		showOptions("id_0-geometry_subcategory", options, [ "{{wizard.form.geometry_subcategory.value}}" ]);
+		
 	}
 	
 	// function called if Ajax request failed
@@ -239,6 +226,9 @@
 
 		// populate geometry choices
 		showGeometrySubCategories(jsonResponse.geometries);
+		
+		// populate geometry IDs
+		populateGeometryIds();
 
 	}
 
@@ -264,7 +254,8 @@
 				
 		populateDatasets();
 		populateVariables();
-		populateGeometryIds();
+		populateGeometrySubCategories();
+		//populateGeometryIds();
 		
 	}
 	
