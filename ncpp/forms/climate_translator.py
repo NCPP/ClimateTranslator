@@ -1,8 +1,9 @@
 from django.forms import (Form, CharField, ChoiceField, BooleanField, MultipleChoiceField, SelectMultiple, FloatField,
                           TextInput, RadioSelect, DateTimeField, Select, CheckboxSelectMultiple, ValidationError)
 
-from ncpp.config.climate_translator import ocgisChoices, Config, ocgisDatasets, ocgisCalculations
+from ncpp.config.climate_translator import ocgisChoices, Config, ocgisCalculations
 from ncpp.config.geometries import ocgisGeometries
+from ncpp.config.datasets import ocgisDatasets
 from ncpp.constants import MONTH_CHOICES, NO_VALUE_OPTION
 from ncpp.utils import hasText
 from contrib.helpers import validate_time_subset
@@ -36,15 +37,16 @@ class ClimateTranslatorForm1(Form):
        The argument passed to ocgisChoices must correspond to a valid key in the file OCGIS configuration file.'''
            
     # data selection
-    dataset_category = ChoiceField(choices=ocgisDatasets.getChoices(), required=True,
-                          widget=Select(attrs={'onchange': 'populateDatasets();'}))
-    # no initial values for 'datasets' widget. The choices are assigned dynamically through Ajax
-    dataset = DynamicChoiceField(choices=[ NO_VALUE_OPTION ], required=True,
-                          widget=Select(attrs={'onchange': 'populateVariables();'}))
+    data_type = ChoiceField(choices=ocgisDatasets.getDataTypes(), required=True,
+                                 widget=Select(attrs={'onchange': 'dataTypeSelected();'}))
     # no initial values for 'variables' widget. The choices are assigned dynamically through Ajax
     variable = DynamicChoiceField(choices=[ NO_VALUE_OPTION ], required=False,
                                   widget=Select(attrs={'onchange': 'populateDateTimes();'}))
-    
+
+    # no initial values for 'datasets' widget. The choices are assigned dynamically through Ajax
+    dataset = DynamicChoiceField(choices=[ NO_VALUE_OPTION ], required=True,
+                          widget=Select(attrs={'onchange': 'populateVariables();'}))
+     
     # geometry selection
     geometry_category = ChoiceField(choices=ocgisGeometries.getCategories(), required=False, 
                                     widget=Select(attrs={'onchange': 'populateGeometrySubCategories();'}))

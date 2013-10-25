@@ -19,6 +19,7 @@ urlpatterns = patterns('',
     # open climate GIS use case
     url(r'^climate_translator/$', ClimateTranslatorWizard.as_view([ClimateTranslatorForm1, ClimateTranslatorForm2, ClimateTranslatorForm3]), name='climate_translator' ),
     url(r'^climate_translator/geometries/$', 'ncpp.views.climate_translator.get_geometries', name='get_geometries'),
+    url(r'^climate_translator/datasets/$', 'ncpp.views.climate_translator.get_datasets', name='get_datasets'),
     
     # job display pages
     url(r'^jobs/(?P<username>.+)/(?P<job_class>.+)/$', 'ncpp.views.jobs_list', name='jobs_list' ),

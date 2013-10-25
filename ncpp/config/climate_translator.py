@@ -96,5 +96,5 @@ class Datasets(ConfigBase):
             tuples.append( (category, category) )
         return tuples
     
-ocgisDatasets = Datasets(DATASETS_FILEPATH)  
+#ocgisDatasets = Datasets(DATASETS_FILEPATH)  
 

@@ -2,13 +2,13 @@ from django.db import models
 from threading import Thread
 from ncpp.models.common import Job
 from ncpp.constants import APPLICATION_LABEL, JOB_STATUS, NO_VALUE_OPTION
-from ncpp.config import ocgisDatasets
 from ncpp.utils import str2bool, get_month_string, hasText
 from ncpp.ocg import OCG
 import json
 
-from ncpp.config import ocgisDatasets, ocgisConfig, Config, ocgisChoices, ocgisCalculations
+from ncpp.config import ocgisConfig, Config, ocgisChoices, ocgisCalculations
 from ncpp.config.geometries import ocgisGeometries
+from ncpp.config.datasets import ocgisDatasets
 
 class OpenClimateGisJob(Job):
     """Class that represents the execution of an Open Climate GIS job."""

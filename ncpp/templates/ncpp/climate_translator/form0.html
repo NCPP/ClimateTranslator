@@ -8,6 +8,37 @@
 <!-- custom javascript code -->
 <script language="javascript">
 
+    // function triggered by a change in data type selection
+    function dataTypeSelected() {
+    	
+    	dataTypeValue = document.getElementById("id_0-data_type").value;
+    	if (dataTypeValue==null || dataTypeValue=='') {
+    		
+  	        var options = new Array();
+  	        options[0] = ["","-- Please Select --"];
+  	        showOptions("id_0-variable", options, []);
+
+    		
+    	} else {
+    		
+    		if (dataTypeValue=='variable') {
+    			
+    		      // execute ajax call to retrieve the available geometries
+    		      url = '/ncpp/climate_translator/datasets?data_type='+encodeURIComponent(dataTypeValue);
+    		      var transaction = YAHOO.util.Connect.asyncRequest('GET', url, variableCallback, null);
+
+    			
+    			
+    		} else if (dataTypeValue=='package') {
+    			alert('package')
+    		} else {
+    			alert("Unrecognized data type value: "+dataTYpeValue)
+    		}
+    	}
+    	
+    	
+    }
+
 	// function to populate the form widget with the dataset choices
 	function populateDatasets() {
 
@@ -224,13 +255,44 @@
 		// parse JSON response into object		
 		var jsonResponse = eval('(' + o.responseText + ')');
 
-		// populate geometry choices
+		// populate variables choices
+		var options = new Array();
+		for (var i = 0; i < geometries.length; i++) {			
+			options.push( [geometries[i][1], geometries[i][0]] );
+		}
+		showOptions("id_0-geometry_subcategory", options, [ "{{wizard.form.geometry_subcategory.value}}" ]);
+
 		showGeometrySubCategories(jsonResponse.geometries);
 		
 		// populate geometry IDs
 		populateGeometryIds();
 
 	}
+	
+	// function called if Ajax request to retrieve variables succeded
+	var handleVariableSuccess = function(o) {
+		
+		// parse JSON response into object		
+		var jsonResponse = eval('(' + o.responseText + ')');
+		alert(jsonResponse);
+
+		// populate variables choices
+		var options = new Array();
+		for (var i = 0; i < jsonResponse.variables.length; i++) {			
+			options.push( [jsonResponse.variables[i][1], jsonResponse.variables[i][0]] );
+		}
+		showOptions("id_0-variable", options, [ "{{wizard.form.variable.value}}" ]);
+
+	}
+	
+	// function called after variables Ajax request returns
+	var variableCallback = {
+	  success: handleVariableSuccess,
+	  failure: handleFailure,
+	  cache: false,
+	  timeout: 5000,
+	  argument: [],
+	};
 
 	// function called after geometry Ajax request returns
 	var geometrySubCategoryCallback = {
@@ -273,20 +335,21 @@
 	
 	<table class="horizontalTable">
 		<tr>
-			<th>Dataset Category</th>
-			<td>{{ wizard.form.dataset_category }}
-				<br/>&nbsp;<span class="error">{{ wizard.form.dataset_category.errors }}</span></td>
+			<th>Select Data By</th>
+			<td>{{ wizard.form.data_type }}
+				<br/>&nbsp;<span class="error">{{ wizard.form.data_type.errors }}</span></td>
+		</tr>
+		<tr>
+			<th>Long Name</th>
+			<td>{{ wizard.form.variable }}
+				<br/>&nbsp;<span class="error">{{ wizard.form.variable.errors }}</span></td>
 		</tr>
 		<tr>
 			<th>Dataset</th>
 			<td>{{ wizard.form.dataset }}
 				<br/>&nbsp;<span class="error">{{ wizard.form.dataset.errors }}</span></td>
 		</tr>
-		<tr>
-			<th>Variable</th>
-			<td>{{ wizard.form.variable }}
-				<br/>&nbsp;<span class="error">{{ wizard.form.variable.errors }}</span></td>
-		</tr>
+
 	</table>
 </fieldset>
 
