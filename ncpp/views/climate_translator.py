@@ -181,20 +181,25 @@ def get_datasets(request):
        for different possible query paramaters.'''
     
     response_data = {}
-    print 'get_datasets request=%s' % request.GET
+    
+    # return back the target widget to be populated
+    response_data['widget_id'] = request.GET.get('widget_id', None)
+    
     if 'data_type' in request.GET:
         
         data_type = request.GET.get('data_type')
         
         if data_type == VARIABLE:
-            print 'looking for variables'
-            print 'VARIABLES=%s' % ocgisDatasets.getVariables()
-            response_data['variables'] = ocgisDatasets.getVariables()
+            response_data['options'] = ocgisDatasets.getVariables()
         
         elif data_type == DATA_PACKAGE:
             pass
         
+    elif 'variable' in request.GET:
+        variable = request.GET.get('variable')
+        response_data['options'] = ocgisDatasets.getTimeFrequencies(variable)
+        
     else:
-        raise "Missing request parameters: %s" % request.GET
+        raise "Incomplete datasets request: %s" % request.GET
     
     return HttpResponse(simplejson.dumps(response_data), mimetype='application/json')

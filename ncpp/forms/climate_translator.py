@@ -39,9 +39,14 @@ class ClimateTranslatorForm1(Form):
     # data selection
     data_type = ChoiceField(choices=ocgisDatasets.getDataTypes(), required=True,
                                  widget=Select(attrs={'onchange': 'dataTypeSelected();'}))
+    
     # no initial values for 'variables' widget. The choices are assigned dynamically through Ajax
     variable = DynamicChoiceField(choices=[ NO_VALUE_OPTION ], required=False,
-                                  widget=Select(attrs={'onchange': 'populateDateTimes();'}))
+                                  widget=Select(attrs={'onchange': 'variableSelected();'}))
+    
+    frequency = DynamicChoiceField(choices=[ NO_VALUE_OPTION ], required=False,
+                                   widget=Select(attrs={'onchange': 'frequencySelected();'}))
+    
 
     # no initial values for 'datasets' widget. The choices are assigned dynamically through Ajax
     dataset = DynamicChoiceField(choices=[ NO_VALUE_OPTION ], required=True,

@@ -40,13 +40,24 @@ class DbDatasets(Datasets):
             'time_frequency': [u'day'], 'dataset_category': [u'Downscaled', u'Gridded Observational'], 
             'dataset': [u'Hayhoe ARRM-GFDL', u'Maurer 2010']}
         '''
-        print 'querying for variables'
+        
         dict = self.dataQuery.get_variable_or_index('variable')
-        print dict
-        tuples = []
+        print 'variables=%s' % dict
+        tuples = [ (NO_VALUE_OPTION[1], NO_VALUE_OPTION[0]) ]
         for value in dict['long_name']:
             tuples.append( (str(value), str(value)) )
         return sorted(tuples, key=lambda t: t[1])
+    
+    def getTimeFrequencies(self, long_name):
+        print 'query for time frequencies for long_name=%s' % long_name
+        
+        dict = self.dataQuery.get_variable_or_index('variable')
+        print 'frequencies=%s' % dict
+        tuples = [ (NO_VALUE_OPTION[1], NO_VALUE_OPTION[0]) ]
+        for value in dict['time_frequency']:
+            tuples.append( (str(value), str(value)) )
+        return sorted(tuples, key=lambda t: t[1])
+    
         
         
 ocgisDatasets = DbDatasets(DATASETS_DB) 
