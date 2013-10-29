@@ -5,7 +5,7 @@ import db
 import query
 import os
 from unittest.case import SkipTest
-from sqlalchemy.orm.exc import NoResultFound
+from sqlalchemy.orm.exc import NoResultFound, MultipleResultsFound
 import ocgis
 from db import get_or_create
 from ClimateTranslator.util.data_scanner import harvest
@@ -102,15 +102,38 @@ class Test(TestBase):
             with self.assertRaises(NoResultFound):
                 dq.get_package(package_name='foo')
             
-            ret = dq.get_package(package_name='Test Package GCMs')
-            rds = [ocgis.RequestDataset(**k) for k in ret]
-            for rd in rds: rd.inspect_as_dct()
-            
             ret = dq.get_package(time_range=[datetime.datetime(1980,2,1),datetime.datetime(1985,3,4)])
             self.assertEqual(ret,{'dataset_category': [u'GCMs', u'Observational'], 'package_name': [u'Test Package', u'Test Package GCMs']})
             
             with self.assertRaises(NoResultFound):
                 dq.get_package(time_range=[datetime.datetime(1900,2,1),datetime.datetime(1901,3,4)])
+                
+    def test_query_data_package_get_datasets(self):
+        models = [CanCM4TestDataset,MaurerTas,MaurerTasmax]
+        with db.session_scope() as session:
+            for m in models: m().insert(session)
+        
+            dataset = session.query(db.Dataset).filter_by(name='Maurer 2010').one()
+            category = session.query(db.DatasetCategory).filter_by(name='Observational').one()
+            fields = [c.field[0] for c in dataset.container]
+            dp = db.DataPackage(field=fields,name='Test Package',description='For testing! Duh...',dataset_category=category)
+            session.add(dp)
+            
+            dataset = session.query(db.Dataset).filter_by(name='Maurer 2010').one()
+            category = session.query(db.DatasetCategory).filter_by(name='GCMs').one()
+            fields = [c.field[0] for c in dataset.container]
+            dp = db.DataPackage(field=fields,name='Test Package GCMs',description='For testing! Duh...',dataset_category=category)
+            session.add(dp)
+            
+            session.commit()
+        
+        dq = DataQuery()
+        ret = dq.get_package_datasets(package_name='Test Package')
+        rds = [ocgis.RequestDataset(**k) for k in ret]
+        for rd in rds: rd.inspect_as_dct()
+        
+        with self.assertRaises(MultipleResultsFound):
+            dq.get_package_datasets()
                 
     def test_data_package_from_models(self):
         self.setUp_insert_models()
@@ -167,10 +190,25 @@ class Test(TestBase):
                                        time_frequency='day',
                                        dataset_category='Observational',
                                        dataset='Maurer 2010')
-        self.assertDictEqual(ret,{'variable': u'tas', 'alias': u'tas', 't_calendar': u'standard', 'uri': [u'/home/local/WX/ben.koziol/climate_data/maurer/2010-concatenated/Maurer02new_OBS_tas_daily.1971-2000.nc'], 't_units': u'days since 1940-01-01 00:00:00'})    
-        rd = ocgis.RequestDataset(**ret)
+        self.assertDictEqual(ret,{'long_name': [u'Near-Surface Air Temperature'], 'time_frequency': [u'day'], 'dataset_category': [u'Observational'], 'dataset': [u'Maurer 2010']})    
+    
+    def test_query_get_variable_or_index_dataset(self):
+        models = [CanCM4TestDataset,MaurerTas,MaurerTasmax]
+        with db.session_scope() as session:
+            for m in models: m().insert(session)
+        dq = query.DataQuery()
+        ret = dq.get_variable_or_index_dataset('variable',
+                                       long_name='Near-Surface Air Temperature',
+                                       time_frequency='day',
+                                       dataset_category='Observational',
+                                       dataset='Maurer 2010')
+        self.assertEqual(ret,[{'variable': u'tas', 'alias': u'tas', 't_calendar': u'standard', 'uri': [u'/home/local/WX/ben.koziol/climate_data/maurer/2010-concatenated/Maurer02new_OBS_tas_daily.1971-2000.nc'], 't_units': u'days since 1940-01-01 00:00:00'}])
+        rd = ocgis.RequestDataset(**ret[0])
         rd.inspect_as_dct()
         
+        with self.assertRaises(MultipleResultsFound):
+            dq.get_variable_or_index_dataset('variable')
+    
     def test_query_limiting(self):
         models = [CanCM4TestDataset,MaurerTas,MaurerTasmax]
         with db.session_scope() as session:
