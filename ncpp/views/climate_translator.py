@@ -8,7 +8,7 @@ from ncpp.models.common import JOB_STATUS
 from ncpp.models.climate_translator import OpenClimateGisJob
 from ncpp.config.climate_translator import ocgisChoices, Config, ocgisConfig, ocgisCalculations
 from ncpp.config.geometries import ocgisGeometries
-from ncpp.config import ocgisDatasets
+from ncpp.config.datasets import ocgisDatasets, VARIABLE, PACKAGE
 from ncpp.utils import get_full_class_name, str2bool, hasText, formatListForDisplay
 from ncpp.utils import get_month_string
 from django.utils import simplejson  
@@ -31,7 +31,7 @@ class ClimateTranslatorWizard(SessionWizardView):
                   
         # before rendering of first form: send data and geometry choices 
         if self.steps.current == self.steps.first:
-            context.update({'datasets':  json.dumps(ocgisDatasets.datasets) })
+            #context.update({'datasets':  json.dumps(ocgisDatasets.datasets) }) # FIXME ?
             context.update({'geometries':  json.dumps(ocgisGeometries.geometries) })
             
         elif self.steps.current == "1":  # note: string type
@@ -159,7 +159,7 @@ class ClimateTranslatorWizard(SessionWizardView):
         return HttpResponseRedirect(reverse('job_detail', args=[job.id, get_full_class_name(job)]))    
     
 def get_geometries(request):
-    '''Ajax method to return a JSON document containing geoentry subtypes or geometry ids.'''
+    '''Ajax method to return a JSON document containing geometry sub-types or geometry identifiers.'''
     
     response_data = {}
     category = request.GET.get('category', None)
@@ -172,5 +172,34 @@ def get_geometries(request):
     # 1st request: type --> subtypes
     else:
         response_data['geometries'] = ocgisGeometries.getSubCategories(category)
+    
+    return HttpResponse(simplejson.dumps(response_data), mimetype='application/json')
+
+
+def get_datasets(request):
+    '''Ajax method to return a JSON document containing the dataset selections, 
+       for different possible query paramaters.'''
+    
+    response_data = {}
+    
+    # return back the target widget to be populated
+    response_data['widget_id'] = request.GET.get('widget_id', None)
+    
+    if 'data_type' in request.GET:
+        
+        data_type = request.GET.get('data_type')
+        
+        if data_type == VARIABLE:
+            response_data['options'] = ocgisDatasets.getVariables()
+        
+        elif data_type == DATA_PACKAGE:
+            pass
+        
+    elif 'variable' in request.GET:
+        variable = request.GET.get('variable')
+        response_data['options'] = ocgisDatasets.getTimeFrequencies(variable)
+        
+    else:
+        raise "Incomplete datasets request: %s" % request.GET
     
     return HttpResponse(simplejson.dumps(response_data), mimetype='application/json')

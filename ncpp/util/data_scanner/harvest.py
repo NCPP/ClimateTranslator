@@ -1,7 +1,7 @@
 import db
 from datasets import maurer,hayhoe
 import os
-from ClimateTranslator.util.data_scanner.datasets import packages
+from ncpp.util.data_scanner.datasets import packages
 
 
 MODELS = [maurer.MaurerTas,

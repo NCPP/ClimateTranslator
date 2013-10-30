@@ -8,8 +8,8 @@ from unittest.case import SkipTest
 from sqlalchemy.orm.exc import NoResultFound, MultipleResultsFound
 import ocgis
 from db import get_or_create
-from ClimateTranslator.util.data_scanner import harvest
-from ClimateTranslator.util.data_scanner.query import DataQuery
+from ncpp.util.data_scanner import harvest
+from ncpp.util.data_scanner.query import DataQuery
 
 
 tdata = TestBase.get_tdata()

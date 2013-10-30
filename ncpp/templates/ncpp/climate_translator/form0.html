@@ -8,6 +8,67 @@
 <!-- custom javascript code -->
 <script language="javascript">
 
+	// widget ids as set by Django wizard
+    var WIDGET_DATA_TYPE = "id_0-data_type"
+    var WIDGET_VARIABLE = "id_0-variable";
+    var WIDGET_FREQUENCY = "id_0-frequency";
+
+    // function triggered by a change in data type selection
+    function dataTypeSelected() {
+    	
+    	selectedValue = document.getElementById(WIDGET_DATA_TYPE).value;
+    	if (selectedValue==null || selectedValue=='') {
+    		
+  	        var options = new Array();
+  	        options[0] = ["","-- Please Select --"];
+  	        showOptions(WIDGET_VARIABLE, options, []);
+
+    		
+    	} else {
+    		
+    		if (selectedValue=='variable') {
+    			
+    		      // execute ajax call to retrieve the available geometries
+    		      url = '/ncpp/climate_translator/datasets'
+    		          + '?data_type='+encodeURIComponent(selectedValue)
+    		    	  + '&widget_id='+WIDGET_VARIABLE;
+    		      var transaction = YAHOO.util.Connect.asyncRequest('GET', url, ajaxCallback, null);
+    			
+    			
+    		} else if (dataTypeValue=='package') {
+    			alert('package')
+    		} else {
+    			alert("Unrecognized data type value: "+dataTYpeValue)
+    		}
+    	}
+    	
+    	
+    }
+    
+    // function triggered by a change in variable selection
+    function variableSelected() {
+    	
+    	selectedValue = document.getElementById(WIDGET_VARIABLE).value;
+    	
+    	if (selectedValue==null || selectedValue=='') {
+    		
+  	        var options = new Array();
+  	        options[0] = ["","-- Please Select --"];
+  	        showOptions(WIDGET_FREQUENCY, options, []);
+    		
+    	} else {
+    		
+		      // execute ajax call to retrieve the available geometries
+		      url = '/ncpp/climate_translator/datasets'
+		          + '?variable='+encodeURIComponent(selectedValue)
+		    	  + '&widget_id='+WIDGET_FREQUENCY;
+		      var transaction = YAHOO.util.Connect.asyncRequest('GET', url, ajaxCallback, null);
+    		
+    	}
+    	
+    	
+    }
+
 	// function to populate the form widget with the dataset choices
 	function populateDatasets() {
 
@@ -224,13 +285,56 @@
 		// parse JSON response into object		
 		var jsonResponse = eval('(' + o.responseText + ')');
 
-		// populate geometry choices
+		// populate variables choices
+		var options = new Array();
+		for (var i = 0; i < geometries.length; i++) {			
+			options.push( [geometries[i][1], geometries[i][0]] );
+		}
+		showOptions("id_0-geometry_subcategory", options, [ "{{wizard.form.geometry_subcategory.value}}" ]);
+
 		showGeometrySubCategories(jsonResponse.geometries);
 		
 		// populate geometry IDs
 		populateGeometryIds();
 
 	}
+	
+	// function called if Ajax request to retrieve variables succeded
+	var handleSuccess = function(o) {
+		
+		// parse JSON response into object		
+		var jsonResponse = eval('(' + o.responseText + ')');
+
+		// retrieve object attributes: 'widget_id' and 'options'
+		var widget_id = jsonResponse.widget_id;
+		var options = jsonResponse.options;
+
+		// populate variables choices
+		var allOptions = new Array();
+		for (var i = 0; i < options.length; i++) {			
+			allOptions.push( [options[i][1], options[i][0]] );
+		}
+		// pass on the current selection // FIXME ?
+		selectedOptions = []
+		if (widget_id==WIDGET_VARIABLE) {
+			selectedOptions = [ "{{wizard.form.variable.value}}" ]
+			
+		} else if (widget_id==WIDGET_FREQUENCY) {
+			selectedOptions = [ "{{wizard.form.frequency.value}}" ]
+		
+		} 
+		showOptions(widget_id, allOptions, selectedOptions);
+
+	}
+	
+	// function called after Ajax request returns
+	var ajaxCallback = {
+	  success: handleSuccess,
+	  failure: handleFailure,
+	  cache: false,
+	  timeout: 5000,
+	  argument: [],
+	};
 
 	// function called after geometry Ajax request returns
 	var geometrySubCategoryCallback = {
@@ -273,20 +377,26 @@
 	
 	<table class="horizontalTable">
 		<tr>
-			<th>Dataset Category</th>
-			<td>{{ wizard.form.dataset_category }}
-				<br/>&nbsp;<span class="error">{{ wizard.form.dataset_category.errors }}</span></td>
+			<th>Select Data By</th>
+			<td>{{ wizard.form.data_type }}
+				<br/>&nbsp;<span class="error">{{ wizard.form.data_type.errors }}</span></td>
+		</tr>
+		<tr>
+			<th>Long Name</th>
+			<td>{{ wizard.form.variable }}
+				<br/>&nbsp;<span class="error">{{ wizard.form.variable.errors }}</span></td>
+		</tr>
+		<tr>
+			<th>Time Frequency</th>
+			<td>{{ wizard.form.frequency }}
+				<br/>&nbsp;<span class="error">{{ wizard.form.frequency.errors }}</span></td>
 		</tr>
 		<tr>
 			<th>Dataset</th>
 			<td>{{ wizard.form.dataset }}
 				<br/>&nbsp;<span class="error">{{ wizard.form.dataset.errors }}</span></td>
 		</tr>
-		<tr>
-			<th>Variable</th>
-			<td>{{ wizard.form.variable }}
-				<br/>&nbsp;<span class="error">{{ wizard.form.variable.errors }}</span></td>
-		</tr>
+
 	</table>
 </fieldset>
 
