@@ -14,6 +14,7 @@ from ncpp.utils import get_month_string
 from django.utils import simplejson  
 from django.shortcuts import get_object_or_404, render_to_response, redirect
 from django.template import RequestContext
+from ncpp.constants import NO_VALUE_OPTION
 
 from datetime import datetime
 import json
@@ -180,26 +181,19 @@ def get_datasets(request):
     '''Ajax method to return a JSON document containing the dataset selections, 
        for different possible query paramaters.'''
     
-    response_data = {}
+    data_type = request.GET.get('data_type', None)
+    variable = request.GET.get('variable', None)
+    time_frequency = request.GET.get('time_frequency', None)
+    dataset_category = request.GET.get('dataset_category', None)
+    dataset = request.GET.get('dataset', None)
+    print 'GET Datasets request: %s' % request.GET
+    json_data = {}
+    # pass back the current selection
+    json_data['request'] = { 'data_type':data_type, 'variable':variable, 'time_frequency':time_frequency, 
+                             'dataset_category': dataset_category, 'dataset':dataset }
+    datasets_dict = ocgisDatasets.getDatasets(data_type, variable=variable, time_frequency=time_frequency, 
+                                              dataset_category=dataset_category, dataset=dataset)
+    # return all available options
+    json_data['response'] = datasets_dict
     
-    # return back the target widget to be populated
-    response_data['widget_id'] = request.GET.get('widget_id', None)
-    
-    if 'data_type' in request.GET:
-        
-        data_type = request.GET.get('data_type')
-        
-        if data_type == VARIABLE:
-            response_data['options'] = ocgisDatasets.getVariables()
-        
-        elif data_type == DATA_PACKAGE:
-            pass
-        
-    elif 'variable' in request.GET:
-        variable = request.GET.get('variable')
-        response_data['options'] = ocgisDatasets.getTimeFrequencies(variable)
-        
-    else:
-        raise "Incomplete datasets request: %s" % request.GET
-    
-    return HttpResponse(simplejson.dumps(response_data), mimetype='application/json')
+    return HttpResponse(simplejson.dumps(json_data), mimetype='application/json')

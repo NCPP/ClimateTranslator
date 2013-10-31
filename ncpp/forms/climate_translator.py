@@ -38,19 +38,20 @@ class ClimateTranslatorForm1(Form):
            
     # data selection
     data_type = ChoiceField(choices=ocgisDatasets.getDataTypes(), required=True,
-                                 widget=Select(attrs={'onchange': 'dataTypeSelected();'}))
+                                 widget=Select(attrs={'onchange': 'getDatasets();'}))
     
-    # no initial values for 'variables' widget. The choices are assigned dynamically through Ajax
+    # The following widgets have no initial choices. The choices are assigned dynamically through Ajax
     variable = DynamicChoiceField(choices=[ NO_VALUE_OPTION ], required=False,
-                                  widget=Select(attrs={'onchange': 'variableSelected();'}))
+                                  widget=Select(attrs={'onchange': 'getDatasets();'}))
     
     frequency = DynamicChoiceField(choices=[ NO_VALUE_OPTION ], required=False,
-                                   widget=Select(attrs={'onchange': 'frequencySelected();'}))
+                                   widget=Select(attrs={'onchange': 'getDatasets();'}))
     
-
-    # no initial values for 'datasets' widget. The choices are assigned dynamically through Ajax
+    dataset_category = DynamicChoiceField(choices=[ NO_VALUE_OPTION ], required=True,
+                          widget=Select(attrs={'onchange': 'getDatasets();'}))
+    
     dataset = DynamicChoiceField(choices=[ NO_VALUE_OPTION ], required=True,
-                          widget=Select(attrs={'onchange': 'populateVariables();'}))
+                                 widget=Select(attrs={'onchange': 'getDatasets();'}) )
      
     # geometry selection
     geometry_category = ChoiceField(choices=ocgisGeometries.getCategories(), required=False, 

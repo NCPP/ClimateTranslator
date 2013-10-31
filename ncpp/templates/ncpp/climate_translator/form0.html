@@ -11,35 +11,48 @@
 	// widget ids as set by Django wizard
     var WIDGET_DATA_TYPE = "id_0-data_type"
     var WIDGET_VARIABLE = "id_0-variable";
-    var WIDGET_FREQUENCY = "id_0-frequency";
+    var WIDGET_TIME_FREQUENCY = "id_0-frequency";
+    var WIDGET_DATASET_CATEGORY = "id_0-dataset_category";
+    var WIDGET_DATASET = "id_0-dataset";
+    var NULL_SELECTION = ["","-- Please Select --"]
 
     // function triggered by a change in data type selection
-    function dataTypeSelected() {
+    function getDatasets() {
     	
-    	selectedValue = document.getElementById(WIDGET_DATA_TYPE).value;
-    	if (selectedValue==null || selectedValue=='') {
+    	dataType = document.getElementById(WIDGET_DATA_TYPE).value;
+    	if (dataType==null || dataType=='') {
     		
-  	        var options = new Array();
-  	        options[0] = ["","-- Please Select --"];
+  	        var options = new Array(NULL_SELECTION);
   	        showOptions(WIDGET_VARIABLE, options, []);
-
+  	        showOptions(WIDGET_TIME_FREQUENCY, options, []);
+  	      	showOptions(WIDGET_DATASET_CATEGORY, options, []);
+  	    	showOptions(WIDGET_DATASET, options, []);
     		
     	} else {
-    		
-    		if (selectedValue=='variable') {
-    			
-    		      // execute ajax call to retrieve the available geometries
-    		      url = '/ncpp/climate_translator/datasets'
-    		          + '?data_type='+encodeURIComponent(selectedValue)
-    		    	  + '&widget_id='+WIDGET_VARIABLE;
-    		      var transaction = YAHOO.util.Connect.asyncRequest('GET', url, ajaxCallback, null);
-    			
-    			
-    		} else if (dataTypeValue=='package') {
-    			alert('package')
-    		} else {
-    			alert("Unrecognized data type value: "+dataTYpeValue)
-    		}
+  		    			
+  		      // data_type is selected
+  		      url = '/ncpp/climate_translator/datasets'
+  		          + '?data_type='+encodeURIComponent(dataType);
+  		      
+  		      // variable 'long_name' is selected
+  		      variable = document.getElementById(WIDGET_VARIABLE).value;
+  		      if (variable!=null && variable!='') url += "&variable="+encodeURIComponent(variable);
+  		      
+  		      // time_frequency is selected
+  		      time_frequency = document.getElementById(WIDGET_TIME_FREQUENCY).value;
+  		      if (time_frequency!=null && time_frequency!='') url += "&time_frequency="+encodeURIComponent(time_frequency);
+
+  		      // dataset_category is selected
+  		      dataset_category = document.getElementById(WIDGET_DATASET_CATEGORY).value;
+  		      if (dataset_category!=null && dataset_category!='') url += "&dataset_category="+encodeURIComponent(dataset_category);
+
+  		      // dataset is selected
+  		      dataset = document.getElementById(WIDGET_DATASET).value;
+  		      if (dataset!=null && dataset!='') url += "&dataset="+encodeURIComponent(dataset);
+  		    	  
+			  // execute async request
+  		      var transaction = YAHOO.util.Connect.asyncRequest('GET', url, ajaxDatasetsCallback, null);   			
+ 
     	}
     	
     	
@@ -54,15 +67,40 @@
     		
   	        var options = new Array();
   	        options[0] = ["","-- Please Select --"];
-  	        showOptions(WIDGET_FREQUENCY, options, []);
+  	        showOptions(WIDGET_TIME_FREQUENCY, options, []);
     		
     	} else {
     		
 		      // execute ajax call to retrieve the available geometries
 		      url = '/ncpp/climate_translator/datasets'
 		          + '?variable='+encodeURIComponent(selectedValue)
-		    	  + '&widget_id='+WIDGET_FREQUENCY;
+		    	  + '&widget_id='+WIDGET_TIME_FREQUENCY;
 		      var transaction = YAHOO.util.Connect.asyncRequest('GET', url, ajaxCallback, null);
+    		
+    	}
+    		
+    }
+    
+    // function triggered by a change in time frequency selection
+    function frequencySelected() {
+    	
+    	selectedValue = document.getElementById(WIDGET_TIME_FREQUENCY).value;
+    	
+    	if (selectedValue==null || selectedValue=='') {
+    		
+  	        var options = new Array();
+  	        options[0] = ["","-- Please Select --"];
+  	        showOptions(WIDGET_DATASET, options, []);
+    		
+    	} else {
+    		
+    		  alert("GOT THIS FAR");
+		      // execute ajax call to retrieve the available geometries
+		      url = '/ncpp/climate_translator/datasets'
+		          + '?variable='+encodeURIComponent(selectedValue)
+		          + '&frequency='
+		    	  + '&widget_id='+WIDGET_DATASET;
+		      var transaction = YAHOO.util.Connect.asyncRequest('GET', url, ajaxDatasetsCallback, null);
     		
     	}
     	
@@ -70,7 +108,7 @@
     }
 
 	// function to populate the form widget with the dataset choices
-	function populateDatasets() {
+	function populateDatasetsXXX() {
 
 		// dataset options
 		var options = new Array();
@@ -300,36 +338,45 @@
 	}
 	
 	// function called if Ajax request to retrieve variables succeded
-	var handleSuccess = function(o) {
+	var handleDatasetsSuccess = function(o) {
 		
 		// parse JSON response into object		
-		var jsonResponse = eval('(' + o.responseText + ')');
-
-		// retrieve object attributes: 'widget_id' and 'options'
-		var widget_id = jsonResponse.widget_id;
-		var options = jsonResponse.options;
-
-		// populate variables choices
-		var allOptions = new Array();
-		for (var i = 0; i < options.length; i++) {			
-			allOptions.push( [options[i][1], options[i][0]] );
-		}
-		// pass on the current selection // FIXME ?
-		selectedOptions = []
-		if (widget_id==WIDGET_VARIABLE) {
-			selectedOptions = [ "{{wizard.form.variable.value}}" ]
-			
-		} else if (widget_id==WIDGET_FREQUENCY) {
-			selectedOptions = [ "{{wizard.form.frequency.value}}" ]
+		var jsonData = eval('(' + o.responseText + ')');
 		
-		} 
-		showOptions(widget_id, allOptions, selectedOptions);
+		// populate 'long_name' widget
+		populateDatasetOptions(WIDGET_VARIABLE, jsonData.response.long_name, [ jsonData.request.variable ])
+		
+		// populate 'time_frequency' widget
+		populateDatasetOptions(WIDGET_TIME_FREQUENCY, jsonData.response.time_frequency, [ jsonData.request.time_frequency ])
+		
+		// populate 'dataset_category' widget
+		populateDatasetOptions(WIDGET_DATASET_CATEGORY, jsonData.response.dataset_category, [ jsonData.request.dataset_category ])
+
+		// populate 'dataset' widget
+		populateDatasetOptions(WIDGET_DATASET, jsonData.response.dataset, [ jsonData.request.dataset ])
 
 	}
 	
+	// function used to populate a single datasets widget
+	function populateDatasetOptions(widget_id, options, selectedOptions) {
+	
+		// build (value, label) pairs, add null option
+		var allOptions = new Array();
+		if (options.length>1) {
+			// prompt user to make a selection
+			allOptions.push( NULL_SELECTION );
+		}
+		for (var i = 0; i < options.length; i++) {			
+			allOptions.push( [options[i], options[i]] );
+		}
+		
+		showOptions(widget_id, allOptions, selectedOptions);
+		
+	}
+	
 	// function called after Ajax request returns
-	var ajaxCallback = {
-	  success: handleSuccess,
+	var ajaxDatasetsCallback = {
+	  success: handleDatasetsSuccess,
 	  failure: handleFailure,
 	  cache: false,
 	  timeout: 5000,
@@ -356,7 +403,7 @@
 	
 	function init() {
 				
-		populateDatasets();
+		//populateDatasets();
 		populateVariables();
 		populateGeometrySubCategories();
 		//populateGeometryIds();
@@ -390,6 +437,11 @@
 			<th>Time Frequency</th>
 			<td>{{ wizard.form.frequency }}
 				<br/>&nbsp;<span class="error">{{ wizard.form.frequency.errors }}</span></td>
+		</tr>
+		<tr>
+			<th>Dataset Category</th>
+			<td>{{ wizard.form.dataset_category }}
+				<br/>&nbsp;<span class="error">{{ wizard.form.dataset_category.errors }}</span></td>
 		</tr>
 		<tr>
 			<th>Dataset</th>

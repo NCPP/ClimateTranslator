@@ -33,7 +33,7 @@ class DbDatasets(Datasets):
         #    tuples.append( (category, category) )
         return tuples
 
-    def getVariables(self):
+    def getDatasets(self, data_type, variable=None, time_frequency=None, dataset_category=None, dataset=None):
         
         '''dict = 
            {'long_name': [u'Air Temperature', u'Daily Precipitation Rate', u'Maximum Air Temperature', u'Minimum Air Temperature'], 
@@ -41,19 +41,23 @@ class DbDatasets(Datasets):
             'dataset': [u'Hayhoe ARRM-GFDL', u'Maurer 2010']}
         '''
         
-        dict = self.dataQuery.get_variable_or_index('variable')
-        print 'variables=%s' % dict
-        tuples = [ (NO_VALUE_OPTION[1], NO_VALUE_OPTION[0]) ]
-        for value in dict['long_name']:
-            tuples.append( (str(value), str(value)) )
-        return sorted(tuples, key=lambda t: t[1])
+        if data_type=='variable':
+            dict = self.dataQuery.get_variable_or_index('variable', long_name=variable, time_frequency=time_frequency, 
+                                                        dataset_category=dataset_category, dataset=dataset)
+            print 'Dataset options: %s' % dict
+            return dict
+        
+        else:
+            raise Exception('Unsupported data type=%s' % data_type)
     
     def getTimeFrequencies(self, long_name):
         print 'query for time frequencies for long_name=%s' % long_name
         
+        # FIXME
         dict = self.dataQuery.get_variable_or_index('variable')
+        #dict = self.dataQuery.get_variable_or_index('variable', long_name=long_name)
         print 'frequencies=%s' % dict
-        tuples = [ (NO_VALUE_OPTION[1], NO_VALUE_OPTION[0]) ]
+        tuples = [] 
         for value in dict['time_frequency']:
             tuples.append( (str(value), str(value)) )
         return sorted(tuples, key=lambda t: t[1])
