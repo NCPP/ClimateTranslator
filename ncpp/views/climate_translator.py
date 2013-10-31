@@ -182,7 +182,7 @@ def get_datasets(request):
        for different possible query paramaters.'''
     
     data_type = request.GET.get('data_type', None)
-    variable = request.GET.get('variable', None)
+    long_name = request.GET.get('long_name', None)
     time_frequency = request.GET.get('time_frequency', None)
     dataset_category = request.GET.get('dataset_category', None)
     dataset = request.GET.get('dataset', None)
@@ -191,10 +191,10 @@ def get_datasets(request):
     print 'GET Datasets request: %s' % request.GET
     json_data = {}
     # pass back the current selection
-    json_data['request'] = { 'data_type':data_type, 'variable':variable, 'time_frequency':time_frequency, 
+    json_data['request'] = { 'data_type':data_type, 'long_name':long_name, 'time_frequency':time_frequency, 
                              'dataset_category': dataset_category, 'dataset':dataset,
                              'dataset_category2': dataset_category2, 'package_name':package_name}
-    datasets_dict = ocgisDatasets.getDatasets(data_type, variable=variable, time_frequency=time_frequency, 
+    datasets_dict = ocgisDatasets.getDatasets(data_type, long_name=long_name, time_frequency=time_frequency, 
                                               dataset_category=dataset_category, dataset=dataset,
                                               dataset_category2=dataset_category2, package_name=package_name)
     # return all available options

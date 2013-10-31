@@ -12,8 +12,8 @@
 	var NULL_SELECTION = ["","-- Please Select --"]
 	
     var WIDGET_DATA_TYPE = "id_0-data_type"
-    var WIDGET_VARIABLE = "id_0-variable";
-    var WIDGET_TIME_FREQUENCY = "id_0-frequency";
+    var WIDGET_LONG_NAME = "id_0-long_name";
+    var WIDGET_TIME_FREQUENCY = "id_0-time_frequency";
     var WIDGET_DATASET_CATEGORY = "id_0-dataset_category";
     var WIDGET_DATASET = "id_0-dataset";
     
@@ -31,7 +31,7 @@
     		
   	        var options = new Array(NULL_SELECTION);
   	        
-  	        showOptions(WIDGET_VARIABLE, options, []);
+  	        showOptions(WIDGET_LONG_NAME, options, []);
   	        showOptions(WIDGET_TIME_FREQUENCY, options, []);
   	      	showOptions(WIDGET_DATASET_CATEGORY, options, []);
   	    	showOptions(WIDGET_DATASET, options, []);
@@ -51,8 +51,8 @@
   		    	  setVisibility(VARIABLE_WIDGETS, true);
   		      
 	  		      // variable 'long_name' is selected
-	  		      variable = document.getElementById(WIDGET_VARIABLE).value;
-	  		      if (variable!=null && variable!='') url += "&variable="+encodeURIComponent(variable);
+	  		      long_name = document.getElementById(WIDGET_LONG_NAME).value;
+	  		      if (long_name!=null && long_name!='') url += "&long_name="+encodeURIComponent(long_name);
 	  		      
 	  		      // time_frequency is selected
 	  		      time_frequency = document.getElementById(WIDGET_TIME_FREQUENCY).value;
@@ -92,7 +92,7 @@
     // function triggered by a change in variable selection
     function variableSelectedXXX() {
     	
-    	selectedValue = document.getElementById(WIDGET_VARIABLE).value;
+    	selectedValue = document.getElementById(WIDGET_LONG_NAME).value;
     	
     	if (selectedValue==null || selectedValue=='') {
     		
@@ -380,7 +380,7 @@
 		if (dataType=='variable') {
 		
 			// populate 'long_name' widget
-			populateDatasetOptions(WIDGET_VARIABLE, jsonData.response.long_name, [ jsonData.request.variable ]);
+			populateDatasetOptions(WIDGET_LONG_NAME, jsonData.response.long_name, [ jsonData.request.long_name ]);
 			
 			// populate 'time_frequency' widget
 			populateDatasetOptions(WIDGET_TIME_FREQUENCY, jsonData.response.time_frequency, [ jsonData.request.time_frequency ]);
@@ -480,13 +480,13 @@
 		<table class="horizontalTable">
 			<tr>
 				<th>Long Name</th>
-				<td>{{ wizard.form.variable }}
-					<br/>&nbsp;<span class="error">{{ wizard.form.variable.errors }}</span></td>
+				<td>{{ wizard.form.long_name }}
+					<br/>&nbsp;<span class="error">{{ wizard.form.long_name.errors }}</span></td>
 			</tr>
 			<tr>
 				<th>Time Frequency</th>
-				<td>{{ wizard.form.frequency }}
-					<br/>&nbsp;<span class="error">{{ wizard.form.frequency.errors }}</span></td>
+				<td>{{ wizard.form.time_frequency }}
+					<br/>&nbsp;<span class="error">{{ wizard.form.time_frequency.errors }}</span></td>
 			</tr>
 			<tr>
 				<th>Dataset Category</th>

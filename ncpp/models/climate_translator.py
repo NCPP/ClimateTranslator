@@ -13,9 +13,16 @@ from ncpp.config.datasets import ocgisDatasets
 class OpenClimateGisJob(Job):
     """Class that represents the execution of an Open Climate GIS job."""
     
-    dataset_category = models.CharField(max_length=200, verbose_name='Dataset Category', blank=False)
-    dataset = models.CharField(max_length=200, verbose_name='Dataset', blank=False)
-    variable = models.CharField(max_length=200, verbose_name='Variable', blank=True, null=True)
+    dataset_type = models.CharField(max_length=50, verbose_name='Data Type', blank=False, null=False)
+    
+    long_name = models.CharField(max_length=200, verbose_name='Long Name', blank=True, null=True)
+    time_frequency = models.CharField(max_length=200, verbose_name='Time Frequency', blank=True, null=True)
+    dataset_category = models.CharField(max_length=200, verbose_name='Dataset Category', blank=True, null=True)
+    dataset = models.CharField(max_length=200, verbose_name='Dataset', blank=True, null=True)
+    
+    dataset_category2 = models.CharField(max_length=200, verbose_name='Dataset Category', blank=True, null=True)
+    package_name = models.CharField(max_length=200, verbose_name='Package Name', blank=True, null=True)
+    
     geometry_category = models.CharField(max_length=200, verbose_name='Geometry Category', null=True, blank=True)
     geometry_subcategory = models.CharField(max_length=200, verbose_name='Geometry Sub-Category', null=True, blank=True)
     geometry_id = models.CharField(max_length=200, verbose_name='Geometry ID', null=True, blank=True)

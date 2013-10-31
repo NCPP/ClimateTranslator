@@ -43,11 +43,11 @@ class ClimateTranslatorForm1(Form):
     # The following widgets have no initial choices. The choices are assigned dynamically through Ajax
     
     # 1) variable or index selection
-    variable = DynamicChoiceField(choices=[ NO_VALUE_OPTION ], required=False,
-                                  widget=Select(attrs={'onchange': 'getDatasets();'}))
-    
-    frequency = DynamicChoiceField(choices=[ NO_VALUE_OPTION ], required=False,
+    long_name = DynamicChoiceField(choices=[ NO_VALUE_OPTION ], required=False,
                                    widget=Select(attrs={'onchange': 'getDatasets();'}))
+    
+    time_frequency = DynamicChoiceField(choices=[ NO_VALUE_OPTION ], required=False,
+                                        widget=Select(attrs={'onchange': 'getDatasets();'}))
     
     dataset_category = DynamicChoiceField(choices=[ NO_VALUE_OPTION ], required=True,
                                           widget=Select(attrs={'onchange': 'getDatasets();'}))

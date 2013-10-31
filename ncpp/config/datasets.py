@@ -23,17 +23,15 @@ class DbDatasets(Datasets):
         self.dataQuery = DataQuery(db_path=db_path)
         
     def getDataTypes(self):
+        
         # no option selected
         tuples = [ NO_VALUE_OPTION ]
         tuples.append( (VARIABLE, VARIABLE.capitalize()) ) # (key, label)
         tuples.append( (PACKAGE, PACKAGE.capitalize()) )   # (key, label)
         
-        # read all keys from JSON file
-        #for category in sorted( self.datasets.keys() ):
-        #    tuples.append( (category, category) )
         return tuples
 
-    def getDatasets(self, data_type, variable=None, time_frequency=None, dataset_category=None, dataset=None,
+    def getDatasets(self, data_type, long_name=None, time_frequency=None, dataset_category=None, dataset=None,
                                      dataset_category2=None, package_name=None):
         
         '''dict = 
@@ -43,7 +41,7 @@ class DbDatasets(Datasets):
         '''
         
         if data_type=='variable':
-            dict = self.dataQuery.get_variable_or_index('variable', long_name=variable, time_frequency=time_frequency, 
+            dict = self.dataQuery.get_variable_or_index('variable', long_name=long_name, time_frequency=time_frequency, 
                                                         dataset_category=dataset_category, dataset=dataset)        
         elif data_type=='package':
             
@@ -54,21 +52,6 @@ class DbDatasets(Datasets):
         
         print 'Dataset options: %s' % dict
         return dict
-
-    
-    def getTimeFrequencies(self, long_name):
-        print 'query for time frequencies for long_name=%s' % long_name
-        
-        # FIXME
-        dict = self.dataQuery.get_variable_or_index('variable')
-        #dict = self.dataQuery.get_variable_or_index('variable', long_name=long_name)
-        print 'frequencies=%s' % dict
-        tuples = [] 
-        for value in dict['time_frequency']:
-            tuples.append( (str(value), str(value)) )
-        return sorted(tuples, key=lambda t: t[1])
-    
-        
         
 ocgisDatasets = DbDatasets(DATASETS_DB) 
         
