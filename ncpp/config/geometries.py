@@ -55,6 +55,7 @@ class JsonGeometries(Geometries):
     def getSubCategories(self, category):
         
         subcategories = self.geometries[category]['geometries']
+        print 'subcats=%s' % subcategories
         
         # multiple sub-categories
         if len(subcategories)>1:                   

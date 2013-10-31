@@ -323,12 +323,14 @@
 		// parse JSON response into object		
 		var jsonResponse = eval('(' + o.responseText + ')');
 
+		/*
 		// populate variables choices
 		var options = new Array();
-		for (var i = 0; i < geometries.length; i++) {			
+		for (var i = 0; i < jsonResponse.geometries.length; i++) {			
 			options.push( [geometries[i][1], geometries[i][0]] );
 		}
 		showOptions("id_0-geometry_subcategory", options, [ "{{wizard.form.geometry_subcategory.value}}" ]);
+		)*/
 
 		showGeometrySubCategories(jsonResponse.geometries);
 		
