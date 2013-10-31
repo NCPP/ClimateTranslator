@@ -43,14 +43,24 @@ class ClimateTranslatorWizard(SessionWizardView):
             job_data = {}
             # retrieve form data for all previous views
             for step in self.steps.all:
-                if step != self.steps.current:                    
-                    cleaned_data = self.get_cleaned_data_for_step(step)   
+                cleaned_data = self.get_cleaned_data_for_step(step) 
+                
+                # first form
+                if step == '0':                
+                    job_data['data_type'] = cleaned_data['data_type']  
+                    if cleaned_data.has_key('long_name'):
+                        job_data['long_name'] = cleaned_data['long_name']  
+                        print 'LONG_NAME=%s' % job_data['long_name']  
+                    if cleaned_data.has_key('time_frequency'):
+                        job_data['time_frequency'] = cleaned_data['time_frequency']                          
                     if cleaned_data.has_key("dataset_category"):
                         job_data['dataset_category'] = cleaned_data['dataset_category'] 
                     if cleaned_data.has_key("dataset"):
                         job_data['dataset'] = cleaned_data['dataset'] 
-                    if cleaned_data.has_key('variable'):
-                        job_data['variable'] = cleaned_data['variable']  
+                    if cleaned_data.has_key("dataset_category2"):
+                        job_data['dataset_category2'] = cleaned_data['dataset_category2'] 
+                    if cleaned_data.has_key("package_name"):
+                        job_data['package_name'] = cleaned_data['package_name']                         
                     if cleaned_data.has_key('geometry_category') and hasText(cleaned_data['geometry_category']):
                         job_data['geometry_category'] = cleaned_data['geometry_category']
                     if cleaned_data.has_key('geometry_subcategory') and hasText(cleaned_data['geometry_subcategory']):
@@ -69,6 +79,9 @@ class ClimateTranslatorWizard(SessionWizardView):
                         job_data['lat'] = float( cleaned_data['lat'] )
                     if cleaned_data.has_key('lon') and cleaned_data['lon'] is not None:
                         job_data['lon'] = float( cleaned_data['lon'] )
+                 
+                # second form       
+                if step == '1':
                     if cleaned_data.has_key('agg_selection'):
                         job_data['agg_selection'] = bool(cleaned_data['agg_selection'])
                     if cleaned_data.has_key('datetime_start') and cleaned_data['datetime_start'] is not None:
@@ -123,9 +136,13 @@ class ClimateTranslatorWizard(SessionWizardView):
         # persist job specification to database
         job = OpenClimateGisJob.objects.create(status=JOB_STATUS.UNKNOWN,
                                                user=user,
+                                               data_type=form_data['data_type'],
+                                               long_name=form_data['long_name'],
+                                               time_frequency=form_data['time_frequency'],
                                                dataset_category=form_data['dataset_category'],
                                                dataset=form_data['dataset'],
-                                               variable=form_data['variable'],
+                                               dataset_category2=form_data['dataset_category2'],
+                                               package_name=form_data['package_name'],
                                                geometry_category=str(form_data['geometry_category']),
                                                geometry_subcategory=str(form_data['geometry_subcategory']),
                                                # must transform list of integers into string
@@ -186,7 +203,7 @@ def get_datasets(request):
     time_frequency = request.GET.get('time_frequency', None)
     dataset_category = request.GET.get('dataset_category', None)
     dataset = request.GET.get('dataset', None)
-    dataset_category2 = request.GET.get('dataset_category', None)
+    dataset_category2 = request.GET.get('dataset_category2', None)
     package_name = request.GET.get('package_name', None)
     print 'GET Datasets request: %s' % request.GET
     json_data = {}
@@ -198,6 +215,7 @@ def get_datasets(request):
                                               dataset_category=dataset_category, dataset=dataset,
                                               dataset_category2=dataset_category2, package_name=package_name)
     # return all available options
+    print 'datasets_dict=%s' % datasets_dict
     json_data['response'] = datasets_dict
     
     return HttpResponse(simplejson.dumps(json_data), mimetype='application/json')

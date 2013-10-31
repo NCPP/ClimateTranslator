@@ -50,8 +50,19 @@ class DbDatasets(Datasets):
         else:
             raise Exception('Unsupported data type=%s' % data_type)
         
-        print 'Dataset options: %s' % dict
         return dict
+    
+    # FIXME ?
+    def get_variable_or_index_dataset(self, data_type, long_name=None, time_frequency=None, 
+                                            dataset_category=None, dataset=None):
+        
+        if data_type=='variable':
+            dict = self.dataQuery.get_variable_or_index_dataset('variable', long_name=long_name, time_frequency=time_frequency, 
+                                                                            dataset_category=dataset_category, dataset=dataset)  
+            return dict
+        else:
+            raise Exception("data_type=index not yet implemented")
+        
         
 ocgisDatasets = DbDatasets(DATASETS_DB) 
         

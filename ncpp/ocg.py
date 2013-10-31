@@ -32,17 +32,41 @@ class OCG(object):
         # ocgis.RequestDataset(uri=None, variable=None, alias=None, time_range=None, time_region=None, 
         #                      level_range=None, s_proj=None, t_units=None, t_calendar=None, did=None, meta=None)
         # retrieve dataset URIs, variable from configuration JSON data
-        jsonObject = self.ocgisDatasets.datasets[openClimateGisJob.dataset_category][openClimateGisJob.dataset]     
-        if jsonObject['type'] == 'datasets': 
+        
+        data_type = openClimateGisJob.data_type
+        if data_type == 'variable':
+            
+            dictionaries = self.ocgisDatasets.get_variable_or_index_dataset('variable',
+                                                                             long_name=str(openClimateGisJob.long_name),
+                                                                             time_frequency=str(openClimateGisJob.time_frequency),
+                                                                             dataset_category=str(openClimateGisJob.dataset_category),
+                                                                             dataset=str(openClimateGisJob.dataset) )
+            # list of dictionaries, example
+            # [{'variable': u'tas', 'alias': u'tas', 't_calendar': u'standard', 
+            #   'uri': [u'/data/maurer/concatenated/Maurer02new_OBS_tas_daily.1971-2000.nc'], 
+            #   't_units': u'days since 1940-01-01 00:00:00'}]
+            print dictionaries
+            print dictionaries[0]
+            args['variable'] = dictionaries[0]['variable']
+            args['alias'] = dictionaries[0]['alias']
+            args['uri'] = dictionaries[0]['uri']
+            args['t_calendar'] = dictionaries[0]['t_calendar']
+            args['t_units'] = dictionaries[0]['t_units']
+            
+        elif data_type == 'package':
+            pass
+        
+        #jsonObject = self.ocgisDatasets.datasets[openClimateGisJob.dataset_category][openClimateGisJob.dataset]     
+        #if jsonObject['type'] == 'datasets': 
             # must sub-select data structure by variable
-            jsonData =jsonObject[openClimateGisJob.variable]
-        elif jsonObject['type'] == 'package':
-            jsonData = jsonObject
-        args['uri'] = jsonData['uri']
-        args['variable'] = jsonData["variable"]
-        args['t_calendar'] = jsonData["t_calendar"]
-        args['t_units'] = jsonData["t_units"]
-        args['alias'] = jsonData["alias"]
+        #    jsonData =jsonObject[openClimateGisJob.variable]
+        #elif jsonObject['type'] == 'package':
+        #    jsonData = jsonObject
+        #args['uri'] = jsonData['uri']
+        #args['variable'] = jsonData["variable"]
+        #args['t_calendar'] = jsonData["t_calendar"]
+        #args['t_units'] = jsonData["t_units"]
+        #args['alias'] = jsonData["alias"]
                     
         # class ocgis.OcgOperations(dataset=None, spatial_operation='intersects', geom=None, 
         #                           aggregate=False, calc=None, calc_grouping=None, calc_raw=False, 

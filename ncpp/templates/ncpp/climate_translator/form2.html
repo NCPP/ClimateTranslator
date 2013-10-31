@@ -3,9 +3,16 @@
 <h3>Request Summary</h3>
 
 <table class="horizontalTable">
-	<tr><th nowrap="nowrap">Dataset Category:</th><td>{{ job_data.dataset_category }}</td></tr>
-	<tr><th nowrap="nowrap">Dataset:</th><td>{{ job_data.dataset }}</td></tr>
-	{% if job_data.variable %} <tr><th nowrap="nowrap">Variable:</th><td>{{ job_data.variable }}</td></tr> {% endif %}
+	<tr><th nowrap="nowrap">Data Selection by:</th><td>{{ job_data.data_type }}</td></tr>
+	{% if job_data.data_type == 'variable' %}
+		<tr><th nowrap="nowrap">Long Name:</th><td>{{ job_data.long_name }}</td></tr>
+		<tr><th nowrap="nowrap">Time Frequency:</th><td>{{ job_data.time_frequency }}</td></tr>
+		<tr><th nowrap="nowrap">Dataset Category:</th><td>{{ job_data.dataset_category }}</td></tr>
+		<tr><th nowrap="nowrap">Dataset:</th><td>{{ job_data.dataset }}</td></tr>
+	{% else %}
+		<tr><th nowrap="nowrap">Dataset Category:</th><td>{{ job_data.dataset_category2 }}</td></tr>
+		<tr><th nowrap="nowrap">Package Name:</th><td>{{ job_data.package_name }}</td></tr>	
+	{% endif %}
 	{% if job_data.geometry_category %}
 		{% if job_data.geometry_subcategory != 'null' %} 
 			<tr><th nowrap="nowrap">Geometry:</th><td>{{ job_data.geometry_category }} &gt; {{ job_data.geometry_subcategory }} &gt; {{ job_data.geometry_id }}</td></tr>

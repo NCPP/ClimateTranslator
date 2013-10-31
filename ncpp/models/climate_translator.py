@@ -13,7 +13,7 @@ from ncpp.config.datasets import ocgisDatasets
 class OpenClimateGisJob(Job):
     """Class that represents the execution of an Open Climate GIS job."""
     
-    dataset_type = models.CharField(max_length=50, verbose_name='Data Type', blank=False, null=False)
+    data_type = models.CharField(max_length=50, verbose_name='Data Type', blank=False, null=False)
     
     long_name = models.CharField(max_length=200, verbose_name='Long Name', blank=True, null=True)
     time_frequency = models.CharField(max_length=200, verbose_name='Time Frequency', blank=True, null=True)
@@ -122,10 +122,19 @@ class OpenClimateGisJob(Job):
         """Returns an ordered list of (choice label, choice value) for display to the user."""
         
         job_data = []
-        job_data.append( ('Dataset Category', self.dataset_category) )
-        job_data.append( ('Dataset', self.dataset) )       
-        if hasText(self.variable):
-            job_data.append( ('Variable', self.variable) )
+        job_data.append( ('Select Data by', self.data_type) )
+        if hasText(self.long_name):
+            job_data.append( ('Long Name', self.long_name) )
+        if hasText(self.time_frequency):
+            job_data.append( ('Time Frequency', self.time_frequency) )
+        if hasText(self.dataset_category):
+            job_data.append( ('Dataset Category', self.dataset_category) )
+        if hasText(self.dataset):
+            job_data.append( ('Dataset', self.dataset) )       
+        if hasText(self.dataset_category2):
+            job_data.append( ('Dataset Category', self.dataset_category2) )
+        if hasText(self.package_name):
+            job_data.append( ('Package Name', self.package_name) )            
         if hasText(self.geometry_category):
             job_data.append( ('Geometry Category', self.geometry_category) )
         if hasText(self.geometry_subcategory):

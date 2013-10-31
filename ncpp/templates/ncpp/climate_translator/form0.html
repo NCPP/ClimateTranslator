@@ -162,7 +162,7 @@
 	}
 	
 	// function to populate the form widget with the variable choices
-	function populateVariables() {
+	function populateVariablesXXX() {
 
 		// variable options
 		var options = new Array();
@@ -258,6 +258,7 @@
 		for (var i = 0; i < options.length; i++) {
 			var option = new Option(options[i][1], options[i][0]); // label, value
 			for (var j=0; j<selectedValues.length; j++) {
+				if (options.length == 1)  option.selected = true;	 // only choice
 				if (options[i][0] == selectedValues[j]) option.selected = true;	
 			}
 			selectWidget.add( option );
@@ -352,15 +353,6 @@
 
 		// parse JSON response into object		
 		var jsonResponse = eval('(' + o.responseText + ')');
-
-		/*
-		// populate variables choices
-		var options = new Array();
-		for (var i = 0; i < jsonResponse.geometries.length; i++) {			
-			options.push( [geometries[i][1], geometries[i][0]] );
-		}
-		showOptions("id_0-geometry_subcategory", options, [ "{{wizard.form.geometry_subcategory.value}}" ]);
-		)*/
 
 		showGeometrySubCategories(jsonResponse.geometries);
 		

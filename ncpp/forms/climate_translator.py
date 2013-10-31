@@ -49,17 +49,17 @@ class ClimateTranslatorForm1(Form):
     time_frequency = DynamicChoiceField(choices=[ NO_VALUE_OPTION ], required=False,
                                         widget=Select(attrs={'onchange': 'getDatasets();'}))
     
-    dataset_category = DynamicChoiceField(choices=[ NO_VALUE_OPTION ], required=True,
+    dataset_category = DynamicChoiceField(choices=[ NO_VALUE_OPTION ], required=False,
                                           widget=Select(attrs={'onchange': 'getDatasets();'}))
     
-    dataset = DynamicChoiceField(choices=[ NO_VALUE_OPTION ], required=True,
+    dataset = DynamicChoiceField(choices=[ NO_VALUE_OPTION ], required=False,
                                  widget=Select(attrs={'onchange': 'getDatasets();'}) )
     
     # 2) package selection
-    dataset_category2 = DynamicChoiceField(choices=[ NO_VALUE_OPTION ], required=True,
+    dataset_category2 = DynamicChoiceField(choices=[ NO_VALUE_OPTION ], required=False,
                                            widget=Select(attrs={'onchange': 'getDatasets();'}))
     
-    package_name = DynamicChoiceField(choices=[ NO_VALUE_OPTION ], required=True,
+    package_name = DynamicChoiceField(choices=[ NO_VALUE_OPTION ], required=False,
                                       widget=Select(attrs={'onchange': 'getDatasets();'}))
 
      
@@ -92,14 +92,17 @@ class ClimateTranslatorForm1(Form):
         # invoke superclass cleaning method
         super(ClimateTranslatorForm1, self).clean()
         
-        # validate data selection
+        # FIXME 
+        #validate data selection
+        '''
         if 'dataset_category' in self.cleaned_data and hasText(self.cleaned_data['dataset_category']):
             if 'dataset' in self.cleaned_data and hasText(self.cleaned_data['dataset']):
                 jsonData = ocgisDatasets.datasets[self.cleaned_data['dataset_category']][self.cleaned_data['dataset']] 
                 if jsonData['type'] == 'datasets':
                     if not 'variable' in self.cleaned_data or not hasText(self.cleaned_data['variable']):
                          self._errors["variable"] = self.error_class(["A variable must be selected when the dataset is not a package."]) 
-                
+        '''
+        
         # validate geometry
         ngeometries = 0
         geometry = None
