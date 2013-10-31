@@ -9,12 +9,19 @@
 <script language="javascript">
 
 	// widget ids as set by Django wizard
+	var NULL_SELECTION = ["","-- Please Select --"]
+	
     var WIDGET_DATA_TYPE = "id_0-data_type"
     var WIDGET_VARIABLE = "id_0-variable";
     var WIDGET_TIME_FREQUENCY = "id_0-frequency";
     var WIDGET_DATASET_CATEGORY = "id_0-dataset_category";
     var WIDGET_DATASET = "id_0-dataset";
-    var NULL_SELECTION = ["","-- Please Select --"]
+    
+    var WIDGET_DATASET_CATEGORY2 = "id_0-dataset_category2";
+    var WIDGET_PACKAGE_NAME = "id_0-package_name";
+    
+    var VARIABLE_WIDGETS = "variable_widgets";
+    var PACKAGE_WIDGETS = "package_widgets";
 
     // function triggered by a change in data type selection
     function getDatasets() {
@@ -23,10 +30,14 @@
     	if (dataType==null || dataType=='') {
     		
   	        var options = new Array(NULL_SELECTION);
+  	        
   	        showOptions(WIDGET_VARIABLE, options, []);
   	        showOptions(WIDGET_TIME_FREQUENCY, options, []);
   	      	showOptions(WIDGET_DATASET_CATEGORY, options, []);
   	    	showOptions(WIDGET_DATASET, options, []);
+  	    	
+  	    	showOptions(WIDGET_DATASET_CATEGORY2, options, []);
+  	    	showOptions(WIDGET_PACKAGE_NAME, options, []);
     		
     	} else {
   		    			
@@ -34,24 +45,44 @@
   		      url = '/ncpp/climate_translator/datasets'
   		          + '?data_type='+encodeURIComponent(dataType);
   		      
-  		      // variable 'long_name' is selected
-  		      variable = document.getElementById(WIDGET_VARIABLE).value;
-  		      if (variable!=null && variable!='') url += "&variable="+encodeURIComponent(variable);
-  		      
-  		      // time_frequency is selected
-  		      time_frequency = document.getElementById(WIDGET_TIME_FREQUENCY).value;
-  		      if (time_frequency!=null && time_frequency!='') url += "&time_frequency="+encodeURIComponent(time_frequency);
-
-  		      // dataset_category is selected
-  		      dataset_category = document.getElementById(WIDGET_DATASET_CATEGORY).value;
-  		      if (dataset_category!=null && dataset_category!='') url += "&dataset_category="+encodeURIComponent(dataset_category);
-
-  		      // dataset is selected
-  		      dataset = document.getElementById(WIDGET_DATASET).value;
-  		      if (dataset!=null && dataset!='') url += "&dataset="+encodeURIComponent(dataset);
+  		      if (dataType=='variable') {
   		    	  
-			  // execute async request
-  		      var transaction = YAHOO.util.Connect.asyncRequest('GET', url, ajaxDatasetsCallback, null);   			
+  		    	  setVisibility(PACKAGE_WIDGETS, false);
+  		    	  setVisibility(VARIABLE_WIDGETS, true);
+  		      
+	  		      // variable 'long_name' is selected
+	  		      variable = document.getElementById(WIDGET_VARIABLE).value;
+	  		      if (variable!=null && variable!='') url += "&variable="+encodeURIComponent(variable);
+	  		      
+	  		      // time_frequency is selected
+	  		      time_frequency = document.getElementById(WIDGET_TIME_FREQUENCY).value;
+	  		      if (time_frequency!=null && time_frequency!='') url += "&time_frequency="+encodeURIComponent(time_frequency);
+	
+	  		      // dataset_category is selected
+	  		      dataset_category = document.getElementById(WIDGET_DATASET_CATEGORY).value;
+	  		      if (dataset_category!=null && dataset_category!='') url += "&dataset_category="+encodeURIComponent(dataset_category);
+	
+	  		      // dataset is selected
+	  		      dataset = document.getElementById(WIDGET_DATASET).value;
+	  		      if (dataset!=null && dataset!='') url += "&dataset="+encodeURIComponent(dataset);
+	  		      
+  		      } else if (dataType=='package') {
+  		    	  
+  		    	  setVisibility(VARIABLE_WIDGETS, false);
+  		    	  setVisibility(PACKAGE_WIDGETS, true);
+  		    		
+  	  		      // dataset_category is selected
+  	  		      dataset_category2 = document.getElementById(WIDGET_DATASET_CATEGORY2).value;
+  	  		      if (dataset_category2!=null && dataset_category2!='') url += "&dataset_category2="+encodeURIComponent(dataset_category2);
+  	
+  	  		      // package_name is selected
+  	  		      package_name = document.getElementById(WIDGET_PACKAGE_NAME).value;
+  	  		      if (package_name!=null && package_name!='') url += "&package_name="+encodeURIComponent(package_name);
+
+  		      }
+  		      
+			  // submit async request
+  		      var transaction = YAHOO.util.Connect.asyncRequest('GET', url, ajaxDatasetsCallback, null);   	
  
     	}
     	
@@ -59,7 +90,7 @@
     }
     
     // function triggered by a change in variable selection
-    function variableSelected() {
+    function variableSelectedXXX() {
     	
     	selectedValue = document.getElementById(WIDGET_VARIABLE).value;
     	
@@ -82,7 +113,7 @@
     }
     
     // function triggered by a change in time frequency selection
-    function frequencySelected() {
+    function frequencySelectedXXX() {
     	
     	selectedValue = document.getElementById(WIDGET_TIME_FREQUENCY).value;
     	
@@ -94,7 +125,6 @@
     		
     	} else {
     		
-    		  alert("GOT THIS FAR");
 		      // execute ajax call to retrieve the available geometries
 		      url = '/ncpp/climate_translator/datasets'
 		          + '?variable='+encodeURIComponent(selectedValue)
@@ -345,17 +375,32 @@
 		// parse JSON response into object		
 		var jsonData = eval('(' + o.responseText + ')');
 		
-		// populate 'long_name' widget
-		populateDatasetOptions(WIDGET_VARIABLE, jsonData.response.long_name, [ jsonData.request.variable ])
+		datType = jsonData.request.data_type;
 		
-		// populate 'time_frequency' widget
-		populateDatasetOptions(WIDGET_TIME_FREQUENCY, jsonData.response.time_frequency, [ jsonData.request.time_frequency ])
+		if (dataType=='variable') {
 		
-		// populate 'dataset_category' widget
-		populateDatasetOptions(WIDGET_DATASET_CATEGORY, jsonData.response.dataset_category, [ jsonData.request.dataset_category ])
-
-		// populate 'dataset' widget
-		populateDatasetOptions(WIDGET_DATASET, jsonData.response.dataset, [ jsonData.request.dataset ])
+			// populate 'long_name' widget
+			populateDatasetOptions(WIDGET_VARIABLE, jsonData.response.long_name, [ jsonData.request.variable ]);
+			
+			// populate 'time_frequency' widget
+			populateDatasetOptions(WIDGET_TIME_FREQUENCY, jsonData.response.time_frequency, [ jsonData.request.time_frequency ]);
+			
+			// populate 'dataset_category' widget
+			populateDatasetOptions(WIDGET_DATASET_CATEGORY, jsonData.response.dataset_category, [ jsonData.request.dataset_category ]);
+	
+			// populate 'dataset' widget
+			populateDatasetOptions(WIDGET_DATASET, jsonData.response.dataset, [ jsonData.request.dataset ]);
+		
+		} else if (dataType=='package') {
+			
+			// populate 'dataset_category' widget
+			populateDatasetOptions(WIDGET_DATASET_CATEGORY2, jsonData.response.dataset_category, [ jsonData.request.dataset_category2 ]);
+	
+			// populate 'dataset' widget
+			populateDatasetOptions(WIDGET_PACKAGE_NAME, jsonData.response.package_name, [ jsonData.request.package_name ]);
+			
+			
+		}
 
 	}
 	
@@ -430,28 +475,45 @@
 			<td>{{ wizard.form.data_type }}
 				<br/>&nbsp;<span class="error">{{ wizard.form.data_type.errors }}</span></td>
 		</tr>
-		<tr>
-			<th>Long Name</th>
-			<td>{{ wizard.form.variable }}
-				<br/>&nbsp;<span class="error">{{ wizard.form.variable.errors }}</span></td>
-		</tr>
-		<tr>
-			<th>Time Frequency</th>
-			<td>{{ wizard.form.frequency }}
-				<br/>&nbsp;<span class="error">{{ wizard.form.frequency.errors }}</span></td>
-		</tr>
-		<tr>
-			<th>Dataset Category</th>
-			<td>{{ wizard.form.dataset_category }}
-				<br/>&nbsp;<span class="error">{{ wizard.form.dataset_category.errors }}</span></td>
-		</tr>
-		<tr>
-			<th>Dataset</th>
-			<td>{{ wizard.form.dataset }}
-				<br/>&nbsp;<span class="error">{{ wizard.form.dataset.errors }}</span></td>
-		</tr>
-
 	</table>
+	<div id="variable_widgets">
+		<table class="horizontalTable">
+			<tr>
+				<th>Long Name</th>
+				<td>{{ wizard.form.variable }}
+					<br/>&nbsp;<span class="error">{{ wizard.form.variable.errors }}</span></td>
+			</tr>
+			<tr>
+				<th>Time Frequency</th>
+				<td>{{ wizard.form.frequency }}
+					<br/>&nbsp;<span class="error">{{ wizard.form.frequency.errors }}</span></td>
+			</tr>
+			<tr>
+				<th>Dataset Category</th>
+				<td>{{ wizard.form.dataset_category }}
+					<br/>&nbsp;<span class="error">{{ wizard.form.dataset_category.errors }}</span></td>
+			</tr>
+			<tr>
+				<th>Dataset</th>
+				<td>{{ wizard.form.dataset }}
+					<br/>&nbsp;<span class="error">{{ wizard.form.dataset.errors }}</span></td>
+			</tr>
+		</table>
+	</div>
+	<div id="package_widgets">
+		<table class="horizontalTable">
+			<tr>
+				<th>Dataset Category</th>
+				<td>{{ wizard.form.dataset_category2 }}
+					<br/>&nbsp;<span class="error">{{ wizard.form.dataset_category2.errors }}</span></td>
+			</tr>
+			<tr>
+				<th>Package Name</th>
+				<td>{{ wizard.form.package_name }}
+					<br/>&nbsp;<span class="error">{{ wizard.form.package_name.errors }}</span></td>
+			</tr>
+		</table>
+	</div>
 </fieldset>
 
 <fieldset class="fieldset_box">

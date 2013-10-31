@@ -33,7 +33,8 @@ class DbDatasets(Datasets):
         #    tuples.append( (category, category) )
         return tuples
 
-    def getDatasets(self, data_type, variable=None, time_frequency=None, dataset_category=None, dataset=None):
+    def getDatasets(self, data_type, variable=None, time_frequency=None, dataset_category=None, dataset=None,
+                                     dataset_category2=None, package_name=None):
         
         '''dict = 
            {'long_name': [u'Air Temperature', u'Daily Precipitation Rate', u'Maximum Air Temperature', u'Minimum Air Temperature'], 
@@ -43,12 +44,17 @@ class DbDatasets(Datasets):
         
         if data_type=='variable':
             dict = self.dataQuery.get_variable_or_index('variable', long_name=variable, time_frequency=time_frequency, 
-                                                        dataset_category=dataset_category, dataset=dataset)
-            print 'Dataset options: %s' % dict
-            return dict
-        
+                                                        dataset_category=dataset_category, dataset=dataset)        
+        elif data_type=='package':
+            
+            dict = self.dataQuery.get_package(dataset_category=dataset_category2, package_name=package_name)
+                                                    
         else:
             raise Exception('Unsupported data type=%s' % data_type)
+        
+        print 'Dataset options: %s' % dict
+        return dict
+
     
     def getTimeFrequencies(self, long_name):
         print 'query for time frequencies for long_name=%s' % long_name
