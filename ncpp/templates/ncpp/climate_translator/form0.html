@@ -23,9 +23,26 @@
     var VARIABLE_WIDGETS = "variable_widgets";
     var PACKAGE_WIDGETS = "package_widgets";
     
+    // list of widgets in the order they are selected
+    var VARIABLE_WIDGET_IDS = [WIDGET_DATA_TYPE, WIDGET_LONG_NAME, WIDGET_TIME_FREQUENCY, WIDGET_DATASET_CATEGORY, WIDGET_DATASET]
+    var PACKAGE_WIDGET_IDS = [WIDGET_DATA_TYPE, WIDGET_DATASET_CATEGORY2, WIDGET_PACKAGE_NAME]
+    
     // function to check wether a given widget value is valid
     function isValid(value) {
     	return (value!=null && value!='' && value!='None');
+    }
+    
+    function invalidateSelection(widget_ids) {
+    	for (var i=0; i<widget_ids.length; i++) {
+    		selectedValue = document.getElementById(widget_ids[i]).value;
+    		if (!isValid(selectedValue)) {
+    			// select first option for all following widgets
+    			for (var j=i+1; j<widget_ids.length; j++) {
+    				document.getElementById(widget_ids[j]).options[0].selected = true;
+    			}
+    			break;
+    		}
+    	}
     }
 
     // function triggered by a change in data type selection
@@ -55,6 +72,9 @@
   		    	  setVisibility(PACKAGE_WIDGETS, false);
   		    	  setVisibility(VARIABLE_WIDGETS, true);
   		    	  
+  		    	  // reset selection for all following widgets:
+  		    	  invalidateSelection(VARIABLE_WIDGET_IDS);
+  		    	  
   	  		      // use long_name from current client selection
   	  		      long_name = document.getElementById(WIDGET_LONG_NAME).value;
   	  		      // or from server stored selection
@@ -71,7 +91,7 @@
 	  		      dataset_category = document.getElementById(WIDGET_DATASET_CATEGORY).value;
 	  		      // or from server stored selection
   	  		      if (!isValid(dataset_category)) dataset_category = "{{wizard.form.dataset_category.value}}";
-  	  		      if (isValid(dataset_category)) url += "&time_frequency="+encodeURIComponent(dataset_category);
+  	  		      if (isValid(dataset_category)) url += "&dataset_category="+encodeURIComponent(dataset_category);
 	
   	  		      // use dataset from current client selection
 	  		      dataset = document.getElementById(WIDGET_DATASET).value;
@@ -83,6 +103,10 @@
   		    	  
   		    	  setVisibility(VARIABLE_WIDGETS, false);
   		    	  setVisibility(PACKAGE_WIDGETS, true);
+  		    	  
+  		    	  // reset selection for all following widgets:
+  		    	  invalidateSelection(PACKAGE_WIDGET_IDS);
+
   		    		
   	  		      // use dataset_category2 from current client selection
   	  		      dataset_category2 = document.getElementById(WIDGET_DATASET_CATEGORY2).value;
@@ -275,8 +299,11 @@
 		selectWidget.options.length = 0;
 		for (var i = 0; i < options.length; i++) {
 			var option = new Option(options[i][1], options[i][0]); // label, value
+			
+			// if only one option + null option, select it
+			if (options.length == 2 && isValid(options[i][0]))  option.selected = true;
+			// or retaing previous selection
 			for (var j=0; j<selectedValues.length; j++) {
-				if (options.length == 1)  option.selected = true;	 // only choice
 				if (options[i][0] == selectedValues[j]) option.selected = true;	
 			}
 			selectWidget.add( option );
@@ -418,11 +445,10 @@
 	function populateDatasetOptions(widget_id, options, selectedOptions) {
 	
 		// build (value, label) pairs, add null option
-		var allOptions = new Array();
-		if (options.length>1) {
-			// prompt user to make a selection
-			allOptions.push( NULL_SELECTION );
-		}
+		// NOTE: always add the -- Select -- option to allow user to backtrack selection
+		var allOptions = new Array(NULL_SELECTION);
+
+		// add all other options
 		for (var i = 0; i < options.length; i++) {			
 			allOptions.push( [options[i], options[i]] );
 		}
