@@ -37,7 +37,7 @@ class ClimateTranslatorForm1(Form):
        The argument passed to ocgisChoices must correspond to a valid key in the file OCGIS configuration file.'''
            
     # data selection
-    data_type = ChoiceField(choices=ocgisDatasets.getDataTypes(), required=True,
+    data_type = ChoiceField(choices=[ NO_VALUE_OPTION ] + ocgisDatasets.getDataTypes(), required=True,
                                  widget=Select(attrs={'onchange': 'getDatasets();'}))
     
     # The following widgets have no initial choices. The choices are assigned dynamically through Ajax
