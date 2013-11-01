@@ -50,7 +50,6 @@ class ClimateTranslatorWizard(SessionWizardView):
                     job_data['data_type'] = cleaned_data['data_type']  
                     if cleaned_data.has_key('long_name'):
                         job_data['long_name'] = cleaned_data['long_name']  
-                        print 'LONG_NAME=%s' % job_data['long_name']  
                     if cleaned_data.has_key('time_frequency'):
                         job_data['time_frequency'] = cleaned_data['time_frequency']                          
                     if cleaned_data.has_key("dataset_category"):
@@ -79,9 +78,6 @@ class ClimateTranslatorWizard(SessionWizardView):
                         job_data['lat'] = float( cleaned_data['lat'] )
                     if cleaned_data.has_key('lon') and cleaned_data['lon'] is not None:
                         job_data['lon'] = float( cleaned_data['lon'] )
-                 
-                # second form       
-                if step == '1':
                     if cleaned_data.has_key('agg_selection'):
                         job_data['agg_selection'] = bool(cleaned_data['agg_selection'])
                     if cleaned_data.has_key('datetime_start') and cleaned_data['datetime_start'] is not None:
@@ -92,6 +88,9 @@ class ClimateTranslatorWizard(SessionWizardView):
                         job_data['timeregion_month'] = get_month_string( cleaned_data['timeregion_month'] )
                     if cleaned_data.has_key('timeregion_year') and cleaned_data['timeregion_year'] is not None:
                         job_data['timeregion_year'] = cleaned_data['timeregion_year']
+                 
+                # second form       
+                if step == '1':
                     if cleaned_data.has_key('calc') and cleaned_data['calc'] is not None and cleaned_data['calc'] != '':
                         job_data['calc'] = ocgisCalculations.getCalc(cleaned_data['calc'])["name"]             
                     if cleaned_data.has_key('par1') and cleaned_data['par1'] is not None:
@@ -205,7 +204,7 @@ def get_datasets(request):
     dataset = request.GET.get('dataset', None)
     dataset_category2 = request.GET.get('dataset_category2', None)
     package_name = request.GET.get('package_name', None)
-    print 'GET Datasets request: %s' % request.GET
+    #print 'GET Datasets request: %s' % request.GET
     json_data = {}
     # pass back the current selection
     json_data['request'] = { 'data_type':data_type, 'long_name':long_name, 'time_frequency':time_frequency, 
@@ -215,7 +214,7 @@ def get_datasets(request):
                                               dataset_category=dataset_category, dataset=dataset,
                                               dataset_category2=dataset_category2, package_name=package_name)
     # return all available options
-    print 'datasets_dict=%s' % datasets_dict
+    #print 'GET Datasets response=%s' % datasets_dict
     json_data['response'] = datasets_dict
     
     return HttpResponse(simplejson.dumps(json_data), mimetype='application/json')
