@@ -22,6 +22,11 @@
     
     var VARIABLE_WIDGETS = "variable_widgets";
     var PACKAGE_WIDGETS = "package_widgets";
+    
+    // function to check wether a given widget value is valid
+    function isValid(value) {
+    	return (value!=null && value!='' && value!='None');
+    }
 
     // function triggered by a change in data type selection
     function getDatasets() {
@@ -49,36 +54,49 @@
   		    	  
   		    	  setVisibility(PACKAGE_WIDGETS, false);
   		    	  setVisibility(VARIABLE_WIDGETS, true);
-  		      
-	  		      // variable 'long_name' is selected
-	  		      long_name = document.getElementById(WIDGET_LONG_NAME).value;
-	  		      if (long_name!=null && long_name!='') url += "&long_name="+encodeURIComponent(long_name);
+  		    	  
+  	  		      // use long_name from current client selection
+  	  		      long_name = document.getElementById(WIDGET_LONG_NAME).value;
+  	  		      // or from server stored selection
+  	  		      if (!isValid(long_name)) long_name = "{{wizard.form.long_name.value}}";
+  	  		      if (isValid(long_name)) url += "&long_name="+encodeURIComponent(long_name);
 	  		      
-	  		      // time_frequency is selected
+  	  			  // use time_frequency from current client selection
 	  		      time_frequency = document.getElementById(WIDGET_TIME_FREQUENCY).value;
-	  		      if (time_frequency!=null && time_frequency!='') url += "&time_frequency="+encodeURIComponent(time_frequency);
+	  		      // or from server stored selection
+  	  		      if (!isValid(time_frequency)) time_frequency = "{{wizard.form.time_frequency.value}}";
+  	  		      if (isValid(time_frequency)) url += "&time_frequency="+encodeURIComponent(time_frequency);
 	
-	  		      // dataset_category is selected
+  	  		      // use dataset_category from current client selection
 	  		      dataset_category = document.getElementById(WIDGET_DATASET_CATEGORY).value;
-	  		      if (dataset_category!=null && dataset_category!='') url += "&dataset_category="+encodeURIComponent(dataset_category);
+	  		      // or from server stored selection
+  	  		      if (!isValid(dataset_category)) dataset_category = "{{wizard.form.dataset_category.value}}";
+  	  		      if (isValid(dataset_category)) url += "&time_frequency="+encodeURIComponent(dataset_category);
 	
-	  		      // dataset is selected
+  	  		      // use dataset from current client selection
 	  		      dataset = document.getElementById(WIDGET_DATASET).value;
-	  		      if (dataset!=null && dataset!='') url += "&dataset="+encodeURIComponent(dataset);
+	  		      // or from server stored selection
+  	  		      if (!isValid(dataset)) dataset = "{{wizard.form.dataset.value}}";
+  	  		      if (isValid(dataset)) url += "&dataset="+encodeURIComponent(dataset);
 	  		      
   		      } else if (dataType=='package') {
   		    	  
   		    	  setVisibility(VARIABLE_WIDGETS, false);
   		    	  setVisibility(PACKAGE_WIDGETS, true);
   		    		
-  	  		      // dataset_category is selected
+  	  		      // use dataset_category2 from current client selection
   	  		      dataset_category2 = document.getElementById(WIDGET_DATASET_CATEGORY2).value;
-  	  		      if (dataset_category2!=null && dataset_category2!='') url += "&dataset_category2="+encodeURIComponent(dataset_category2);
+  	  		      // or from server stored selection
+  	  		      if (!isValid(dataset_category2)) dataset_category2 = "{{wizard.form.dataset_category2.value}}";
+  	  		      // or from server stored selection
+  	  		      if (isValid(dataset_category2)) url += "&dataset_category2="+encodeURIComponent(dataset_category2);
   	
-  	  		      // package_name is selected
+  	  		      // use package_name from current client selection
   	  		      package_name = document.getElementById(WIDGET_PACKAGE_NAME).value;
-  	  		      if (package_name!=null && package_name!='') url += "&package_name="+encodeURIComponent(package_name);
-
+  	  		      // or from server stored selection
+  	  		  	  if (!isValid(package_name)) package_name = "{{wizard.form.package_name.value}}";
+  	  		      if (isValid(package_name)) url += "&package_name="+encodeURIComponent(package_name);
+  	  		      
   		      }
   		      
 			  // submit async request
@@ -442,8 +460,9 @@
 	
 	function init() {
 				
-		//populateDatasets();
-		populateVariables();
+		getDatasets();
+		
+		//riables();
 		populateGeometrySubCategories();
 		//populateGeometryIds();
 		

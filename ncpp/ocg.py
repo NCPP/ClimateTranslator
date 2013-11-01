@@ -61,6 +61,7 @@ class OCG(object):
             dictionaries = self.ocgisDatasets.get_package_datasets(package_name=openClimateGisJob.package_name)
 
         # combine all dictionaries into lists
+        print dictionaries
         for dict in dictionaries:
             args['variable'].append( dict['variable'] )
             args['alias'].append( dict['alias'] )

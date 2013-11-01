@@ -86,22 +86,27 @@ class ClimateTranslatorForm1(Form):
     timeregion_month = MultipleChoiceField(choices=MONTH_CHOICES, required=False, widget=CheckboxSelectMultiple)                                    #initial = range(12))
     timeregion_year = CharField(required=False, widget=TextInput(attrs={'size':50}))
     
+    def _validateFields(self, field_names):
+        '''Method for bulk validation of a list of field.'''
+        for field_name in field_names:
+            if not hasText( self.cleaned_data[field_name] ):
+                self._errors[field_name] = self.error_class(["This field is required"])
+        
     # custom validation
     def clean(self):
         
         # invoke superclass cleaning method
         super(ClimateTranslatorForm1, self).clean()
         
-        # FIXME 
-        #validate data selection
-        '''
-        if 'dataset_category' in self.cleaned_data and hasText(self.cleaned_data['dataset_category']):
-            if 'dataset' in self.cleaned_data and hasText(self.cleaned_data['dataset']):
-                jsonData = ocgisDatasets.datasets[self.cleaned_data['dataset_category']][self.cleaned_data['dataset']] 
-                if jsonData['type'] == 'datasets':
-                    if not 'variable' in self.cleaned_data or not hasText(self.cleaned_data['variable']):
-                         self._errors["variable"] = self.error_class(["A variable must be selected when the dataset is not a package."]) 
-        '''
+        # validate data selection
+        if 'data_type' in self.cleaned_data and hasText( self.cleaned_data['data_type']):
+            data_type = self.cleaned_data['data_type']
+            if data_type == 'variable':
+                self._validateFields(['long_name', 'time_frequency', 'dataset_category', 'dataset'])
+            elif data_type == 'package':
+                self._validateFields(['dataset_category2', 'package_name'])    
+        else:
+            self._errors['data_type'] = self.error_class(["Please select a Data Type"])
         
         # validate geometry
         ngeometries = 0
