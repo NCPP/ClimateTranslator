@@ -8,8 +8,8 @@ from unittest.case import SkipTest
 from sqlalchemy.orm.exc import NoResultFound, MultipleResultsFound
 import ocgis
 from db import get_or_create
-from ncpp.util.data_scanner import harvest
-from ncpp.util.data_scanner.query import DataQuery
+from ClimateTranslator.ncpp.util.data_scanner import harvest
+from ClimateTranslator.ncpp.util.data_scanner.query import DataQuery
 
 
 tdata = TestBase.get_tdata()
@@ -129,7 +129,7 @@ class Test(TestBase):
         
         dq = DataQuery()
         ret = dq.get_package_datasets(package_name='Test Package')
-        rds = [ocgis.RequestDataset(**k) for k in ret]
+        rds = [ocgis.RequestDataset(**k) for k in ret['dataset']]
         for rd in rds: rd.inspect_as_dct()
         
         with self.assertRaises(MultipleResultsFound):
@@ -202,8 +202,8 @@ class Test(TestBase):
                                        time_frequency='day',
                                        dataset_category='Observational',
                                        dataset='Maurer 2010')
-        self.assertEqual(ret,[{'variable': u'tas', 'alias': u'tas', 't_calendar': u'standard', 'uri': [u'/home/local/WX/ben.koziol/climate_data/maurer/2010-concatenated/Maurer02new_OBS_tas_daily.1971-2000.nc'], 't_units': u'days since 1940-01-01 00:00:00'}])
-        rd = ocgis.RequestDataset(**ret[0])
+        self.assertEqual(ret,{'metadata': {'description': {'long_name': u'Fill it in!', 'dataset_category': u'Some observational datasets.', 'dataset': u'Amazing dataset!'}, 'time_range': [datetime.datetime(1971, 1, 1, 0, 0), datetime.datetime(2000, 12, 31, 0, 0)]}, 'dataset': [{'variable': u'tas', 'alias': u'tas', 't_calendar': u'standard', 'uri': [u'/home/local/WX/ben.koziol/climate_data/maurer/2010-concatenated/Maurer02new_OBS_tas_daily.1971-2000.nc'], 't_units': u'days since 1940-01-01 00:00:00'}]})
+        rd = ocgis.RequestDataset(**ret['dataset'][0])
         rd.inspect_as_dct()
         
         with self.assertRaises(MultipleResultsFound):
