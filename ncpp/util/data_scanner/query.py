@@ -17,11 +17,7 @@ class DataQuery(object):
         :param package_name: The name of the package.
         :type dataset_category: str
         :raises: NoResultFound
-        :returns: A dictionary representation that changes depending on parameterization.
-        
-        1. If the constructed query returns a single object, then a dictionary containing appropriate keywords for `ocgis.RequestDataset` is returned.
-        2. If multiple rows are returned by the query, a dictionary representation of remaining options is returned with keys corresponding to keyword arguments.
-        
+        :returns: A dictionary with keys corresponding to options. The key values are lists of options.
         :rtype: dict
         '''
         
@@ -46,14 +42,22 @@ class DataQuery(object):
         
         :raises: NoResultFound, MultipleResultsFound
         :rtype: list containing a 1 or more dictionaries
-        :returns: The dictionary element(s) of the returned list are suitable for creating RequestDataset objects.
+        :returns: A dictionary with two keys: 'dataset' and 'metadata'. The 'dataset'
+        key contains a list of dictionaries suitable to pass as a single argument
+        to `ocgis.RequestDatasetCollection`. The 'metadata' key contains description
+        and other fields such as 'time_range'.
         '''
         
         with db.session_scope() as session:
             
             kwds['session'] = session
             query = self._get_package_query_(*args,**kwds)
-            ret = [f.get_request_dataset_kwargs() for f in query.one().field]
+            package = query.one()
+            dataset = [f.get_request_dataset_kwargs() for f in package.field]
+            ret = {'dataset':dataset,
+                   'metadata':{'description':{'package':package.description,
+                                              'dataset_category':package.dataset_category.description},
+                               'time_range':[package.time_start,package.time_stop]}}
             return(ret)
     
     def _get_package_query_(self,dataset_category=None,package_name=None,time_range=None,session=None):
@@ -87,11 +91,7 @@ class DataQuery(object):
         :param time_range: List with two elements corresponding to lower and upper time selection boundaries.
         :type time_rage: [datetime.datetime,datetime.datetime]
         :raises: NoResultFound
-        :returns: A dictionary representation that changes depending on parameterization.
-        
-        1. If the constructed query returns a single object, then a dictionary containing appropriate keywords for `ocgis.RequestDataset` is returned.
-        2. If multiple rows are returned by the query, a dictionary representation of remaining options is returned with keys corresponding to keyword arguments.
-        
+        :returns: A dictionary with keys corresponding to options. The key values are lists of options.
         :rtype: dict
         '''
         
@@ -122,7 +122,10 @@ class DataQuery(object):
         
         :raises: NoResultFound, MultipleResultsFound
         :rtype: list containing a single dictionary
-        :returns: The dictionary element of the returned list is suitable to create a RequestDataset
+        :returns: A dictionary with two keys: 'dataset' and 'metadata'. The 'dataset'
+        key contains a list of dictionaries suitable to pass as a single argument
+        to `ocgis.RequestDatasetCollection`. The 'metadata' key contains description
+        and other fields such as 'time_range'.
         '''
         
         with db.session_scope() as session:
@@ -130,8 +133,13 @@ class DataQuery(object):
             kwds['session'] = session
             query = self._get_variable_or_index_query_(*args,**kwds)
             field = session.query(db.Field).filter(db.Field.fid == query.one().fid).one()
-            ret = field.get_request_dataset_kwargs()
-            return([ret])
+            dataset = field.get_request_dataset_kwargs()
+            ret = {'dataset':[dataset],
+                   'metadata':{'description':{'long_name':field.clean_variable.description,
+                                              'dataset':field.container.dataset.description,
+                                              'dataset_category':field.container.dataset.dataset_category.description},
+                               'time_range':[field.container.time_start,field.container.time_stop]}}
+            return(ret)
     
     def _get_variable_or_index_query_(self,select_data_by,long_name=None,time_frequency=None,
                                       dataset_category=None,dataset=None,time_range=None,
@@ -169,4 +177,3 @@ class DataQuery(object):
             query = query.filter(or_(and_start,and_stop))
         
         return(query)
-        
