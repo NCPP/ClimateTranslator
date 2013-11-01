@@ -34,6 +34,11 @@ class OCG(object):
         # retrieve dataset URIs, variable from configuration JSON data
         
         data_type = openClimateGisJob.data_type
+        args['variable'] = []
+        args['alias'] = []
+        args['uri'] = []
+        args['t_calendar'] = []
+        args['t_units'] = []
         if data_type == 'variable':
             
             # [{'variable': u'tas', 'alias': u'tas', 't_calendar': u'standard', 
@@ -55,14 +60,13 @@ class OCG(object):
             #   'uri': [u'/data/downscaled/arrm/arrm_gfdl_2.1.20c3m.tasmin.NAm.1971-2000.nc'], 't_units': u'days since 1959-12-31'}]
             dictionaries = self.ocgisDatasets.get_package_datasets(package_name=openClimateGisJob.package_name)
 
-        # list of dictionaries
-        print dictionaries
-        print dictionaries[0]
-        args['variable'] = dictionaries[0]['variable']
-        args['alias'] = dictionaries[0]['alias']
-        args['uri'] = dictionaries[0]['uri']
-        args['t_calendar'] = dictionaries[0]['t_calendar']
-        args['t_units'] = dictionaries[0]['t_units']
+        # combine all dictionaries into lists
+        for dict in dictionaries:
+            args['variable'].append( dict['variable'] )
+            args['alias'].append( dict['alias'] )
+            args['uri'].append( dict['uri'] )
+            args['t_calendar'].append( dict['t_calendar'] )
+            args['t_units'].append( dict['t_units'] )
 
                             
         # class ocgis.OcgOperations(dataset=None, spatial_operation='intersects', geom=None, 
