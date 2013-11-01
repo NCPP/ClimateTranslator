@@ -79,9 +79,6 @@ class ClimateTranslatorWizard(SessionWizardView):
                         job_data['lat'] = float( cleaned_data['lat'] )
                     if cleaned_data.has_key('lon') and cleaned_data['lon'] is not None:
                         job_data['lon'] = float( cleaned_data['lon'] )
-                 
-                # second form       
-                if step == '1':
                     if cleaned_data.has_key('agg_selection'):
                         job_data['agg_selection'] = bool(cleaned_data['agg_selection'])
                     if cleaned_data.has_key('datetime_start') and cleaned_data['datetime_start'] is not None:
@@ -92,6 +89,10 @@ class ClimateTranslatorWizard(SessionWizardView):
                         job_data['timeregion_month'] = get_month_string( cleaned_data['timeregion_month'] )
                     if cleaned_data.has_key('timeregion_year') and cleaned_data['timeregion_year'] is not None:
                         job_data['timeregion_year'] = cleaned_data['timeregion_year']
+
+                 
+                # second form       
+                if step == '1':
                     if cleaned_data.has_key('calc') and cleaned_data['calc'] is not None and cleaned_data['calc'] != '':
                         job_data['calc'] = ocgisCalculations.getCalc(cleaned_data['calc'])["name"]             
                     if cleaned_data.has_key('par1') and cleaned_data['par1'] is not None:

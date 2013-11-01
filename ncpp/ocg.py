@@ -62,6 +62,7 @@ class OCG(object):
 
         # combine all dictionaries into lists
         print dictionaries
+        args['datasets'] = dictionaries
         for dict in dictionaries:
             args['variable'].append( dict['variable'] )
             args['alias'].append( dict['alias'] )
@@ -173,6 +174,7 @@ class OCG(object):
             os.makedirs(dir_output)             
                                     
             # build up the list of request datasets
+            '''
             dataset = []
             iter_tuple = [args[key] for key in ['uri', 'variable', 't_calendar', 't_units', 'alias']]
             time_range=args['time_range']
@@ -181,9 +183,12 @@ class OCG(object):
                 rd = ocgis.RequestDataset(uri=uri,variable=variable,t_calendar=t_calendar,t_units=t_units,
                                   time_range=time_range,time_region=time_region,alias=alias)
                 dataset.append(rd)
+            '''
+                
+            datasets = ocgis.RequestDatasetCollection(args['datasets'])
 
             ## construct the operations call
-            ops = ocgis.OcgOperations(dataset=dataset, 
+            ops = ocgis.OcgOperations(dataset=datasets, 
                                       geom=args['geom'],
                                       select_ugid=args['select_ugid'],
                                       agg_selection=args['agg_selection'],
