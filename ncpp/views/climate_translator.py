@@ -210,9 +210,9 @@ def get_datasets(request):
     json_data['request'] = { 'data_type':data_type, 'long_name':long_name, 'time_frequency':time_frequency, 
                              'dataset_category': dataset_category, 'dataset':dataset,
                              'dataset_category2': dataset_category2, 'package_name':package_name}
-    datasets_dict = ocgisDatasets.getDatasets(data_type, long_name=long_name, time_frequency=time_frequency, 
-                                              dataset_category=dataset_category, dataset=dataset,
-                                              dataset_category2=dataset_category2, package_name=package_name)
+    datasets_dict = ocgisDatasets.getDatasetOptions(data_type, long_name=long_name, time_frequency=time_frequency, 
+                                                    dataset_category=dataset_category, dataset=dataset,
+                                                    dataset_category2=dataset_category2, package_name=package_name)
     # return all available options
     #print 'GET Datasets response=%s' % datasets_dict
     json_data['response'] = datasets_dict

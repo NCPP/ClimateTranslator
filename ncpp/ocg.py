@@ -44,11 +44,11 @@ class OCG(object):
             # [{'variable': u'tas', 'alias': u'tas', 't_calendar': u'standard', 
             #   'uri': [u'/data/maurer/concatenated/Maurer02new_OBS_tas_daily.1971-2000.nc'], 
             #   't_units': u'days since 1940-01-01 00:00:00'}]            
-            dictionaries = self.ocgisDatasets.getDataset(data_type,
-                                                        long_name=openClimateGisJob.long_name,
-                                                        time_frequency=openClimateGisJob.time_frequency,
-                                                        dataset_category=openClimateGisJob.dataset_category,
-                                                        dataset=openClimateGisJob.dataset ) 
+            dictionaries = self.ocgisDatasets.getDatasets(data_type,
+                                                         long_name=openClimateGisJob.long_name,
+                                                         time_frequency=openClimateGisJob.time_frequency,
+                                                         dataset_category=openClimateGisJob.dataset_category,
+                                                         dataset=openClimateGisJob.dataset ) 
             
         elif data_type == 'package':
             # Example:
@@ -58,17 +58,16 @@ class OCG(object):
             #   'uri': [u'/data/downscaled/arrm/arrm_gfdl_2.1.20c3m.tasmax.NAm.1971-2000.nc'], 't_units': u'days since 1959-12-31'}, 
             #  {'variable': u'tasmin', 'alias': u'tasmin', 't_calendar': u'365_day', 
             #   'uri': [u'/data/downscaled/arrm/arrm_gfdl_2.1.20c3m.tasmin.NAm.1971-2000.nc'], 't_units': u'days since 1959-12-31'}]
-            dictionaries = self.ocgisDatasets.getDataset(data_type, package_name=openClimateGisJob.package_name)
+            dictionaries = self.ocgisDatasets.getDatasets(data_type, package_name=openClimateGisJob.package_name)
 
-        # combine all dictionaries into lists
-        print dictionaries
         args['datasets'] = dictionaries
-        for dict in dictionaries:
-            args['variable'].append( dict['variable'] )
-            args['alias'].append( dict['alias'] )
-            args['uri'].append( dict['uri'] )
-            args['t_calendar'].append( dict['t_calendar'] )
-            args['t_units'].append( dict['t_units'] )
+        # combine all dictionaries into lists
+        #for dict in dictionaries:
+        #    args['variable'].append( dict['variable'] )
+        #    args['alias'].append( dict['alias'] )
+        #    args['uri'].append( dict['uri'] )
+        #    args['t_calendar'].append( dict['t_calendar'] )
+        #    args['t_units'].append( dict['t_units'] )
 
                             
         # class ocgis.OcgOperations(dataset=None, spatial_operation='intersects', geom=None, 
@@ -175,16 +174,15 @@ class OCG(object):
                                     
             # build up the list of request datasets
             '''
-            dataset = []
+            datasets = []
             iter_tuple = [args[key] for key in ['uri', 'variable', 't_calendar', 't_units', 'alias']]
             time_range=args['time_range']
             time_region=args['time_region']
             for uri,variable,t_calendar,t_units,alias in zip(*iter_tuple):
                 rd = ocgis.RequestDataset(uri=uri,variable=variable,t_calendar=t_calendar,t_units=t_units,
                                   time_range=time_range,time_region=time_region,alias=alias)
-                dataset.append(rd)
-            '''
-                
+                datasets.append(rd)
+            '''      
             datasets = ocgis.RequestDatasetCollection(args['datasets'])
 
             ## construct the operations call

@@ -33,7 +33,7 @@ class DbDatasets(Datasets):
         
         return tuples
 
-    def getDatasets(self, data_type, long_name=None, time_frequency=None, dataset_category=None, dataset=None,
+    def getDatasetOptions(self, data_type, long_name=None, time_frequency=None, dataset_category=None, dataset=None,
                                      dataset_category2=None, package_name=None):
         '''
         Method to return the available options for the dataset selection fields.
@@ -55,7 +55,7 @@ class DbDatasets(Datasets):
         
         return dict
     
-    def getDataset(self, data_type, long_name=None, time_frequency=None, 
+    def getDatasets(self, data_type, long_name=None, time_frequency=None, 
                          dataset_category=None, dataset=None, package_name=None):
         
         '''Method to return the datasets for a given selection.
