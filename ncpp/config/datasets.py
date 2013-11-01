@@ -57,12 +57,16 @@ class DbDatasets(Datasets):
                                             dataset_category=None, dataset=None):
         
         if data_type=='variable':
-            dict = self.dataQuery.get_variable_or_index_dataset('variable', long_name=long_name, time_frequency=time_frequency, 
+            dictionaries = self.dataQuery.get_variable_or_index_dataset('variable', long_name=long_name, time_frequency=time_frequency, 
                                                                             dataset_category=dataset_category, dataset=dataset)  
-            return dict
+            return dictionaries
         else:
             raise Exception("data_type=index not yet implemented")
         
+    def get_package_datasets(self, package_name=None):
+        
+        dictionaries = self.dataQuery.get_package_datasets(package_name=package_name)
+        return dictionaries
         
 ocgisDatasets = DbDatasets(DATASETS_DB) 
         
