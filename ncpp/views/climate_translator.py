@@ -216,16 +216,7 @@ def get_datasets(request):
                                                     dataset_category2=dataset_category2, package_name=package_name)
     # return all available options
     json_data['response'] = datasets_dict
-    
-    # query for datasets metadata
-    if data_type=='variable':
-        pass
-    elif data_type=='package':
-        if package_name is not None:
-            dataset_dict = ocgisDatasets.getDatasets(data_type, package_name=package_name)
-            print 'metadata_dict=%s' % dataset_dict
-            json_data['metadata'] = dataset_dict['metadata']
-    
+        
     return HttpResponse(simplejson.dumps(json_data), mimetype='application/json')
 
 def get_metadata(request):

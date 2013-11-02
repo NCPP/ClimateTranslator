@@ -23,6 +23,10 @@
     var VARIABLE_WIDGETS = "variable_widgets";
     var PACKAGE_WIDGETS = "package_widgets";
     
+    var WIDGET_DATETIME_START = "id_0-datetime_start";
+    var WIDGET_DATETIME_STOP = "id_0-datetime_stop";
+    var WIDGET_DESCRIPTION = "id_0-description";
+    
     // list of widgets in the order they are selected
     var VARIABLE_WIDGET_IDS = [WIDGET_DATA_TYPE, WIDGET_LONG_NAME, WIDGET_TIME_FREQUENCY, WIDGET_DATASET_CATEGORY, WIDGET_DATASET]
     var PACKAGE_WIDGET_IDS = [WIDGET_DATA_TYPE, WIDGET_DATASET_CATEGORY2, WIDGET_PACKAGE_NAME]
@@ -37,11 +41,17 @@
     function invalidateSelection(widget_ids) {
     	for (var i=0; i<widget_ids.length; i++) {
     		selectedValue = document.getElementById(widget_ids[i]).value;
+    		
     		if (!isValid(selectedValue)) {
     			// select first option for all following widgets
     			for (var j=i+1; j<widget_ids.length; j++) {
     				document.getElementById(widget_ids[j]).options[0].selected = true;
     			}
+    			
+    			// invalidate metadata widgets
+    			document.getElementById(WIDGET_DATETIME_START).value = '';
+    			document.getElementById(WIDGET_DATETIME_STOP).value = '';
+    			
     			break;
     		}
     	}
@@ -369,6 +379,28 @@
 	// function called if Ajax request to retrieve metadata succeded
 	var handleMetadataSuccess = function(o) {
 		
+		// parse JSON response into object		
+		var jsonData = eval('(' + o.responseText + ')');
+
+		startDateTimeWidget = document.getElementById(WIDGET_DATETIME_START);
+		startDateTimeWidget.value = jsonData['time_range'][0];
+		stopDateTimeWidget = document.getElementById(WIDGET_DATETIME_STOP);
+		stopDateTimeWidget.value = jsonData['time_range'][1];
+		
+		descriptionWidget = document.getElementById(WIDGET_DESCRIPTION);
+		text = "";
+		if (isValid(jsonData['description']['dataset_category'])) {
+			if (text.length>0) text += "<br/>";
+			text += "Dataset Category: " + encodeURIComponent(jsonData['description']['dataset_category']); // FIXME
+		}
+		if (isValid(jsonData['description']['package'])) {
+			if (text.length>0) text += "<br/>";
+			text += "Package: " + encodeURIComponent(jsonData['description']['package']); // FIXME
+		}
+
+		descriptionWidget.innerHTML = text;
+		
+		
 	}
 	
 	// function called after Ajax request for datasets returns
@@ -472,6 +504,14 @@
 			</tr>
 		</table>
 	</div>
+	<table class="horizontalTable">
+		<tr>
+			<th>Dataset Description</th>
+			<td>
+				<div id="id_0-description" class="mybox"></div>
+			</td>
+		</tr>
+	</table>
 </fieldset>
 
 <fieldset class="fieldset_box">
