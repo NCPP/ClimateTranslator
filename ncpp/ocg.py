@@ -41,26 +41,35 @@ class OCG(object):
         args['t_units'] = []
         if data_type == 'variable':
             
-            # [{'variable': u'tas', 'alias': u'tas', 't_calendar': u'standard', 
-            #   'uri': [u'/data/maurer/concatenated/Maurer02new_OBS_tas_daily.1971-2000.nc'], 
-            #   't_units': u'days since 1940-01-01 00:00:00'}]            
+            # Example:
+            # {'metadata': {'description': {'long_name': u'<tdk>', 'dataset_category': u'<tdk>', 'dataset': u'<tdk>'}, 
+            #                'time_range': [datetime.datetime(1971, 1, 1, 0, 0), datetime.datetime(2000, 12, 31, 0, 0)]}, 
+            #  'dataset': [{'variable': u'tas', 'alias': u'tas', 't_calendar': u'standard', 
+            #               'uri': [u'/data/maurer/concatenated/Maurer02new_OBS_tas_daily.1971-2000.nc'], 
+            #               't_units': u'days since 1940-01-01 00:00:00'}]}          
             dictionaries = self.ocgisDatasets.getDatasets(data_type,
-                                                         long_name=openClimateGisJob.long_name,
-                                                         time_frequency=openClimateGisJob.time_frequency,
-                                                         dataset_category=openClimateGisJob.dataset_category,
-                                                         dataset=openClimateGisJob.dataset ) 
+                                                          long_name=openClimateGisJob.long_name,
+                                                          time_frequency=openClimateGisJob.time_frequency,
+                                                          dataset_category=openClimateGisJob.dataset_category,
+                                                          dataset=openClimateGisJob.dataset ) 
             
         elif data_type == 'package':
             # Example:
-            # [{'variable': u'pr', 'alias': u'pr', 't_calendar': u'365_day', 
-            #   'uri': [u'/data/downscaled/arrm/arrm_gfdl_2.1.20c3m.pr.NAm.1971-2000.nc'], 't_units': u'days since 1959-12-31'}, 
-            #  {'variable': u'tasmax', 'alias': u'tasmax', 't_calendar': u'365_day', 
-            #   'uri': [u'/data/downscaled/arrm/arrm_gfdl_2.1.20c3m.tasmax.NAm.1971-2000.nc'], 't_units': u'days since 1959-12-31'}, 
-            #  {'variable': u'tasmin', 'alias': u'tasmin', 't_calendar': u'365_day', 
-            #   'uri': [u'/data/downscaled/arrm/arrm_gfdl_2.1.20c3m.tasmin.NAm.1971-2000.nc'], 't_units': u'days since 1959-12-31'}]
+            # {'metadata': {'description': {'dataset_category': u'<tdk>', 'package': u'<tdk>'}, 
+            #               'time_range': [datetime.datetime(1971, 1, 1, 0, 0), datetime.datetime(2000, 12, 31, 0, 0)]}, 
+            #  'dataset': [{'variable': u'pr', 'alias': u'pr', 't_calendar': u'365_day', 
+            #               'uri': [u'/data/downscaled/arrm/arrm_gfdl_2.1.20c3m.pr.NAm.1971-2000.nc'], 
+            #               't_units': u'days since 1959-12-31'}, 
+            #              {'variable': u'tasmax', 'alias': u'tasmax', 't_calendar': u'365_day', 
+            #               'uri': [u'/data/downscaled/arrm/arrm_gfdl_2.1.20c3m.tasmax.NAm.1971-2000.nc'], 
+            #               't_units': u'days since 1959-12-31'}, 
+            #              {'variable': u'tasmin', 'alias': u'tasmin', 't_calendar': u'365_day', 
+            #               'uri': [u'/data/downscaled/arrm/arrm_gfdl_2.1.20c3m.tasmin.NAm.1971-2000.nc'], 
+            #               't_units': u'days since 1959-12-31'}]}            
             dictionaries = self.ocgisDatasets.getDatasets(data_type, package_name=openClimateGisJob.package_name)
 
-        args['datasets'] = dictionaries
+        print dictionaries
+        args['datasets'] = dictionaries['dataset']
         # combine all dictionaries into lists
         #for dict in dictionaries:
         #    args['variable'].append( dict['variable'] )
