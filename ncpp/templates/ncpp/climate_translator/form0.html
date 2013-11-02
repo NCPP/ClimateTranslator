@@ -115,8 +115,13 @@
     	dataType = document.getElementById(WIDGET_DATA_TYPE).value;
     	if (dataType==null || dataType=='') {
     		
+    		// invaliate all widgets
     		invalidateSelection(VARIABLE_WIDGET_IDS);
     		invalidateSelection(PACKAGE_WIDGET_IDS);
+    		
+    		// hide all widgets
+	    	setVisibility(PACKAGE_WIDGETS, false);
+		    setVisibility(VARIABLE_WIDGETS, false);
     		
     	} else {
   		    			
