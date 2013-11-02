@@ -1,6 +1,7 @@
 # module containing NCPP utility functions
 from ncpp.constants import MONTH_DICT
 
+
 def get_class( kls ):
     """ Utility function to retrieve a Class object from its fully qualified name as a string.
         Example: ClimateIndexesJob  = get_class('ncpp.models.climate_indexes.ClimateIndexesJob')."""

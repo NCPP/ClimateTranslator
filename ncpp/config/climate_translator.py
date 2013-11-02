@@ -1,5 +1,5 @@
 # module containing configuration classes for Open Climate GIS application
-from ncpp.constants import CONFIG_FILEPATH, GEOMETRIES_FILEPATH, DATASETS_FILEPATH, CALCULATIONS_FILEPATH, NO_VALUE_OPTION
+from ncpp.constants import CONFIG_FILEPATH, GEOMETRIES_FILEPATH, CALCULATIONS_FILEPATH, NO_VALUE_OPTION
 import json
 import os, ConfigParser
 import abc
@@ -73,28 +73,4 @@ class Calculations(ConfigBase):
         for key in sorted( self.calcs, key=lambda key: self.calcs[key]["order"] ):
             print "calculation=%s" % self.calcs[key]
         
-ocgisCalculations = Calculations()   
-
-class Datasets(ConfigBase):
-    """Class holding Climate Translator dataset choices."""
-    
-    def __init__(self, filepath):
-        
-        # read datasets from JSON file
-        try:
-            with open(filepath,'r') as f:
-                self.datasets = json.load(f)
-        except Exception as e:
-            print "Error reading datasets file: %s" % DATASETS_FILEPATH
-            raise e
-        
-    def getChoices(self):
-        # no option selected
-        tuples = [ NO_VALUE_OPTION ]
-        # read all keys from JSON file
-        for category in sorted( self.datasets.keys() ):
-            tuples.append( (category, category) )
-        return tuples
-    
-#ocgisDatasets = Datasets(DATASETS_FILEPATH)  
-
+ocgisCalculations = Calculations()

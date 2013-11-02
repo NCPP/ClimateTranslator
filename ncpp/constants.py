@@ -1,11 +1,11 @@
 # Module holding application constants.
+from ncpp.util.filepaths import getAbsolutePath
 
 APPLICATION_LABEL = 'ncpp'
 CONFIG_FILEPATH = '/usr/local/ocgis/ocgis.cfg'
 GEOMETRIES_FILEPATH = '/usr/local/ocgis/ocgis_geometries.json'
-DATASETS_FILEPATH = '/usr/local/ocgis/ocgis_datasets.json'
 CALCULATIONS_FILEPATH = '/usr/local/ocgis/ocgis_calc.json'
-DATASETS_DB = '/Users/cinquini/Documents/workspace-cog/ClimateTranslator/database/datasets.sqlite' #FIXME
+DATASETS_DB = getAbsolutePath('../database/datasets.sqlite')
 
 def enum(**enums):
     return type('Enum', (), enums)
