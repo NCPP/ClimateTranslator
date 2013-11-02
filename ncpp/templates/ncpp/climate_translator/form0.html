@@ -51,10 +51,62 @@
     			// invalidate metadata widgets
     			document.getElementById(WIDGET_DATETIME_START).value = '';
     			document.getElementById(WIDGET_DATETIME_STOP).value = '';
+    			document.getElementById(WIDGET_DESCRIPTION).innerHTML = '';
     			
     			break;
     		}
     	}
+    }
+    
+    // utility method to build the URL query string for datasets or metadata Ajax requests
+    function buildQueryString(dataType) {
+    	
+    	query = "";
+        if (dataType=='variable') {
+	    	  	    	  
+  		      // use long_name from current client selection
+  		      long_name = document.getElementById(WIDGET_LONG_NAME).value;
+  		      // or from server stored selection
+  		      if (!isValid(long_name)) long_name = "{{wizard.form.long_name.value}}";
+  		      if (isValid(long_name)) query += "&long_name="+encodeURIComponent(long_name);
+ 		      
+  			  // use time_frequency from current client selection
+ 		      time_frequency = document.getElementById(WIDGET_TIME_FREQUENCY).value;
+ 		      // or from server stored selection
+  		      if (!isValid(time_frequency)) time_frequency = "{{wizard.form.time_frequency.value}}";
+  		      if (isValid(time_frequency)) query += "&time_frequency="+encodeURIComponent(time_frequency);
+
+  		      // use dataset_category from current client selection
+ 		      dataset_category = document.getElementById(WIDGET_DATASET_CATEGORY).value;
+ 		      // or from server stored selection
+  		      if (!isValid(dataset_category)) dataset_category = "{{wizard.form.dataset_category.value}}";
+  		      if (isValid(dataset_category)) query += "&dataset_category="+encodeURIComponent(dataset_category);
+
+  		      // use dataset from current client selection
+ 		      dataset = document.getElementById(WIDGET_DATASET).value;
+ 		      // or from server stored selection
+  		      if (!isValid(dataset)) dataset = "{{wizard.form.dataset.value}}";
+  		      if (isValid(dataset)) query += "&dataset="+encodeURIComponent(dataset);
+ 		      
+	      } else if (dataType=='package') {
+	    	  	    		
+  		      // use dataset_category2 from current client selection
+  		      dataset_category2 = document.getElementById(WIDGET_DATASET_CATEGORY2).value;
+  		      // or from server stored selection
+  		      if (!isValid(dataset_category2)) dataset_category2 = "{{wizard.form.dataset_category2.value}}";
+  		      // or from server stored selection
+  		      if (isValid(dataset_category2)) query += "&dataset_category2="+encodeURIComponent(dataset_category2);
+
+  		      // use package_name from current client selection
+  		      package_name = document.getElementById(WIDGET_PACKAGE_NAME).value;
+  		      // or from server stored selection
+  		  	  if (!isValid(package_name)) package_name = "{{wizard.form.package_name.value}}";
+  		      if (isValid(package_name)) query += "&package_name="+encodeURIComponent(package_name); 	  		      
+  		      
+	      }
+        
+          return query;
+    	
     }
 
     // function triggered by a change in data type selection
@@ -79,54 +131,17 @@
   		    	  
   		    	  // reset selection for all following widgets:
   		    	  invalidateSelection(VARIABLE_WIDGET_IDS);
-  		    	  
-  	  		      // use long_name from current client selection
-  	  		      long_name = document.getElementById(WIDGET_LONG_NAME).value;
-  	  		      // or from server stored selection
-  	  		      if (!isValid(long_name)) long_name = "{{wizard.form.long_name.value}}";
-  	  		      if (isValid(long_name)) url += "&long_name="+encodeURIComponent(long_name);
-	  		      
-  	  			  // use time_frequency from current client selection
-	  		      time_frequency = document.getElementById(WIDGET_TIME_FREQUENCY).value;
-	  		      // or from server stored selection
-  	  		      if (!isValid(time_frequency)) time_frequency = "{{wizard.form.time_frequency.value}}";
-  	  		      if (isValid(time_frequency)) url += "&time_frequency="+encodeURIComponent(time_frequency);
-	
-  	  		      // use dataset_category from current client selection
-	  		      dataset_category = document.getElementById(WIDGET_DATASET_CATEGORY).value;
-	  		      // or from server stored selection
-  	  		      if (!isValid(dataset_category)) dataset_category = "{{wizard.form.dataset_category.value}}";
-  	  		      if (isValid(dataset_category)) url += "&dataset_category="+encodeURIComponent(dataset_category);
-	
-  	  		      // use dataset from current client selection
-	  		      dataset = document.getElementById(WIDGET_DATASET).value;
-	  		      // or from server stored selection
-  	  		      if (!isValid(dataset)) dataset = "{{wizard.form.dataset.value}}";
-  	  		      if (isValid(dataset)) url += "&dataset="+encodeURIComponent(dataset);
-	  		      
+  		    	  	  		      
   		      } else if (dataType=='package') {
   		    	  
   		    	  setVisibility(VARIABLE_WIDGETS, false);
   		    	  setVisibility(PACKAGE_WIDGETS, true);
-  		    	  
-  		    	  // reset selection for all following widgets:
-  		    	  invalidateSelection(PACKAGE_WIDGET_IDS);
-  		    		
-  	  		      // use dataset_category2 from current client selection
-  	  		      dataset_category2 = document.getElementById(WIDGET_DATASET_CATEGORY2).value;
-  	  		      // or from server stored selection
-  	  		      if (!isValid(dataset_category2)) dataset_category2 = "{{wizard.form.dataset_category2.value}}";
-  	  		      // or from server stored selection
-  	  		      if (isValid(dataset_category2)) url += "&dataset_category2="+encodeURIComponent(dataset_category2);
-  	
-  	  		      // use package_name from current client selection
-  	  		      package_name = document.getElementById(WIDGET_PACKAGE_NAME).value;
-  	  		      // or from server stored selection
-  	  		  	  if (!isValid(package_name)) package_name = "{{wizard.form.package_name.value}}";
-  	  		      if (isValid(package_name)) url += "&package_name="+encodeURIComponent(package_name); 	  		      
-  	  		      
+  		    	    	  		      
   		      }
   		      
+  		      // add query string from widgets already selected
+  		      url += buildQueryString(dataType);
+
 			  // submit async request
   		      var transaction = YAHOO.util.Connect.asyncRequest('GET', url, ajaxDatasetsCallback, null);   	
  
@@ -202,34 +217,6 @@
 				
 	}
 		
-	// function to populate the start, stop times
-	function populateDateTimes() {
-			
-		// retrieve current selection for dataset category  and dataset
-		datasetCategorySelect = document.getElementById("id_0-dataset_category");
-		datasetSelect = document.getElementById("id_0-dataset");
-		variableSelect = document.getElementById("id_0-variable");
-		if (   datasetCategorySelect.value!=null && datasetCategorySelect.value!='' 
-			&& datasetSelect.value!=null && datasetSelect.value!=''
-			&& variableSelect.value!=null && variableSelect.value!='') {	
-			
-				var datasets = JSON.parse("{{datasets}}".unescapeHtml());
-				jsonData = jsonData = datasets[datasetCategorySelect.value][datasetSelect.value][variableSelect.value]["time_range"];		
-				if (jsonData!=null) { // type='datasets'
-					_populateDateTimes(jsonData[0], jsonData[1]);
-				}
-		
-		}
-
-	}
-	
-	// function to populate the start, stop times
-	function _populateDateTimes(datetime_start, datetime_stop) {
-		startDateTimeText = document.getElementById("id_0-datetime_start");
-		startDateTimeText.value = datetime_start;
-		stopDateTimeText = document.getElementById("id_0-datetime_stop");
-		stopDateTimeText.value = datetime_stop;
-	}
 	
 	// function to populate the geometry choices
 	function showGeometries(geometries) {
@@ -304,21 +291,26 @@
 		url = '/ncpp/climate_translator/metadata'
 	        + '?data_type='+encodeURIComponent(dataType);
 		
+		// examine query string from widgets already selected
+		query = buildQueryString(dataType);
+		
 		if (dataType=='variable') {
 			
-		} else if (dataType=='package') {
+			if (   query.indexOf('long_name')>0 
+				&& query.indexOf('time_frequency')>0 
+				&& query.indexOf('dataset_category')>0 
+				&& query.indexOf('dataset')>0) {
+				// all fields selected -> query for metadata
+				var transaction = YAHOO.util.Connect.asyncRequest('GET', url+query, ajaxMetadataCallback, null); 
+			}
+
 			
-  		      // use package_name from current client selection
-  		      package_name = document.getElementById(WIDGET_PACKAGE_NAME).value;
-  		      // or from server stored selection
-  		  	  if (!isValid(package_name)) package_name = "{{wizard.form.package_name.value}}";
-  		      if (isValid(package_name)) url += "&package_name="+encodeURIComponent(package_name); 	  		      
-
-			  // submit async request
-			  if (isValid(package_name)) {
-  		          var transaction = YAHOO.util.Connect.asyncRequest('GET', url, ajaxMetadataCallback, null);   
-			  }
-
+		} else if (dataType=='package') {
+			if (query.indexOf('package_name')>0) {
+				// package_name selected -> query for metadata
+				var transaction = YAHOO.util.Connect.asyncRequest('GET', url+query, ajaxMetadataCallback, null); 
+			}
+			
 		}
 				
 	}
@@ -352,11 +344,11 @@
 	
 			// populate 'dataset' widget
 			populateDatasetOptions(WIDGET_PACKAGE_NAME, jsonData.response.package_name, [ jsonData.request.package_name ]);
-			
-			// FIXME
-			getMetadata(dataType);
-			
+						
 		}
+		
+		// trigger request for metadata (if necessary fields have been selected)
+		getMetadata(dataType);
 
 	}
 	
@@ -376,30 +368,36 @@
 		
 	}
 	
+	// utility method to add text to the description field
+	function addText(text, jsonData, key, label) {
+		if (isValid(jsonData[key])) {
+			if (text.length>0) text += "<br/>";
+			text += label +": "+encodeURIComponent(jsonData[key]); // FIXME
+		}
+		return text;
+	}
+	
 	// function called if Ajax request to retrieve metadata succeded
 	var handleMetadataSuccess = function(o) {
 		
 		// parse JSON response into object		
 		var jsonData = eval('(' + o.responseText + ')');
 
+		// populate date-time widgets
 		startDateTimeWidget = document.getElementById(WIDGET_DATETIME_START);
 		startDateTimeWidget.value = jsonData['time_range'][0];
 		stopDateTimeWidget = document.getElementById(WIDGET_DATETIME_STOP);
 		stopDateTimeWidget.value = jsonData['time_range'][1];
 		
+		// populate description widget
 		descriptionWidget = document.getElementById(WIDGET_DESCRIPTION);
 		text = "";
-		if (isValid(jsonData['description']['dataset_category'])) {
-			if (text.length>0) text += "<br/>";
-			text += "Dataset Category: " + encodeURIComponent(jsonData['description']['dataset_category']); // FIXME
-		}
-		if (isValid(jsonData['description']['package'])) {
-			if (text.length>0) text += "<br/>";
-			text += "Package: " + encodeURIComponent(jsonData['description']['package']); // FIXME
-		}
-
-		descriptionWidget.innerHTML = text;
+		text = addText(text, jsonData['description'], 'dataset_category', 'Dataset Category');	
+		text = addText(text, jsonData['description'], 'package', 'Package');
+		text = addText(text, jsonData['description'], 'long_name', 'Long Name');
+		text = addText(text, jsonData['description'], 'dataset', 'Dataset');
 		
+		descriptionWidget.innerHTML = text;
 		
 	}
 	
