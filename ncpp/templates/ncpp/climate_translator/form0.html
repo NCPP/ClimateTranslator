@@ -113,7 +113,7 @@
   	  		      package_name = document.getElementById(WIDGET_PACKAGE_NAME).value;
   	  		      // or from server stored selection
   	  		  	  if (!isValid(package_name)) package_name = "{{wizard.form.package_name.value}}";
-  	  		      if (isValid(package_name)) url += "&package_name="+encodeURIComponent(package_name);
+  	  		      if (isValid(package_name)) url += "&package_name="+encodeURIComponent(package_name); 	  		      
   	  		      
   		      }
   		      
@@ -287,6 +287,32 @@
 
 	}
 	
+	// function that submits an asynchronous metadata request
+	// if all the necessary widgets have been selected
+	function getMetadata(dataType) {
+		
+		url = '/ncpp/climate_translator/metadata'
+	        + '?data_type='+encodeURIComponent(dataType);
+		
+		if (dataType=='variable') {
+			
+		} else if (dataType=='package') {
+			
+  		      // use package_name from current client selection
+  		      package_name = document.getElementById(WIDGET_PACKAGE_NAME).value;
+  		      // or from server stored selection
+  		  	  if (!isValid(package_name)) package_name = "{{wizard.form.package_name.value}}";
+  		      if (isValid(package_name)) url += "&package_name="+encodeURIComponent(package_name); 	  		      
+
+			  // submit async request
+			  if (isValid(package_name)) {
+  		          var transaction = YAHOO.util.Connect.asyncRequest('GET', url, ajaxMetadataCallback, null);   
+			  }
+
+		}
+				
+	}
+	
 	// function called if Ajax request to retrieve variables succeded
 	var handleDatasetsSuccess = function(o) {
 		
@@ -317,6 +343,8 @@
 			// populate 'dataset' widget
 			populateDatasetOptions(WIDGET_PACKAGE_NAME, jsonData.response.package_name, [ jsonData.request.package_name ]);
 			
+			// FIXME
+			getMetadata(dataType);
 			
 		}
 
@@ -338,7 +366,12 @@
 		
 	}
 	
-	// function called after Ajax request returns
+	// function called if Ajax request to retrieve metadata succeded
+	var handleMetadataSuccess = function(o) {
+		
+	}
+	
+	// function called after Ajax request for datasets returns
 	var ajaxDatasetsCallback = {
 	  success: handleDatasetsSuccess,
 	  failure: handleFailure,
@@ -346,8 +379,17 @@
 	  timeout: 5000,
 	  argument: [],
 	};
+	
+	// function called after Ajax request for metadata returns
+	var ajaxMetadataCallback = {
+	  success: handleMetadataSuccess,
+	  failure: handleFailure,
+	  cache: false,
+	  timeout: 5000,
+	  argument: [],
+	};
 
-	// function called after geometry Ajax request returns
+	// function called after geometry Ajax request for geometries returns
 	var geometrySubCategoryCallback = {
 	  success: handleGeometrySubCategorySuccess,
 	  failure: handleFailure,

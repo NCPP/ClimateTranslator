@@ -14,7 +14,7 @@ from ncpp.utils import get_month_string
 from django.utils import simplejson  
 from django.shortcuts import get_object_or_404, render_to_response, redirect
 from django.template import RequestContext
-from ncpp.constants import NO_VALUE_OPTION
+from ncpp.constants import NO_VALUE_OPTION, DATETIME_FORMAT
 
 from datetime import datetime
 import json
@@ -204,6 +204,7 @@ def get_datasets(request):
     dataset = request.GET.get('dataset', None)
     dataset_category2 = request.GET.get('dataset_category2', None)
     package_name = request.GET.get('package_name', None)
+    
     #print 'GET Datasets request: %s' % request.GET
     json_data = {}
     # pass back the current selection
@@ -214,7 +215,40 @@ def get_datasets(request):
                                                     dataset_category=dataset_category, dataset=dataset,
                                                     dataset_category2=dataset_category2, package_name=package_name)
     # return all available options
-    #print 'GET Datasets response=%s' % datasets_dict
     json_data['response'] = datasets_dict
     
+    # query for datasets metadata
+    if data_type=='variable':
+        pass
+    elif data_type=='package':
+        if package_name is not None:
+            dataset_dict = ocgisDatasets.getDatasets(data_type, package_name=package_name)
+            print 'metadata_dict=%s' % dataset_dict
+            json_data['metadata'] = dataset_dict['metadata']
+    
     return HttpResponse(simplejson.dumps(json_data), mimetype='application/json')
+
+def get_metadata(request):
+    '''Ajax method to return a JSON document containing the dataset metadata.''' 
+
+    data_type = request.GET.get('data_type', None)
+    long_name = request.GET.get('long_name', None)
+    time_frequency = request.GET.get('time_frequency', None)
+    dataset_category = request.GET.get('dataset_category', None)
+    dataset = request.GET.get('dataset', None)
+    dataset_category2 = request.GET.get('dataset_category2', None)
+    package_name = request.GET.get('package_name', None)
+    
+    dict = ocgisDatasets.getDatasets(data_type, long_name=long_name, time_frequency=time_frequency, 
+                                                dataset_category=dataset_category, dataset=dataset,
+                                                package_name=package_name)
+    
+    # NOTE: must format datetime object as strings for JSON serialization
+    dates = dict['metadata']['time_range']
+    dict['metadata']['time_range'] = [ dates[0].strftime(DATETIME_FORMAT), dates[1].strftime(DATETIME_FORMAT) ]
+    
+    return HttpResponse(simplejson.dumps(dict['metadata']), mimetype='application/json')
+    
+    
+
+    

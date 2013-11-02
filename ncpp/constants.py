@@ -29,3 +29,5 @@ MONTH_CHOICES = ( (1,'Jan'), (2,'Feb'), (3,'Mar'), (4,'Apr'),   (5,'May'),   (6,
 MONTH_DICT = dict(MONTH_CHOICES) # transform tuples to dictionary for easy indexing of keys
 
 NO_VALUE_OPTION = ("","-- Please Select --")
+
+DATETIME_FORMAT = "%Y-%m-%d %H:%M:%S"
