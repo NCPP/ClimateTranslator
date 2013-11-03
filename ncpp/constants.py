@@ -3,8 +3,8 @@ from ncpp.util.filepaths import getAbsolutePath
 
 APPLICATION_LABEL = 'ncpp'
 CONFIG_FILEPATH = '/usr/local/ocgis/ocgis.cfg'
-GEOMETRIES_FILEPATH = '/usr/local/ocgis/ocgis_geometries.json'
-CALCULATIONS_FILEPATH = '/usr/local/ocgis/ocgis_calc.json'
+GEOMETRIES_FILEPATH = getAbsolutePath('config/ocgis_geometries.json')
+CALCULATIONS_FILEPATH = getAbsolutePath('config/ocgis_calc.json')
 DATASETS_DB = getAbsolutePath('../database/datasets.sqlite')
 
 def enum(**enums):
