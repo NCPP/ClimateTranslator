@@ -213,7 +213,7 @@ class ClimateTranslatorForm2(Form):
     #calc_group = MultipleChoiceField(choices=ocgisChoices(Config.CALCULATION_GROUP).items(), required=False)
     calc_group = MultipleChoiceField(choices=ocgisChoices(Config.CALCULATION_GROUP).items(), required=False, widget=CheckboxSelectMultiple)
     calc_raw = BooleanField(initial=False, required=False)
-    aggregate = BooleanField(initial=True, required=False)
+    aggregate = BooleanField(initial=False, required=False)
     spatial_operation = ChoiceField(required=True, choices=ocgisChoices(Config.SPATIAL_OPERATION).items(),
                                     widget=RadioSelect, initial='intersects')
     output_format = ChoiceField(choices=ocgisChoices(Config.OUTPUT_FORMAT).items(), required=True, initial='csv')
