@@ -177,7 +177,7 @@ class Test(TestBase):
             
         dq = query.DataQuery()
         state = dq.get_variable_or_index('variable')
-        target = {'long_name': [u'Near-Surface Air Temperature', u'Near-Surface Maximum Air Temperature'], 'time_frequency': [u'day'], 'dataset_category': [u'GCMs', u'Observational'], 'dataset': [u'CanCM4', u'Maurer 2010']}
+        target = {'long_name': [u'Near-Surface Air Temperature', u'Near-Surface Maximum Air Temperature'], 'time_frequency': [u'Day'], 'dataset_category': [u'GCMs', u'Observational'], 'dataset': [u'CanCM4', u'Maurer 2010']}
         self.assertDictEqual(state,target)
 
     def test_query_limiting_all(self):
@@ -187,10 +187,10 @@ class Test(TestBase):
         dq = query.DataQuery()
         ret = dq.get_variable_or_index('variable',
                                        long_name='Near-Surface Air Temperature',
-                                       time_frequency='day',
+                                       time_frequency='Day',
                                        dataset_category='Observational',
                                        dataset='Maurer 2010')
-        self.assertDictEqual(ret,{'long_name': [u'Near-Surface Air Temperature'], 'time_frequency': [u'day'], 'dataset_category': [u'Observational'], 'dataset': [u'Maurer 2010']})    
+        self.assertDictEqual(ret,{'long_name': [u'Near-Surface Air Temperature'], 'time_frequency': [u'Day'], 'dataset_category': [u'Observational'], 'dataset': [u'Maurer 2010']})    
     
     def test_query_get_variable_or_index_dataset(self):
         models = [CanCM4TestDataset,MaurerTas,MaurerTasmax]
@@ -199,7 +199,7 @@ class Test(TestBase):
         dq = query.DataQuery()
         ret = dq.get_variable_or_index_dataset('variable',
                                        long_name='Near-Surface Air Temperature',
-                                       time_frequency='day',
+                                       time_frequency='Day',
                                        dataset_category='Observational',
                                        dataset='Maurer 2010')
         self.assertEqual(ret,{'metadata': {'description': {'long_name': u'Fill it in!', 'dataset_category': u'Some observational datasets.', 'dataset': u'Amazing dataset!'}, 'time_range': [datetime.datetime(1971, 1, 1, 0, 0), datetime.datetime(2000, 12, 31, 0, 0)]}, 'dataset': [{'variable': u'tas', 'alias': u'tas', 't_calendar': u'standard', 'uri': [u'/home/local/WX/ben.koziol/climate_data/maurer/2010-concatenated/Maurer02new_OBS_tas_daily.1971-2000.nc'], 't_units': u'days since 1940-01-01 00:00:00'}]})
@@ -216,7 +216,7 @@ class Test(TestBase):
         dq = query.DataQuery()
         ret = dq.get_variable_or_index('variable',
                                        long_name='Near-Surface Air Temperature')
-        self.assertDictEqual(ret,{'long_name': [u'Near-Surface Air Temperature'], 'time_frequency': [u'day'], 'dataset_category': [u'GCMs', u'Observational'], 'dataset': [u'CanCM4', u'Maurer 2010']})
+        self.assertDictEqual(ret,{'long_name': [u'Near-Surface Air Temperature'], 'time_frequency': [u'Day'], 'dataset_category': [u'GCMs', u'Observational'], 'dataset': [u'CanCM4', u'Maurer 2010']})
 
     def test_query_time_range(self):
         models = [CanCM4TestDataset,MaurerTas,MaurerTasmax]
@@ -226,7 +226,7 @@ class Test(TestBase):
         ret = dq.get_variable_or_index('variable',
                                        time_range=[datetime.datetime(1980,2,3),
                                                    datetime.datetime(1990,3,4)])
-        target = {'long_name': [u'Near-Surface Air Temperature', u'Near-Surface Maximum Air Temperature'], 'time_frequency': [u'day'], 'dataset_category': [u'Observational'], 'dataset': [u'Maurer 2010']}
+        target = {'long_name': [u'Near-Surface Air Temperature', u'Near-Surface Maximum Air Temperature'], 'time_frequency': [u'Day'], 'dataset_category': [u'Observational'], 'dataset': [u'Maurer 2010']}
         self.assertDictEqual(ret,target)
         
     def test_query_empty(self):
@@ -249,7 +249,7 @@ class Test(TestBase):
             container = session.query(db.Container).one()
             self.assertEqual(container.dataset.name,'CanCM4')
             objects,simple = container.as_dict()
-            self.assertEqual(simple,{'time_calendar': u'365_day', 'time_start': datetime.datetime(2001, 1, 1, 0, 0), 'description': None, 'spatial_abstraction': u'polygon', 'cid': 1, 'did': 1, 'spatial_proj4': u'+proj=longlat +ellps=WGS84 +towgs84=0,0,0,0,0,0,0 +no_defs ', 'time_stop': datetime.datetime(2011, 1, 1, 0, 0), 'time_units': u'days since 1850-1-1', 'spatial_envelope': u'POLYGON ((-1.4062500000000000 -90.0000000000000000, -1.4062500000000000 90.0000000000000000, 358.5937500000000000 90.0000000000000000, 358.5937500000000000 -90.0000000000000000, -1.4062500000000000 -90.0000000000000000))', 'spatial_res': u'2.8125', 'field': [], 'time_frequency': u'day', 'field_shape': u'(1, 3650, 1, 64, 128)', 'time_res_days': 1.0})
+            self.assertDictEqual(simple,{'time_calendar': u'365_day', 'time_start': datetime.datetime(2001, 1, 1, 0, 0), 'description': None, 'spatial_abstraction': u'polygon', 'cid': 1, 'did': 1, 'spatial_proj4': u'+proj=longlat +ellps=WGS84 +towgs84=0,0,0,0,0,0,0 +no_defs ', 'time_stop': datetime.datetime(2011, 1, 1, 0, 0), 'time_units': u'days since 1850-1-1', 'spatial_envelope': u'POLYGON ((-1.4062500000000000 -90.0000000000000000, -1.4062500000000000 90.0000000000000000, 358.5937500000000000 90.0000000000000000, 358.5937500000000000 -90.0000000000000000, -1.4062500000000000 -90.0000000000000000))', 'spatial_res': u'2.8125', 'field': [], 'time_frequency': u'day', 'field_shape': u'(1, 3650, 1, 64, 128)', 'time_res_days': 1.0})
             self.assertEqual(objects['uri'][0].value,self.test_data.get_uri('cancm4_tas'))
             self.assertEqual(objects['dataset'].name,'CanCM4')
         finally:
@@ -308,7 +308,7 @@ class TestHydraPopulated(TestBase):
     def test_variable(self):
         dq = DataQuery(db_path=self._db_path)
         ret = dq.get_variable_or_index('variable')
-        self.assertDictEqual(ret,{'long_name': [u'Air Temperature', u'Daily Precipitation Rate', u'Maximum Air Temperature', u'Minimum Air Temperature'], 'time_frequency': [u'day'], 'dataset_category': [u'Downscaled', u'Gridded Observational'], 'dataset': [u'Hayhoe ARRM-GFDL', u'Maurer 2010']})
+        self.assertDictEqual(ret,{'long_name': [u'Air Temperature', u'Daily Precipitation Rate', u'Maximum Air Temperature', u'Minimum Air Temperature'], 'time_frequency': [u'Day'], 'dataset_category': [u'Downscaled', u'Gridded Observational'], 'dataset': [u'Hayhoe ARRM-GFDL', u'Maurer 2010']})
     
     def test_package(self):
         dq = DataQuery(db_path=self._db_path)

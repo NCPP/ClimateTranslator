@@ -105,7 +105,12 @@ class DataQuery(object):
                 ret = {tc:[] for tc in to_collect}
                 for obj in query.all():
                     for tc in to_collect:
-                        ret[tc].append(getattr(obj,tc))
+                        to_append = getattr(obj,tc)
+                        ## the time frequency is stored as lower case in the database
+                        ## and should be capitalized for aesthetic purposes.
+                        if tc == 'time_frequency':
+                            to_append = to_append.title()
+                        ret[tc].append(to_append)
                 for k,v in ret.iteritems():
                     new = list(set(v))
                     new.sort()
@@ -162,7 +167,7 @@ class DataQuery(object):
             query = query.filter(db.CleanVariable.long_name == long_name)
         
         if time_frequency is not None:
-            query = query.filter(cquery.c.time_frequency == time_frequency)
+            query = query.filter(cquery.c.time_frequency == time_frequency.lower())
 
         if dataset_category is not None:
             query = query.filter(cquery.c.dataset_category == dataset_category)
