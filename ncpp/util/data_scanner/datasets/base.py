@@ -1,7 +1,7 @@
 import abc
 from ocgis.api.request.nc import NcRequestDataset
 import os
-from ClimateTranslator.ncpp.util.data_scanner import db
+import db
 
 
 UNITS_CELSIUS = {'standard_name':'C','long_name':'Celsius'}
@@ -17,6 +17,7 @@ CATEGORY_GRIDDED_OBS = dict(name='Gridded Observational',description='<tdk>')
 
 class AbstractHarvestDataset(object):
     __metaclass__ = abc.ABCMeta
+    _exclude = False
     @abc.abstractproperty
     def clean_units(self): dict
     @abc.abstractproperty
@@ -65,6 +66,7 @@ class AbstractFolderHarvestDataset(AbstractHarvestDataset):
     
 class AbstractDataPackage(object):
     __metaclass__ = abc.ABCMeta
+    _exclude = False
     @abc.abstractproperty
     def description(self): str
     @abc.abstractproperty
@@ -86,3 +88,44 @@ class AbstractDataPackage(object):
         dp = db.DataPackage(field=qq.all(),name=self.name,description=self.description,dataset_category=dc)
         session.add(dp)
         session.commit()
+
+
+def itersubclasses(cls, _seen=None):
+    """
+    itersubclasses(cls)
+
+    Generator over all subclasses of a given class, in depth first order.
+
+    >>> list(itersubclasses(int)) == [bool]
+    True
+    >>> class A(object): pass
+    >>> class B(A): pass
+    >>> class C(A): pass
+    >>> class D(B,C): pass
+    >>> class E(D): pass
+    >>> 
+    >>> for cls in itersubclasses(A):
+    ...     print(cls.__name__)
+    B
+    D
+    E
+    C
+    >>> # get ALL (new-style) classes currently defined
+    >>> [cls.__name__ for cls in itersubclasses(object)] #doctest: +ELLIPSIS
+    ['type', ...'tuple', ...]
+    """
+    
+    if not isinstance(cls, type):
+        raise TypeError('itersubclasses must be called with '
+                        'new-style classes, not %.100r' % cls)
+    if _seen is None: _seen = set()
+    try:
+        subs = cls.__subclasses__()
+    except TypeError: # fails only when cls is type
+        subs = cls.__subclasses__(cls)
+    for sub in subs:
+        if sub not in _seen:
+            _seen.add(sub)
+            yield sub
+            for sub in itersubclasses(sub, _seen):
+                yield sub

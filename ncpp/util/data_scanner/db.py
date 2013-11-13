@@ -115,7 +115,9 @@ class DataPackage(Base):
         
         shapes = set([str(f.container.field_shape) for f in kwds['field']])
         if len(shapes) > 1:
-            raise(ValueError('Data package fields must have the same shape.'))
+            msg = 'Data package fields must have the same shape: {0}'
+            msg_fill = {f.container.dataset.name:f.container.field_shape for f in kwds['field']}
+            raise(ValueError(msg.format(msg_fill)))
         
         time_starts = [f.container.time_start for f in kwds['field']]
         time_stops = [f.container.time_stop for f in kwds['field']]
