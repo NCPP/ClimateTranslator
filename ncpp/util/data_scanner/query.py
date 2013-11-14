@@ -27,8 +27,14 @@ class DataQuery(object):
             query = self._get_package_query_(*args,**kwds)
 
             if query.count() >= 1:
-                ret = {'dataset_category':[obj.dataset_category.name for obj in query],
-                       'package_name':[obj.name for obj in query]}
+                
+                dataset_category = list(set([obj.dataset_category.name for obj in query]))
+                dataset_category.sort()
+                package_name = [obj.name for obj in query]
+                package_name.sort()
+                
+                ret = {'dataset_category':dataset_category,
+                       'package_name':package_name}
                 for v in ret.itervalues(): v.sort()
             else:
                 raise(NoResultFound)
@@ -180,5 +186,5 @@ class DataQuery(object):
             and_start = and_(cquery.c.time_start <= start,cquery.c.time_stop >= start)
             and_stop = and_(cquery.c.time_start <= stop,cquery.c.time_stop >= stop)
             query = query.filter(or_(and_start,and_stop))
-        
+            
         return(query)

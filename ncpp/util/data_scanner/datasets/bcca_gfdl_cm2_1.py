@@ -6,7 +6,7 @@ class AbstractBCCA_GFDL_CM_2_1(base.AbstractFolderHarvestDataset):
     __metaclass__ = abc.ABCMeta
     folder = '/data/downscaled/bcca'
     dataset_category = dict(name='Downscaled',description='<tdk>')
-    dataset = dict(name='BCCA-CCCMA-CGCM3',description='<tdk>')
+    dataset = dict(name='BCCA-GFDL-CM2.1',description='<tdk>')
     type = 'variable'
     
     
