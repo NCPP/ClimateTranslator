@@ -308,18 +308,18 @@
 		query = buildQueryString(dataType);
 		
 		if (dataType=='variable') {
-			
-			if (   query.indexOf('long_name')>0 
-				&& query.indexOf('time_frequency')>0 
-				&& query.indexOf('dataset_category')>0 
-				&& query.indexOf('dataset')>0) {
+						
+			if (   query.indexOf('long_name=')>0 
+				&& query.indexOf('time_frequency=')>0 
+				&& query.indexOf('dataset_category=')>0 
+				&& query.indexOf('dataset=')>0) {
 				// all fields selected -> query for metadata
 				var transaction = YAHOO.util.Connect.asyncRequest('GET', url+query, ajaxMetadataCallback, null); 
 			}
 
 			
 		} else if (dataType=='package') {
-			if (query.indexOf('package_name')>0) {
+			if (query.indexOf('package_name=')>0) {
 				// package_name selected -> query for metadata
 				var transaction = YAHOO.util.Connect.asyncRequest('GET', url+query, ajaxMetadataCallback, null); 
 			}
