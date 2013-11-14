@@ -109,8 +109,9 @@
     	
     }
 
-    // function triggered by a change in data type selection
-    function getDatasets() {
+    // function triggered by a change in data type selection for this widget
+    function getDatasets(widget) {
+    	
     	
     	dataType = document.getElementById(WIDGET_DATA_TYPE).value;
     	if (dataType==null || dataType=='') {
@@ -134,13 +135,20 @@
   		    	  setVisibility(PACKAGE_WIDGETS, false);
   		    	  setVisibility(VARIABLE_WIDGETS, true);
   		    	  
-  		    	  // reset selection for all following widgets:
-  		    	  invalidateSelection(VARIABLE_WIDGET_IDS);
+  		    	  // if user selected '--Please Selec--': reset selection for all following widgets
+  		          if (widget!=null && !isValid(widget.value)) {
+  		    	  	invalidateSelection(VARIABLE_WIDGET_IDS);
+  		          }
   		    	  	  		      
   		      } else if (dataType=='package') {
   		    	  
   		    	  setVisibility(VARIABLE_WIDGETS, false);
   		    	  setVisibility(PACKAGE_WIDGETS, true);
+  		    	  
+  		    	  // if user selected '--Please Selec--': reset selection for all following widgets
+  		    	  if (widget!=null && !isValid(widget.value)) {
+  		    	  	invalidateSelection(PACKAGE_WIDGET_IDS);
+  		    	  }
   		    	    	  		      
   		      }
   		      
@@ -444,7 +452,7 @@
 	
 	function init() {
 				
-		getDatasets();
+		getDatasets(null); // no widget selected
 		
 		populateGeometrySubCategories();
 		

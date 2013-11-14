@@ -38,29 +38,29 @@ class ClimateTranslatorForm1(Form):
            
     # data selection
     data_type = ChoiceField(choices=[ NO_VALUE_OPTION ] + ocgisDatasets.getDataTypes(), required=True,
-                                 widget=Select(attrs={'onchange': 'getDatasets();'}))
+                                 widget=Select(attrs={'onchange': 'getDatasets(this);'}))
     
     # The following widgets have no initial choices. The choices are assigned dynamically through Ajax
     
     # 1) variable or index selection
     long_name = DynamicChoiceField(choices=[ NO_VALUE_OPTION ], required=False,
-                                   widget=Select(attrs={'onchange': 'getDatasets();'}))
+                                   widget=Select(attrs={'onchange': 'getDatasets(this);'}))
     
     time_frequency = DynamicChoiceField(choices=[ NO_VALUE_OPTION ], required=False,
-                                        widget=Select(attrs={'onchange': 'getDatasets();'}))
+                                        widget=Select(attrs={'onchange': 'getDatasets(this);'}))
     
     dataset_category = DynamicChoiceField(choices=[ NO_VALUE_OPTION ], required=False,
-                                          widget=Select(attrs={'onchange': 'getDatasets();'}))
+                                          widget=Select(attrs={'onchange': 'getDatasets(this);'}))
     
     dataset = DynamicChoiceField(choices=[ NO_VALUE_OPTION ], required=False,
-                                 widget=Select(attrs={'onchange': 'getDatasets();'}) )
+                                 widget=Select(attrs={'onchange': 'getDatasets(this);'}) )
     
     # 2) package selection
     dataset_category2 = DynamicChoiceField(choices=[ NO_VALUE_OPTION ], required=False,
-                                           widget=Select(attrs={'onchange': 'getDatasets();'}))
+                                           widget=Select(attrs={'onchange': 'getDatasets(this);'}))
     
     package_name = DynamicChoiceField(choices=[ NO_VALUE_OPTION ], required=False,
-                                      widget=Select(attrs={'onchange': 'getDatasets();'}))
+                                      widget=Select(attrs={'onchange': 'getDatasets(this);'}))
 
      
     # geometry selection
