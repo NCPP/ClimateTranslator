@@ -39,6 +39,7 @@
     // function to invalidate the selection of a list of widgets
     // following an unselected widget
     function invalidateSelection(widget_ids) {
+
     	for (var i=0; i<widget_ids.length; i++) {
     		selectedValue = document.getElementById(widget_ids[i]).value;
     		
@@ -47,15 +48,20 @@
     			for (var j=i+1; j<widget_ids.length; j++) {
     				document.getElementById(widget_ids[j]).options[0].selected = true;
     			}
-    			
-    			// invalidate metadata widgets
-    			document.getElementById(WIDGET_DATETIME_START).value = '';
-    			document.getElementById(WIDGET_DATETIME_STOP).value = '';
-    			document.getElementById(WIDGET_DESCRIPTION).innerHTML = '';
-    			
+    			    			
     			break;
     		}
     	}
+    	
+    }
+    
+    // function to invalidate the content of the metadata widgets
+    function invalidateMetadata() {
+    	
+		document.getElementById(WIDGET_DATETIME_START).value = '';
+		document.getElementById(WIDGET_DATETIME_STOP).value = '';
+		document.getElementById(WIDGET_DESCRIPTION).innerHTML = '';
+    	
     }
     
     // utility method to build the URL query string for datasets or metadata Ajax requests
@@ -119,12 +125,16 @@
     		// invaliate all widgets
     		invalidateSelection(VARIABLE_WIDGET_IDS);
     		invalidateSelection(PACKAGE_WIDGET_IDS);
+    		invalidateMetadata();
     		
     		// hide all widgets
 	    	setVisibility(PACKAGE_WIDGETS, false);
 		    setVisibility(VARIABLE_WIDGETS, false);
     		
     	} else {
+    		
+    		  // clear metadata content
+    		  invalidateMetadata();
   		    			
   		      // data_type is selected
   		      url = '/ncpp/climate_translator/datasets'
