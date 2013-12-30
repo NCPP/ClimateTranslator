@@ -84,9 +84,9 @@
 </script>
 
 <fieldset class="fieldset_box">
-	<legend class="fieldset_legend">Calculation</legend>	
-	Optionally, you may select a calculation to be executed on the data.
-	<br/>If no calculation is selected, a subset of the data will be returned.
+	<legend class="fieldset_legend">Calculation (Optional)</legend>	
+	Optionally, you may select a data calculation.
+	<br/>If no calculation is selected, a subset of the raw data will be returned.
 	<p/>&nbsp;
          
 	<table class="horizontalTable">
@@ -109,7 +109,7 @@
 		<tr>
 			<th>Calculation Group</th>
 			<td>{{ wizard.form.calc_group }}
-				<br/>If performing a computation, you MUST select one or more temporal grouping for the data
+				<br/>If performing a calculation, you MUST select one or more temporal groupings.
 			    <br/><span class="error">{{ wizard.form.calc_group.errors }}</span></td>
 		</tr>
 		<tr>
@@ -120,7 +120,7 @@
 		<tr>
 			<th>Calculate Raw ?</th>
 			<td>{{ wizard.form.calc_raw }}
-				&nbsp;Check to execute the calculation on raw, unaggregated values
+				&nbsp;(Advanced) Check to execute the calculation on raw, unaggregated values.
 			     <br/><span class="error">{{ wizard.form.calc_raw.errors }}</span></td>
 		</tr>
 	</table>
@@ -139,7 +139,7 @@
 		<tr>
 			<th>&nbsp;</th>
 			<td>
-				     <i>Intersect:</i> Source geometries touching or overlapping selection geometries are returned.
+				     <i>Intersect:</i> Source geometries overlapping selection geometries are returned.
 				<br/><i>Clip:</i> A full geometric intersection is performed between source and selection geometries. 
 				</td>
 		</tr>

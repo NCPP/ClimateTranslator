@@ -475,10 +475,7 @@
 </script>
        
 <fieldset class="fieldset_box">
-	<legend class="fieldset_legend">Data Selection</legend>	
-	Please select a <i>dataset category</i>, a <i>dataset</i>, and a <i>variable</i>
-	<br/>(when selecting a <i>dataset package</i>, a <i>variable</i> selection is not necessary).
-	<p/>&nbsp;
+	<legend class="fieldset_legend">Data Selection (Required)</legend>	
 	
 	<table class="horizontalTable">
 		<tr>
@@ -536,30 +533,30 @@
 </fieldset>
 
 <fieldset class="fieldset_box">
-	<legend class="fieldset_legend">Geo-Spatial Selection</legend>	
-	Optionally, you may select either a <i>shape</i> geometry, a <i>bounding box</i>, or a <i>point</i>.
-	<br/>If no selection is made,the full dataset geo-spatial extent will be processed.
+	<legend class="fieldset_legend">Spatial Subsetting (Optional)</legend>	
+	You may select a <i>predefined region(s)</i>, <i>bounding box</i>, or <i>point</i>.
+	<br/>If no selection is made, the full spatial extent will be returned.
 	<p/>&nbsp;
 	
 	<table class="horizontalTable">
 		<tr>
-			<th>Geometry:</th>
+			<th>Predefined Region:</th>
 			<td>
 				Category: {{ wizard.form.geometry_category }}
-				<br/>Sub-Category: {{ wizard.form.geometry_subcategory }}
+				<br/>Subcategory: {{ wizard.form.geometry_subcategory }}
 				<br/><span class="error">{{ wizard.form.geometry_category.errors }}</span>
 				<br/><span class="error">{{ wizard.form.geometry_subcategory.errors }}</span>
 			</td>
 			<td style="width:100%; text-align:left;"> 
-			    Shape: {{ wizard.form.geometry_id }}
+			    Region(s): {{ wizard.form.geometry_id }}
 				<br/><span class="error">{{ wizard.form.geometry_id.errors }}</span>
 			</td>
 		</tr>
 		<tr>
 			<th nowrap="nowrap">Bounding Box:</th>
 			<td colspan="3" nowrap="nowrap">
-				Latitude min: {{ wizard.form.latmin }} max: {{ wizard.form.latmax }}
-				Longitude min: {{ wizard.form.lonmin }} max: {{ wizard.form.lonmax }}
+				Latitude Min: {{ wizard.form.latmin }} Max: {{ wizard.form.latmax }}
+				Longitude Min: {{ wizard.form.lonmin }} Max: {{ wizard.form.lonmax }}
 			</td>	
 		</tr>
 		<tr>
@@ -585,9 +582,9 @@
 			</td>
 		</tr>
 		<tr>
-			<th nowrap="nowrap">Aggregate Selection ?</th>
+			<th nowrap="nowrap">Aggregate Selection?</th>
 			<td colspan="2">{{ wizard.form.agg_selection }}
-				&nbsp;If checked, the selection geometries will be aggregated prior to any spatial operations.
+				&nbsp;If checked, the selection geometries will be aggregated (unioned) prior to any spatial operations.
 			     <br/><span class="error">{{ wizard.form.agg_selection.errors }}</span></td>
 		</tr>
 		
@@ -595,16 +592,16 @@
 </fieldset>
 
 <fieldset class="fieldset_box">
-	<legend class="fieldset_legend">Temporal Selection</legend>
-	Optionally, you may specify a <i>time range</i> (i.e. a start and stop time), 
+	<legend class="fieldset_legend">Temporal Subsetting (Optional)</legend>
+	You may specify a <i>time range</i> (a start and stop time), 
 	and/or a <i>time selection</i> (one or more months, and/or one or more years).
 	If both are specified, the <i>time range</i> must contain the <i>time selection</i>.
-	<br/>If neither <i>time range</i> or <i>time selection</i> is specified,the full dataset temporal extent will be processed.
+	<br/>If neither <i>time range</i> or <i>time selection</i> is specified, the full dataset temporal extent will be processed.
 	<p/>&nbsp;
 	
 	<table class="horizontalTable">
 		<tr>
-			<th>Time Range: Start</th>
+			<th>Start</th>
 			<td>
 				{{ wizard.form.datetime_start }} <b>Stop</b> {{ wizard.form.datetime_stop }} &nbsp; [Format: YYYY-MM-DD HH:MM:SS]
 				<br/>
@@ -612,7 +609,7 @@
 			</td>
 		</tr>
 		<tr>
-			<th>Time Selection: Months</th>
+			<th>Months</th>
 			<td nowrap="nowrap">
 			{% for box in wizard.form.timeregion_month %}
 				{{ box }}
@@ -620,7 +617,7 @@
 			</td>
 		</tr>
 		<tr>
-			<th nowrap="nowrap">Time Selection: Years</th>
+			<th nowrap="nowrap">Years</th>
 			<td>{{ wizard.form.timeregion_year }}
 				&nbsp;[Format: YYYY, YYYY, ... or YYYY-YYYY]
 			</td>
