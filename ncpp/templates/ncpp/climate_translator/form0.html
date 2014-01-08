@@ -25,7 +25,7 @@
     
     var WIDGET_DATETIME_START = "id_0-datetime_start";
     var WIDGET_DATETIME_STOP = "id_0-datetime_stop";
-    var WIDGET_DESCRIPTION = "id_0-description";
+    //FIXME var WIDGET_DESCRIPTION = "id_0-description";
     
     // list of widgets in the order they are selected
     var VARIABLE_WIDGET_IDS = [WIDGET_DATA_TYPE, WIDGET_LONG_NAME, WIDGET_TIME_FREQUENCY, WIDGET_DATASET_CATEGORY, WIDGET_DATASET]
@@ -60,7 +60,7 @@
     	
 		document.getElementById(WIDGET_DATETIME_START).value = '';
 		document.getElementById(WIDGET_DATETIME_STOP).value = '';
-		document.getElementById(WIDGET_DESCRIPTION).innerHTML = '';
+		//FIXME document.getElementById(WIDGET_DESCRIPTION).innerHTML = '';
     	
     }
     
@@ -413,14 +413,14 @@
 		stopDateTimeWidget.value = jsonData['time_range'][1];
 		
 		// populate description widget
-		descriptionWidget = document.getElementById(WIDGET_DESCRIPTION);
-		text = "";
-		text = addText(text, jsonData['description'], 'dataset_category', 'Dataset Category');	
-		text = addText(text, jsonData['description'], 'package', 'Package');
-		text = addText(text, jsonData['description'], 'long_name', 'Long Name');
-		text = addText(text, jsonData['description'], 'dataset', 'Dataset');
+		//FIXME descriptionWidget = document.getElementById(WIDGET_DESCRIPTION);
+		//FIXME text = "";
+		//FIXME text = addText(text, jsonData['description'], 'dataset_category', 'Dataset Category');	
+		//FIXME text = addText(text, jsonData['description'], 'package', 'Package');
+		//FIXME text = addText(text, jsonData['description'], 'long_name', 'Long Name');
+		//FIXME text = addText(text, jsonData['description'], 'dataset', 'Dataset');
 		
-		descriptionWidget.innerHTML = text;
+		//FIXME descriptionWidget.innerHTML = text;
 		
 	}
 	
@@ -522,6 +522,7 @@
 			</tr>
 		</table>
 	</div>
+	<!-- FIXME
 	<table class="horizontalTable">
 		<tr>
 			<th>Dataset Description</th>
@@ -529,7 +530,7 @@
 				<div id="id_0-description" class="mybox"></div>
 			</td>
 		</tr>
-	</table>
+	</table> -->
 </fieldset>
 
 <fieldset class="fieldset_box">
