@@ -107,18 +107,18 @@
 			 </td>
 		</tr>
 		<tr>
-			<th>Calculation Group</th>
+			<th><a href="http://ncpp.github.io/ocgis/api.html#calc-grouping" target="_blank">Calculation Group</a></th>
 			<td>{{ wizard.form.calc_group }}
 				<br/>If performing a calculation, you MUST select one or more temporal groupings.
 			    <br/><span class="error">{{ wizard.form.calc_group.errors }}</span></td>
 		</tr>
 		<tr>
-			<th>Aggregate</th>
+			<th><a href="http://ncpp.github.io/ocgis/appendix.html#aggregate-union" target="_blank">Aggregate</a></th>
 			<td>{{ wizard.form.aggregate }} Check to combine selected geometries into a single geometry using area-weighted spatial aggregation.
 			<br/><span class="error">{{ wizard.form.aggregate.errors }}</span></td>
 		</tr>
 		<tr>
-			<th>Calculate Raw ?</th>
+			<th>Calculate Raw?</th>
 			<td>{{ wizard.form.calc_raw }}
 				&nbsp;(Advanced) Check to execute the calculation on raw, unaggregated values.
 			     <br/><span class="error">{{ wizard.form.calc_raw.errors }}</span></td>
@@ -139,8 +139,8 @@
 		<tr>
 			<th>&nbsp;</th>
 			<td>
-				     <i>Intersect:</i> Source geometries overlapping selection geometries are returned.
-				<br/><i>Clip:</i> A full geometric intersection is performed between source and selection geometries. 
+				     <i><a href="http://ncpp.github.io/ocgis/appendix.html#intersects-select" target="_blank">Intersect</a>:</i> Source geometries overlapping selection geometries are returned.
+				<br/><i><a href="http://ncpp.github.io/ocgis/appendix.html#clip-intersection" target="_blank">Clip</a>:</i> A full geometric intersection is performed between source and selection geometries. 
 				</td>
 		</tr>
 		<tr>
@@ -155,7 +155,7 @@
 		</tr>
 		<tr>
 			<th nowrap="nowrap"><b>Include Auxiliary Files ?</b></th>
-			<td>{{ wizard.form.with_auxiliary_files }} &nbsp;Check to return a compressed file that includes auxiliary files.
+			<td>{{ wizard.form.with_auxiliary_files }} &nbsp;Check to return a compressed file that includes auxiliary metadata files.
 			<br/><span class="error">{{ wizard.form.with_auxiliary_files.errors }}</span></td>
 		</tr>
 		
