@@ -85,12 +85,12 @@
 
 <fieldset class="fieldset_box">
 	<legend class="fieldset_legend">Calculation (Optional)</legend>	
-	If no calculation is selected, a subset of the raw data will be returned.
+	If no calculation is selected, the raw data will be returned.
 	<p/>&nbsp;
          
 	<table class="horizontalTable">
 		<tr>
-			<th>Calculation</th>
+			<th>Select:</th>
 			<td>
 				<div style="float:left">
 				<table>
@@ -106,20 +106,20 @@
 			 </td>
 		</tr>
 		<tr>
-			<th><a href="http://ncpp.github.io/ocgis/api.html#calc-grouping" target="_blank">Temporal Group</a></th>
+			<th><a href="http://ncpp.github.io/ocgis/api.html#calc-grouping" target="_blank">Temporal Group</a>:</th>
 			<td>{{ wizard.form.calc_group }}
 				<br/>If performing a calculation, you <i>must</i> select one or more temporal groups.
 			    <br/><span class="error">{{ wizard.form.calc_group.errors }}</span></td>
 		</tr>
 		<tr>
-			<th><a href="http://ncpp.github.io/ocgis/appendix.html#aggregate-union" target="_blank">Aggregate</a></th>
-			<td>{{ wizard.form.aggregate }} Check to combine subsetted geometries into a single geometry using area-weighted spatial aggregation.
+			<th><a href="http://ncpp.github.io/ocgis/appendix.html#aggregate-union" target="_blank">Aggregate</a>:</th>
+			<td>{{ wizard.form.aggregate }} Combine subsetted geometries into a single geometry using area-weighted spatial aggregation.
 			<br/><span class="error">{{ wizard.form.aggregate.errors }}</span></td>
 		</tr>
 		<tr>
-			<th>Calculate Raw</th>
+			<th>Calculate Raw:</th>
 			<td>{{ wizard.form.calc_raw }}
-				&nbsp;(Advanced) Check to execute the calculation on raw values. Only applicable if Aggregate is selected.
+				&nbsp;(Advanced) Execute the calculation on raw values. Only applicable if Aggregate is selected.
 			     <br/><span class="error">{{ wizard.form.calc_raw.errors }}</span></td>
 		</tr>
 	</table>
@@ -130,7 +130,7 @@
 	<legend class="fieldset_legend">Output Format</legend>	
 	<table class="horizontalTable">
 		<tr>
-			<th nowrap="nowrap"><b>Spatial Operation</b></th>
+			<th nowrap="nowrap"><b>Spatial Operation:</b></th>
 			<td> {{ wizard.form.spatial_operation }}
 				<br/><span class="error">{{ wizard.form.spatial_operation.errors }}</span>
 			</td>
@@ -143,18 +143,18 @@
 				</td>
 		</tr>
 		<tr>
-			<th nowrap="nowrap"><b>Output Format</b></th>
+			<th nowrap="nowrap"><b>Output Format:</b></th>
 			<td>{{ wizard.form.output_format }}<br/><span class="error">{{ wizard.form.output_format.errors }}</span></td>
 		</tr>
 		<tr>
-			<th><b>File Output Prefix</b></th>
+			<th><b>File Output Prefix:</b></th>
 			<td>{{ wizard.form.prefix }}
 			<br/>Optionally, change the prefix for the output data file (use only letters, numbers and '_').
 			<br/><span class="error">{{ wizard.form.prefix.errors }}</span></td>
 		</tr>
 		<tr>
-			<th nowrap="nowrap"><b>Include Auxiliary Files</b></th>
-			<td>{{ wizard.form.with_auxiliary_files }} &nbsp;Check to return a compressed file that includes auxiliary metadata files.
+			<th nowrap="nowrap"><b>Add Auxiliary Files:</b></th>
+			<td>{{ wizard.form.with_auxiliary_files }} &nbsp;Return a compressed file including auxiliary metadata files.
 			<br/><span class="error">{{ wizard.form.with_auxiliary_files.errors }}</span></td>
 		</tr>
 		

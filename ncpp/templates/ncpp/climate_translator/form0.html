@@ -479,7 +479,7 @@
 	
 	<table class="horizontalTable">
 		<tr>
-			<th>Select Data By</th>
+			<th>Select Data By:</th>
 			<td>{{ wizard.form.data_type }}
 				<br/>&nbsp;<span class="error">{{ wizard.form.data_type.errors }}</span></td>
 		</tr>
@@ -487,22 +487,22 @@
 	<div id="variable_widgets">
 		<table class="horizontalTable">
 			<tr>
-				<th>Long Name</th>
+				<th>Long Name:</th>
 				<td>{{ wizard.form.long_name }}
 					<br/>&nbsp;<span class="error">{{ wizard.form.long_name.errors }}</span></td>
 			</tr>
 			<tr>
-				<th>Time Frequency</th>
+				<th>Time Frequency:</th>
 				<td>{{ wizard.form.time_frequency }}
 					<br/>&nbsp;<span class="error">{{ wizard.form.time_frequency.errors }}</span></td>
 			</tr>
 			<tr>
-				<th>Dataset Category</th>
+				<th>Dataset Category:</th>
 				<td>{{ wizard.form.dataset_category }}
 					<br/>&nbsp;<span class="error">{{ wizard.form.dataset_category.errors }}</span></td>
 			</tr>
 			<tr>
-				<th>Dataset</th>
+				<th>Dataset:</th>
 				<td>{{ wizard.form.dataset }}
 					<br/>&nbsp;<span class="error">{{ wizard.form.dataset.errors }}</span></td>
 			</tr>
@@ -511,12 +511,12 @@
 	<div id="package_widgets">
 		<table class="horizontalTable">
 			<tr>
-				<th>Dataset Category</th>
+				<th>Dataset Category:</th>
 				<td>{{ wizard.form.dataset_category2 }}
 					<br/>&nbsp;<span class="error">{{ wizard.form.dataset_category2.errors }}</span></td>
 			</tr>
 			<tr>
-				<th>Package Name</th>
+				<th>Package Name:</th>
 				<td>{{ wizard.form.package_name }}
 					<br/>&nbsp;<span class="error">{{ wizard.form.package_name.errors }}</span></td>
 			</tr>
@@ -535,7 +535,7 @@
 
 <fieldset class="fieldset_box">
 	<legend class="fieldset_legend">Spatial Subsetting (Optional)</legend>	
-	You may select a <i>predefined region(s)</i>, <i>bounding box</i>, or <i>point</i>.
+	Select a <i>predefined region(s)</i>, <i>bounding box</i>, or <i>point</i>.
 	<br/>If no selection is made, the full spatial extent will be returned.
 	<p/>&nbsp;
 	
@@ -583,9 +583,9 @@
 			</td>
 		</tr>
 		<tr>
-			<th nowrap="nowrap">Aggregate Selection</th>
+			<th nowrap="nowrap">Combine Region(s):</th>
 			<td colspan="2">{{ wizard.form.agg_selection }}
-				&nbsp;If checked, the selection geometries will be aggregated (unioned) prior to any spatial operations.
+				&nbsp;Selected region(s) will be <a href="http://ncpp.github.io/ocgis/appendix.html#aggregate-union" target="_blank">aggregated (unioned)</a> before spatial subsetting.
 			     <br/><span class="error">{{ wizard.form.agg_selection.errors }}</span></td>
 		</tr>
 		
@@ -594,23 +594,23 @@
 
 <fieldset class="fieldset_box">
 	<legend class="fieldset_legend">Temporal Subsetting (Optional)</legend>
-	You may specify a <i>time range</i> (a start and stop time), 
+	Specify a <i>time range</i> (a start and stop time), 
 	and/or a <i>time selection</i> (one or more months, and/or one or more years).
 	If both are specified, the <i>time range</i> must contain the <i>time selection</i>.
-	<br/>If neither <i>time range</i> or <i>time selection</i> is specified, the full dataset temporal extent will be processed.
+	<br/>Without a <i>time range</i> or <i>time selection</i>, the full dataset temporal extent will be processed.
 	<p/>&nbsp;
 	
 	<table class="horizontalTable">
 		<tr>
-			<th>Start</th>
+			<th>Start:</th>
 			<td>
-				{{ wizard.form.datetime_start }} <b>Stop</b> {{ wizard.form.datetime_stop }} &nbsp; [Format: YYYY-MM-DD HH:MM:SS]
+				{{ wizard.form.datetime_start }} <b>Stop:</b> {{ wizard.form.datetime_stop }} &nbsp; [Format: YYYY-MM-DD HH:MM:SS]
 				<br/>
 				<span class="error">{{ wizard.form.datetime_start.errors }} &nbsp; {{ wizard.form.datetime_stop.errors }}
 			</td>
 		</tr>
 		<tr>
-			<th>Months</th>
+			<th>Months:</th>
 			<td nowrap="nowrap">
 			{% for box in wizard.form.timeregion_month %}
 				{{ box }}
@@ -618,7 +618,7 @@
 			</td>
 		</tr>
 		<tr>
-			<th nowrap="nowrap">Years</th>
+			<th nowrap="nowrap">Years:</th>
 			<td>{{ wizard.form.timeregion_year }}
 				&nbsp;[Format: YYYY, YYYY, ... or YYYY-YYYY]
 			</td>

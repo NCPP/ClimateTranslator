@@ -23,7 +23,7 @@
 	<!-- body -->
 	<div class="box">
 		<h2>ClimateTranslator Workflow: Step {{ wizard.steps.step1 }} of {{ wizard.steps.count }}</h2>
-		Disclaimer: ClimateTranslator and the underlying OpenClimateGIS software are in <i>beta</i>.
+		<i>ClimateTranslator and the underlying <a href="https://www.earthsystemcog.org/projects/openclimategis/" target="_blank">OpenClimateGIS</a> software are in beta.</i>
 		<form action="" method="post">
 			{% csrf_token %}
 			{{ wizard.management_form }}
