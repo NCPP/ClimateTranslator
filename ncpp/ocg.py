@@ -166,6 +166,8 @@ class OCG(object):
         for dataset in args['datasets']:
             dataset['time_range'] = args['time_range']
             dataset['time_region'] = args['time_region']
+        del args['time_range']
+        del args['time_region']
       
         print 'Running OCGIS job with arguments=%s' % args
 
