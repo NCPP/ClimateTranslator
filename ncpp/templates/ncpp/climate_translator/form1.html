@@ -85,8 +85,7 @@
 
 <fieldset class="fieldset_box">
 	<legend class="fieldset_legend">Calculation (Optional)</legend>	
-	Optionally, you may select a data calculation.
-	<br/>If no calculation is selected, a subset of the raw data will be returned.
+	If no calculation is selected, a subset of the raw data will be returned.
 	<p/>&nbsp;
          
 	<table class="horizontalTable">
@@ -107,20 +106,20 @@
 			 </td>
 		</tr>
 		<tr>
-			<th><a href="http://ncpp.github.io/ocgis/api.html#calc-grouping" target="_blank">Calculation Group</a></th>
+			<th><a href="http://ncpp.github.io/ocgis/api.html#calc-grouping" target="_blank">Temporal Group</a></th>
 			<td>{{ wizard.form.calc_group }}
-				<br/>If performing a calculation, you MUST select one or more temporal groupings.
+				<br/>If performing a calculation, you <i>must</i> select one or more temporal groups.
 			    <br/><span class="error">{{ wizard.form.calc_group.errors }}</span></td>
 		</tr>
 		<tr>
 			<th><a href="http://ncpp.github.io/ocgis/appendix.html#aggregate-union" target="_blank">Aggregate</a></th>
-			<td>{{ wizard.form.aggregate }} Check to combine selected geometries into a single geometry using area-weighted spatial aggregation.
+			<td>{{ wizard.form.aggregate }} Check to combine subsetted geometries into a single geometry using area-weighted spatial aggregation.
 			<br/><span class="error">{{ wizard.form.aggregate.errors }}</span></td>
 		</tr>
 		<tr>
-			<th>Calculate Raw?</th>
+			<th>Calculate Raw</th>
 			<td>{{ wizard.form.calc_raw }}
-				&nbsp;(Advanced) Check to execute the calculation on raw, unaggregated values.
+				&nbsp;(Advanced) Check to execute the calculation on raw values. Only applicable if Aggregate is selected.
 			     <br/><span class="error">{{ wizard.form.calc_raw.errors }}</span></td>
 		</tr>
 	</table>
@@ -154,7 +153,7 @@
 			<br/><span class="error">{{ wizard.form.prefix.errors }}</span></td>
 		</tr>
 		<tr>
-			<th nowrap="nowrap"><b>Include Auxiliary Files ?</b></th>
+			<th nowrap="nowrap"><b>Include Auxiliary Files</b></th>
 			<td>{{ wizard.form.with_auxiliary_files }} &nbsp;Check to return a compressed file that includes auxiliary metadata files.
 			<br/><span class="error">{{ wizard.form.with_auxiliary_files.errors }}</span></td>
 		</tr>
