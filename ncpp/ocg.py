@@ -162,6 +162,11 @@ class OCG(object):
         
     def run(self, args):
         
+        # apply time_range and time_region constraints to each dataset
+        for dataset in args['datasets']:
+            dataset['time_range'] = args['time_range']
+            dataset['time_region'] = args['time_region']
+      
         print 'Running OCGIS job with arguments=%s' % args
 
         # fake invocation on laptop
@@ -182,16 +187,6 @@ class OCG(object):
             os.makedirs(dir_output)             
                                     
             # build up the list of request datasets
-            '''
-            datasets = []
-            iter_tuple = [args[key] for key in ['uri', 'variable', 't_calendar', 't_units', 'alias']]
-            time_range=args['time_range']
-            time_region=args['time_region']
-            for uri,variable,t_calendar,t_units,alias in zip(*iter_tuple):
-                rd = ocgis.RequestDataset(uri=uri,variable=variable,t_calendar=t_calendar,t_units=t_units,
-                                  time_range=time_range,time_region=time_region,alias=alias)
-                datasets.append(rd)
-            '''      
             datasets = ocgis.RequestDatasetCollection(args['datasets'])
 
             ## construct the operations call
