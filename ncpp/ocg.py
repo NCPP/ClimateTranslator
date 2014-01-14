@@ -147,7 +147,10 @@ class OCG(object):
             
         args['calc_raw'] = openClimateGisJob.calc_raw
         if hasText(openClimateGisJob.calc_group):
-            args['calc_grouping'] = map(str, openClimateGisJob.calc_group.split(","))
+            if openClimateGisJob.calc_group == 'none':
+                args['calc_grouping'] = None
+            else:
+                args['calc_grouping'] = map(str, openClimateGisJob.calc_group.split(","))
         else:
             args['calc_grouping'] = None
         

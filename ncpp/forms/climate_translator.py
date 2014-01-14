@@ -214,8 +214,8 @@ class ClimateTranslatorForm2(Form):
     par1 = CharField(required=False, widget=TextInput(attrs={'size':6}), initial="")
     par2 = CharField(required=False, widget=TextInput(attrs={'size':6}), initial="")
     par3 = CharField(required=False, widget=TextInput(attrs={'size':6}), initial="")
-    #calc_group = MultipleChoiceField(choices=ocgisChoices(Config.CALCULATION_GROUP).items(), required=False)
-    calc_group = MultipleChoiceField(choices=ocgisChoices(Config.CALCULATION_GROUP).items(), required=False, widget=CheckboxSelectMultiple)
+    calc_group = ChoiceField(choices=ocgisChoices(Config.CALCULATION_GROUP).items(), required=False,
+                             widget=RadioSelect, initial='none')
     calc_raw = BooleanField(initial=False, required=False)
     aggregate = BooleanField(initial=False, required=False)
     output_format = ChoiceField(choices=ocgisChoices(Config.OUTPUT_FORMAT).items(), required=True, initial='csv')

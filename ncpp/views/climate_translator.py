@@ -102,10 +102,7 @@ class ClimateTranslatorWizard(SessionWizardView):
                     if cleaned_data.has_key('par3') and cleaned_data['par3'] is not None:
                         job_data['par3'] = cleaned_data['par3']
                     if cleaned_data.has_key('calc_group'):
-                        calc_groups =[]
-                        for group in cleaned_data['calc_group']:
-                            calc_groups.append(ocgisChoices(Config.CALCULATION_GROUP)[group])  
-                            job_data['calc_group'] = formatListForDisplay(calc_groups)                           
+                        job_data['calc_group'] = ocgisChoices(Config.CALCULATION_GROUP)[cleaned_data['calc_group']] 
                     if cleaned_data.has_key('calc_raw'):
                         job_data['calc_raw'] = bool(cleaned_data['calc_raw'])   
                     if cleaned_data.has_key('aggregate'):
@@ -162,7 +159,7 @@ class ClimateTranslatorWizard(SessionWizardView):
                                                par2=form_data['par2'],
                                                par3=form_data['par3'],
                                                calc_raw=form_data['calc_raw'],
-                                               calc_group=",".join(form_data['calc_group']),
+                                               calc_group=form_data['calc_group'],
                                                spatial_operation=form_data['spatial_operation'],
                                                aggregate=bool(form_data['aggregate']),
                                                output_format=form_data['output_format'],
