@@ -1,5 +1,5 @@
 # module containing configuration classes for Open Climate GIS application
-from ncpp.constants import CONFIG_FILEPATH, GEOMETRIES_FILEPATH, CALCULATIONS_FILEPATH, NO_VALUE_OPTION
+from ncpp.constants import CONFIG_FILEPATH, GEOMETRIES_FILEPATH, CALCULATIONS_FILEPATH, NO_VALUE_OPTION, NO_VALUE_OPTION2
 import json
 import os, ConfigParser
 import abc
@@ -59,7 +59,7 @@ class Calculations(ConfigBase):
     def getChoices(self):
         
         # no option selected
-        choices = [ NO_VALUE_OPTION ]
+        choices = [ NO_VALUE_OPTION2 ]
         # then all US counties
         for key in sorted( self.calcs, key=lambda key: self.calcs[key]["order"] ):
             calc = self.calcs[key]
