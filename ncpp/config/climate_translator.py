@@ -3,6 +3,7 @@ from ncpp.constants import CONFIG_FILEPATH, GEOMETRIES_FILEPATH, CALCULATIONS_FI
 import json
 import os, ConfigParser
 import abc
+from collections import OrderedDict
 
 class ConfigBase(object):
     """Abstract Base Class for Climate Translator configuration."""
@@ -16,8 +17,8 @@ class ConfigBase(object):
         return []
     
 
-#ocgisConfig = ConfigParser.RawConfigParser(dict_type=OrderedDict)
-ocgisConfig = ConfigParser.RawConfigParser()
+ocgisConfig = ConfigParser.RawConfigParser(dict_type=OrderedDict)
+#ocgisConfig = ConfigParser.RawConfigParser()
 # must set following line explicitely to preserve the case of configuration keys
 ocgisConfig.optionxform = str 
 try:
@@ -37,11 +38,13 @@ class Config():
     
     
 def ocgisChoices(section, nochoice=False):
-    choices = {}
+    choices = OrderedDict()
     # add empty choice 
     if nochoice:
         choices[ NO_VALUE_OPTION[0] ] = NO_VALUE_OPTION[1]
-    choices.update( dict( ocgisConfig.items(section) ) )
+    # iterate over configuration choices in original order
+    for key, value in ocgisConfig.items(section):
+        choices[ key ] = value
     return choices
 
 class Calculations(ConfigBase):

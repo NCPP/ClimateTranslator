@@ -209,6 +209,9 @@ class ClimateTranslatorForm1(Form):
 class ClimateTranslatorForm2(Form):
     '''Form that backs up the second selection page.'''
     
+    # FIXME
+    print '\nCHOICES=%s' % ocgisChoices(Config.CALCULATION_GROUP).items()
+    
     calc = ChoiceField(choices=ocgisCalculations.getChoices(), required=False, initial='none',
                        widget=Select(attrs={'onchange': 'populateParameters();'}))
     par1 = CharField(required=False, widget=TextInput(attrs={'size':6}), initial="")
