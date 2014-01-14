@@ -90,8 +90,16 @@
          
 	<table class="horizontalTable">
 		<tr>
+			<th nowrap="nowrap"><a href="http://ncpp.github.io/ocgis/appendix.html#aggregate-union" target="_blank">Spatial Average</a>:</th>
+			<td>{{ wizard.form.aggregate }}</td>
+			<td>Return one value / time series of the statistic for the area of interest based on average of all intersecting grid cells (area-weighted). 
+				Otherwise, statistic will be reported separately for each grid cell.
+				<br/><span class="error">{{ wizard.form.aggregate.errors }}</span>
+			</td>
+		</tr>
+		<tr>
 			<th>Select:</th>
-			<td>
+			<td colspan="2">
 				<div style="float:left">
 				<table>
 					<tr>
@@ -106,17 +114,12 @@
 			 </td>
 		</tr>
 		<tr>
-			<th><a href="http://ncpp.github.io/ocgis/api.html#calc-grouping" target="_blank">Temporal Group</a>:</th>
-			<td>{{ wizard.form.calc_group }}
+			<th nowrap="nowrap"><a href="http://ncpp.github.io/ocgis/api.html#calc-grouping" target="_blank">Temporal Group</a>:</th>
+			<td colspan="2">{{ wizard.form.calc_group }}
 				<br/>If performing a calculation, you <i>must</i> select one or more temporal groups.
 			    <br/><span class="error">{{ wizard.form.calc_group.errors }}</span></td>
 		</tr>
-		<tr>
-			<th><a href="http://ncpp.github.io/ocgis/appendix.html#aggregate-union" target="_blank">Aggregate</a>:</th>
-			<td>{{ wizard.form.aggregate }} Combine subsetted geometries into a single geometry using area-weighted spatial aggregation.
-			<br/><span class="error">{{ wizard.form.aggregate.errors }}</span></td>
-		</tr>
-<!-- 		<tr>
+        <!-- <tr>
 			<th>Calculate Raw</th>
 			<td>{{ wizard.form.calc_raw }}
 				&nbsp;(Advanced) Execute the calculation on raw values. Only applicable if Aggregate is selected.
