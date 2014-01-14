@@ -80,6 +80,8 @@ class ClimateTranslatorWizard(SessionWizardView):
                         job_data['lon'] = float( cleaned_data['lon'] )
                     if cleaned_data.has_key('agg_selection'):
                         job_data['agg_selection'] = bool(cleaned_data['agg_selection'])
+                    if cleaned_data.has_key('spatial_operation'):
+                        job_data['spatial_operation'] = ocgisChoices(Config.SPATIAL_OPERATION)[cleaned_data['spatial_operation']]
                     if cleaned_data.has_key('datetime_start') and cleaned_data['datetime_start'] is not None:
                         job_data['datetime_start'] = cleaned_data['datetime_start']
                     if cleaned_data.has_key('datetime_stop') and cleaned_data['datetime_stop'] is not None:
@@ -106,8 +108,6 @@ class ClimateTranslatorWizard(SessionWizardView):
                             job_data['calc_group'] = formatListForDisplay(calc_groups)                           
                     if cleaned_data.has_key('calc_raw'):
                         job_data['calc_raw'] = bool(cleaned_data['calc_raw'])   
-                    if cleaned_data.has_key('spatial_operation'):
-                        job_data['spatial_operation'] = ocgisChoices(Config.SPATIAL_OPERATION)[cleaned_data['spatial_operation']]
                     if cleaned_data.has_key('aggregate'):
                         job_data['aggregate'] = bool(cleaned_data['aggregate'])       
                     if cleaned_data.has_key('output_format'):

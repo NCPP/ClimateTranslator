@@ -540,20 +540,6 @@
 	<p/>&nbsp;
 	
 	<table class="horizontalTable">
-	    <tr>
-			<th nowrap="nowrap"><b>Spatial Operation:</b></th>
-			<td> {{ wizard.form.spatial_operation }}
-				<br/><span class="error">{{ wizard.form.spatial_operation.errors }}</span>
-			</td>
-		</tr>
-		<tr>
-			<th>&nbsp;</th>
-			<td>
-				     <i><a href="http://ncpp.github.io/ocgis/appendix.html#intersects-select" target="_blank">Intersect</a>:</i> Source geometries overlapping selection geometries are returned.
-				<br/><i><a href="http://ncpp.github.io/ocgis/appendix.html#clip-intersection" target="_blank">Clip</a>:</i> A full geometric intersection is performed between source and selection geometries. 
-				</td>
-		</tr>
-		<tr>&nbsp</tr>
 		<tr>
 			<th>Predefined Region:</th>
 			<td>
@@ -602,6 +588,20 @@
 				&nbsp;Selected region(s) will be <a href="http://ncpp.github.io/ocgis/appendix.html#aggregate-union" target="_blank">aggregated (unioned)</a> before spatial subsetting.
 			     <br/><span class="error">{{ wizard.form.agg_selection.errors }}</span></td>
 		</tr>
+	    <tr>
+			<th nowrap="nowrap"><b>Spatial Operation:</b></th>
+			<td colspan="2"> {{ wizard.form.spatial_operation }}
+				 <br/><span class="error">{{ wizard.form.spatial_operation.errors }}</span>
+			</td>
+		</tr>
+		<tr>
+			<th>&nbsp;</th>
+			<td colspan="2">
+				     <i><a href="http://ncpp.github.io/ocgis/appendix.html#intersects-select" target="_blank">Intersect</a>:</i> Source geometries overlapping selection geometries are returned.
+				<br/><i><a href="http://ncpp.github.io/ocgis/appendix.html#clip-intersection" target="_blank">Clip</a>:</i> A full geometric intersection is performed between source and selection geometries. 
+			</td>
+		</tr>
+		<tr>&nbsp</tr>
 		
 	</table>
 </fieldset>
