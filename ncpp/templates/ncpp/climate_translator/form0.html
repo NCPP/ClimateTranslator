@@ -554,6 +554,9 @@
 			</td>
 		</tr>
 		<tr>
+			<td colspan="4"><hr/></td>
+		</tr>
+		<tr>
 			<th nowrap="nowrap">Bounding Box:</th>
 			<td colspan="3" nowrap="nowrap">
 				Latitude Min: {{ wizard.form.latmin }} Max: {{ wizard.form.latmax }}
@@ -569,12 +572,22 @@
 			</td>
 		</tr>
 		<tr>
+			<td colspan="4"><hr/></td>
+		</tr>
+		<tr>
 			<th>Point:</th>
 			<td colspan="2">Latitude: {{ wizard.form.lat }}
 							Longitude: {{ wizard.form.lon }}
-				<br/><span class="error">{{ wizard.form.lat.errors }}</span>
-				<br/><span class="error">{{ wizard.form.lon.errors }}</span>
+				{% if wizard.form.lat.errors %}
+					<br/><span class="error">{{ wizard.form.lat.errors }}</span>
+				{% endif %}
+				{% if wizard.form.lon.errors %}
+					<br/><span class="error">{{ wizard.form.lon.errors }}</span>
+				{% endif %}
 			</td>	
+		</tr>
+		<tr>
+			<td colspan="4"><hr/></td>
 		</tr>
 		<tr>
 			<td></td>
