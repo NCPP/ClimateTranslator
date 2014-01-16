@@ -68,7 +68,6 @@ class OCG(object):
             #               't_units': u'days since 1959-12-31'}]}            
             dictionaries = self.ocgisDatasets.getDatasets(data_type, package_name=openClimateGisJob.package_name)
 
-        print dictionaries
         args['datasets'] = dictionaries['dataset']
         # combine all dictionaries into lists
         #for dict in dictionaries:
@@ -147,10 +146,7 @@ class OCG(object):
             
         args['calc_raw'] = openClimateGisJob.calc_raw
         if hasText(openClimateGisJob.calc_group):
-            if openClimateGisJob.calc_group == 'none':
-                args['calc_grouping'] = None
-            else:
-                args['calc_grouping'] = map(str, openClimateGisJob.calc_group.split(","))
+            args['calc_grouping'] = map(str, openClimateGisJob.calc_group.split(","))
         else:
             args['calc_grouping'] = None
         
@@ -192,6 +188,7 @@ class OCG(object):
             os.makedirs(dir_output)             
                                     
             # build up the list of request datasets
+            print "ocgis.RequestDatasetCollection(args['datasets']): " % args['datasets']
             datasets = ocgis.RequestDatasetCollection(args['datasets'])
 
             ## construct the operations call

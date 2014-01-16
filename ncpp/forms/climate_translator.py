@@ -208,17 +208,13 @@ class ClimateTranslatorForm1(Form):
     
 class ClimateTranslatorForm2(Form):
     '''Form that backs up the second selection page.'''
-    
-    # FIXME
-    print '\nCHOICES=%s' % ocgisChoices(Config.CALCULATION_GROUP).items()
-    
+        
     calc = ChoiceField(choices=ocgisCalculations.getChoices(), required=False, initial='none',
                        widget=Select(attrs={'onchange': 'populateParameters();'}))
     par1 = CharField(required=False, widget=TextInput(attrs={'size':6}), initial="")
     par2 = CharField(required=False, widget=TextInput(attrs={'size':6}), initial="")
     par3 = CharField(required=False, widget=TextInput(attrs={'size':6}), initial="")
-    calc_group = ChoiceField(choices=ocgisChoices(Config.CALCULATION_GROUP).items(), required=False,
-                             widget=RadioSelect, initial='none')
+    calc_group = ChoiceField(choices=ocgisChoices(Config.CALCULATION_GROUP).items(), required=False, widget=RadioSelect, initial='month')
     calc_raw = BooleanField(initial=False, required=False)
     aggregate = BooleanField(initial=False, required=False)
     output_format = ChoiceField(choices=ocgisChoices(Config.OUTPUT_FORMAT).items(), required=True, initial='csv')
