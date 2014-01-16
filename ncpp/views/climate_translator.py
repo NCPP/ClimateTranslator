@@ -101,7 +101,7 @@ class ClimateTranslatorWizard(SessionWizardView):
                         job_data['par2'] = cleaned_data['par2']
                     if cleaned_data.has_key('par3') and cleaned_data['par3'] is not None:
                         job_data['par3'] = cleaned_data['par3']
-                    if cleaned_data.has_key('calc_group'):
+                    if cleaned_data.has_key('calc_group') and cleaned_data['calc_group'] is not None:
                         job_data['calc_group'] = ocgisChoices(Config.CALCULATION_GROUP)[cleaned_data['calc_group']] 
                     if cleaned_data.has_key('calc_raw'):
                         job_data['calc_raw'] = bool(cleaned_data['calc_raw'])   

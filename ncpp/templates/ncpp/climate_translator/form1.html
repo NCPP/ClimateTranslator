@@ -3,6 +3,25 @@
 <!-- custom javascript code -->
 <script language="javascript">
 
+    var TEMPORAL_GROUPING = "temporal_grouping";
+    
+    // function called every time the window is loaded.
+    function init() {
+    	populateParameters(); 
+    	displayTemporalGrouping();
+    }
+    
+    function displayTemporalGrouping() {
+    	
+    	calcSelect = document.getElementById("id_1-calc");
+    	if (calcSelect.value!=null && calcSelect.value!='') {
+    		setVisibility(TEMPORAL_GROUPING, true);
+    	} else {
+    		setVisibility(TEMPORAL_GROUPING, false);
+    	}
+    	
+    }
+
 	function populateParameters() {
 		
 		// parse calculations JSON from server
@@ -79,7 +98,7 @@
 	}
 	
 	// load parameters widget every time
-	window.onload = populateParameters;
+	window.onload = init;
 
 </script>
 
@@ -113,14 +132,23 @@
 			    </div>
 			 </td>
 		</tr>
+		
 		<tr>
-			<th nowrap="nowrap"><a href="http://ncpp.github.io/ocgis/api.html#calc-grouping" target="_blank">Temporal Group</a>:</th>
-			<td colspan="2">
-				{% for radio in  wizard.form.calc_group %}
-					{{ radio }}<br/>
-				{% endfor %}
-				<br/>If performing a calculation, you <i>must</i> select one or more temporal groups.
-			    <br/><span class="error">{{ wizard.form.calc_group.errors }}</span></td>
+			<td colspan="3">
+				<div id="temporal_grouping" style="text-align: left; float: left;">
+				<table align="left">
+					<tr>
+						<th nowrap="nowrap"><a href="http://ncpp.github.io/ocgis/api.html#calc-grouping" target="_blank">Temporal Group</a>:</th>
+						<td colspan="2">
+							{% for radio in  wizard.form.calc_group %}
+								{{ radio }}<br/>
+							{% endfor %}
+							If performing a calculation, you <i>must</i> select one or more temporal groups.
+						    <br/><span class="error">{{ wizard.form.calc_group.errors }}</span></td>
+				    </tr>
+				</table>
+				</div>
+			</td>
 		</tr>
         <!-- <tr>
 			<th>Calculate Raw</th>

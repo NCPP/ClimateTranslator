@@ -210,7 +210,7 @@ class ClimateTranslatorForm2(Form):
     '''Form that backs up the second selection page.'''
         
     calc = ChoiceField(choices=ocgisCalculations.getChoices(), required=False, initial='none',
-                       widget=Select(attrs={'onchange': 'populateParameters();'}))
+                       widget=Select(attrs={'onchange': 'populateParameters(); displayTemporalGrouping()'}))
     par1 = CharField(required=False, widget=TextInput(attrs={'size':6}), initial="")
     par2 = CharField(required=False, widget=TextInput(attrs={'size':6}), initial="")
     par3 = CharField(required=False, widget=TextInput(attrs={'size':6}), initial="")
@@ -249,7 +249,12 @@ class ClimateTranslatorForm2(Form):
                     elif keyword["type"] == "string":
                         if "values" in keyword:
                             if not value.lower() in keyword["values"]:
-                                self._errors[parN] = self.error_class(["Invalid string value for keyword: "+keyword["name"]])
+                                self._errors[parN] = self.error_class(["Invalid string value for keyword: "+keyword["name"]])     
+                                               
+        # if no calculation is selected, there cannot be any temporal grouping
+        else:
+            self.cleaned_data['calc_group'] = None
+            
         if 'prefix' in self.cleaned_data and re.search(INVALID_CHARS, self.cleaned_data['prefix']):
             self._errors['prefix'] = self.error_class(["The prefix contains invalid characters."])
         
