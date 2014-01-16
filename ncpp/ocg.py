@@ -188,7 +188,7 @@ class OCG(object):
             os.makedirs(dir_output)             
                                     
             # build up the list of request datasets
-            print "ocgis.RequestDatasetCollection(args['datasets']): " % args['datasets']
+            print "ocgis.RequestDatasetCollection(args['datasets']): %s" % args['datasets']
             datasets = ocgis.RequestDatasetCollection(args['datasets'])
 
             ## construct the operations call
