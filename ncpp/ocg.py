@@ -161,6 +161,8 @@ class OCG(object):
         
     def run(self, args):
         
+        print 'OCG args=%s' % args
+        
         # apply time_range and time_region constraints to each dataset
         for dataset in args['datasets']:
             dataset['time_range'] = args['time_range']
@@ -216,3 +218,21 @@ class OCG(object):
         url = download_path.replace(self.rootDir, self.rootUrl)
         return url
         
+'''
+Debug method
+'''
+if __name__ == '__main__':
+    
+    import datetime
+    
+    # instantiate OCG job
+    ocg = OCG(None, None, None, 
+              rootDir='/usr/ClimateTranslator/static/ocgis', 
+              rootUrl='http://hydra-ncpp.fsl.noaa.gov/static/ocgis', debug=True)
+
+    # set request parameters from string dictionary
+    data = "{'dir_output': '5', 'datasets': [{'variable': u'pr', 'alias': u'pr', 't_calendar': u'365_day', 'uri': [u'/data/downscaled/arrm/arrm_gfdl_2.1.20c3m.pr.NAm.1971-2000.nc'], 't_units': u'days since 1959-12-31'}, {'variable': u'tas', 'alias': u'tas', 't_calendar': u'365_day', 'uri': [u'/data/downscaled/arrm/arrm_gfdl_2.1.20c3m.tas.NAm.1971-2000.nc'], 't_units': u'days since 1959-12-31'}, {'variable': u'tasmax', 'alias': u'tasmax', 't_calendar': u'365_day', 'uri': [u'/data/downscaled/arrm/arrm_gfdl_2.1.20c3m.tasmax.NAm.1971-2000.nc'], 't_units': u'days since 1959-12-31'}, {'variable': u'tasmin', 'alias': u'tasmin', 't_calendar': u'365_day', 'uri': [u'/data/downscaled/arrm/arrm_gfdl_2.1.20c3m.tasmin.NAm.1971-2000.nc'], 't_units': u'days since 1959-12-31'}], 'aggregate': False, 'time_region': None, 'calc_raw': False, 'agg_selection': False, 'spatial_operation': u'intersects', 'select_ugid': None, 'with_auxiliary_files': True, 'uri': [], 'time_range': [datetime.datetime(1971, 1, 1, 0, 0), datetime.datetime(2000, 12, 31, 0, 0)], 'calc_grouping': None, 'alias': [], 'prefix': u'ocgis_output', 'geom': None, 't_units': [], 'variable': [], 'calc': None, 't_calendar': [], 'output_format': u'csv', 'headers': ['did', 'ugid', 'gid', 'time', 'year', 'month', 'day', 'variable', 'alias', 'value']}"
+    args = eval(data)
+    
+    # run job
+    ocg.run(args)
