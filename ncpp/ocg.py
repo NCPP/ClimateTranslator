@@ -6,7 +6,7 @@ import re
 
 SLEEP_SECONDS = 1
 HEADERS_NOCALC = ['did','ugid','gid','time','year','month','day','variable','alias','value']
-HEADERS_CALC = ['did','ugid','gid','year','month','day','variable','alias','calc_name','value']
+HEADERS_CALC = ['did','ugid','gid','time','year','month','day','variable','alias','calc_key','calc_alias','value']
 
 class OCG(object):
     """Adapter class that invokes the OCGIS library."""
