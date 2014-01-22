@@ -214,7 +214,7 @@ class ClimateTranslatorForm2(Form):
     par1 = CharField(required=False, widget=TextInput(attrs={'size':6}), initial="")
     par2 = CharField(required=False, widget=TextInput(attrs={'size':6}), initial="")
     par3 = CharField(required=False, widget=TextInput(attrs={'size':6}), initial="")
-    calc_group = ChoiceField(choices=ocgisChoices(Config.CALCULATION_GROUP).items(), required=False, widget=RadioSelect, initial='month')
+    calc_group = ChoiceField(choices=ocgisChoices(Config.CALCULATION_GROUP).items(), required=False, widget=RadioSelect, initial='month,year')
     calc_raw = BooleanField(initial=False, required=False)
     aggregate = BooleanField(initial=False, required=False)
     output_format = ChoiceField(choices=ocgisChoices(Config.OUTPUT_FORMAT).items(), required=True, initial='csv')
