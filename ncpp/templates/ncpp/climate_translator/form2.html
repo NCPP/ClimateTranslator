@@ -3,7 +3,7 @@
 <h3>Request Summary</h3>
 
 <table class="horizontalTable">
-	<tr><th nowrap="nowrap">Data Selection by:</th><td>{{ job_data.data_type }}</td></tr>
+	<tr><th nowrap="nowrap">Data Selection By:</th><td>{{ job_data.data_type }}</td></tr>
 	{% if job_data.data_type == 'variable' %}
 		<tr><th nowrap="nowrap">Long Name:</th><td>{{ job_data.long_name }}</td></tr>
 		<tr><th nowrap="nowrap">Time Frequency:</th><td>{{ job_data.time_frequency }}</td></tr>
@@ -15,22 +15,22 @@
 	{% endif %}
 	{% if job_data.geometry_category %}
 		{% if job_data.geometry_subcategory != 'null' %} 
-			<tr><th nowrap="nowrap">Geometry:</th><td>{{ job_data.geometry_category }} &gt; {{ job_data.geometry_subcategory }} &gt; {{ job_data.geometry_id }}</td></tr>
+			<tr><th nowrap="nowrap">Predefined Region:</th><td>{{ job_data.geometry_category }} &gt; {{ job_data.geometry_subcategory }} &gt; {{ job_data.geometry_id }}</td></tr>
 		{% else %}
-			<tr><th nowrap="nowrap">Geometry:</th><td>{{ job_data.geometry_category }} &gt; {{ job_data.geometry_id }}</td></tr>
+			<tr><th nowrap="nowrap">Predefined Region:</th><td>{{ job_data.geometry_category }} &gt; {{ job_data.geometry_id }}</td></tr>
 		{% endif %}
 	{% endif %}
 	{% if job_data.latmin or job_data.latmax or job_data.lonmin or job_data.lonmax %}
 		<tr><th nowrap="nowrap">Bounding Box:</th>
-		    <td> Lat min: {{ job_data.latmin }} max: {{ job_data.latmax }}
-		         Lon min: {{ job_data.lonmin }} max: {{ job_data.lonmax }}
+		    <td> Lat Min: {{ job_data.latmin }} Max: {{ job_data.latmax }}
+		         Lon Min: {{ job_data.lonmin }} Max: {{ job_data.lonmax }}
 		    </td>
 		</tr>
 	{% endif %}
 	{% if job_data.lat != None and job_data.lon != None %}
 		<tr><th nowrap="nowrap">Point:</th><td> Latitude: {{ job_data.lat }} Longitude: {{ job_data.lon }}</td></tr>
 	{% endif %}
-	<tr><th nowrap="nowrap">Aggregate Selection:</th><td>{{ job_data.agg_selection }}</td></tr>
+	<tr><th nowrap="nowrap">Combine Region(s):</th><td>{{ job_data.agg_selection }}</td></tr>
 	<tr><th nowrap="nowrap">Spatial Operation:</th><td>{{ job_data.spatial_operation }}</td></tr>
 	
 	{% if job_data.datetime_start %}
@@ -40,12 +40,12 @@
 		<tr><th nowrap="nowrap">Stop Date Time:</th><td>{{ job_data.datetime_stop }}</td></tr>
 	{% endif %}
 	{% if job_data.timeregion_month|length > 0 %}
-		<tr><th nowrap="nowrap">Time Selection: Months</th><td>{{ job_data.timeregion_month }}</td></tr>
+		<tr><th nowrap="nowrap">Time Selection (Months):</th><td>{{ job_data.timeregion_month }}</td></tr>
 	{% endif %}
 	{% if job_data.timeregion_year|length > 0 %}
-		<tr><th nowrap="nowrap">Time Selection: Years</th><td>{{ job_data.timeregion_year }}</td></tr>
+		<tr><th nowrap="nowrap">Time Selection (Years):</th><td>{{ job_data.timeregion_year }}</td></tr>
 	{% endif %}
-	<tr><th nowrap="nowrap">Aggregate:</th><td>{{ job_data.aggregate }}</td></tr>
+	<tr><th nowrap="nowrap">Spatial Average:</th><td>{{ job_data.aggregate }}</td></tr>
 	
 	{% if job_data.calc %}
 		<tr><th nowrap="nowrap">Statistic:</th><td>{{ job_data.calc }}</td></tr>
@@ -60,7 +60,7 @@
 		</td></tr>
 	{% endif %}
 	{% if job_data.calc_group %}
-		<tr><th nowrap="nowrap">Calculation Group:</th><td>{{ job_data.calc_group }}</td></tr>
+		<tr><th nowrap="nowrap">Output Time Frequency:</th><td>{{ job_data.calc_group }}</td></tr>
 	{% endif %}
 	
 	<!-- <tr><th nowrap="nowrap">Calculate Raw:</th><td>{{ job_data.calc_raw }}</td></tr> -->

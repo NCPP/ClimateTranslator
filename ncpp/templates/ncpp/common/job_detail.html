@@ -32,7 +32,7 @@
 		{% endfor %}
 
 		<!-- job status -->
-		<tr><th nowrap="nowrap">User :</th><td>{{ job.user.username }}</td></tr>
+		<tr><th nowrap="nowrap">User:</th><td>{{ job.user.username }}</td></tr>
 		<tr><th nowrap="nowrap">
 			{% if job.status == 'Process Succeeded' %}
 				<span class="success">Status</span> :</th><td><span class="success">{{ job.status }}</span>
