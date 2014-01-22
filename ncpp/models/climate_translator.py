@@ -23,9 +23,9 @@ class OpenClimateGisJob(Job):
     dataset_category2 = models.CharField(max_length=200, verbose_name='Dataset Category', blank=True, null=True)
     package_name = models.CharField(max_length=200, verbose_name='Package Name', blank=True, null=True)
     
-    geometry_category = models.CharField(max_length=200, verbose_name='Geometry Category', null=True, blank=True)
-    geometry_subcategory = models.CharField(max_length=200, verbose_name='Geometry Sub-Category', null=True, blank=True)
-    geometry_id = models.CharField(max_length=200, verbose_name='Geometry ID', null=True, blank=True)
+    geometry_category = models.CharField(max_length=200, verbose_name='Region Category', null=True, blank=True)
+    geometry_subcategory = models.CharField(max_length=200, verbose_name='Region Sub-Category', null=True, blank=True)
+    geometry_id = models.CharField(max_length=200, verbose_name='Region ID', null=True, blank=True)
     latmin = models.FloatField(verbose_name='Latitude Minimum', blank=True, null=True)
     latmax = models.FloatField(verbose_name='Latitude Maximum', blank=True, null=True)
     lonmin = models.FloatField(verbose_name='Longitude Minimum', blank=True, null=True)
@@ -36,22 +36,22 @@ class OpenClimateGisJob(Job):
     
     datetime_start = models.DateTimeField(verbose_name='Start Date Time', blank=True, null=True)
     datetime_stop = models.DateTimeField(verbose_name='Stop Date Time', blank=True, null=True)
-    timeregion_month = models.CharField(max_length=200, verbose_name='Time Region: Month', null=True, blank=True)
-    timeregion_year = models.CharField(max_length=200, verbose_name='Time Region: Year', null=True, blank=True)
+    timeregion_month = models.CharField(max_length=200, verbose_name='Time Region (Month)', null=True, blank=True)
+    timeregion_year = models.CharField(max_length=200, verbose_name='Time Region (Year)', null=True, blank=True)
         
     calc = models.CharField(max_length=50, verbose_name='Calculation', null=True, blank=True)
     par1 = models.CharField(max_length=50, verbose_name='Calculation Parameter 1', blank=True, null=True)
     par2 = models.CharField(max_length=50, verbose_name='Calculation Parameter 2', blank=True, null=True)
     par3 = models.CharField(max_length=50, verbose_name='Calculation Parameter 3', blank=True, null=True)
-    calc_group = models.CharField(max_length=100, verbose_name='Calculation Group', null=True, blank=True)
-    calc_raw = models.BooleanField(verbose_name='Calculate Raw ?')
+    calc_group = models.CharField(max_length=100, verbose_name='Output Time Frequency', null=True, blank=True)
+    calc_raw = models.BooleanField(verbose_name='Calculate Raw')
     spatial_operation = models.CharField(max_length=50, verbose_name='Spatial Operation', blank=False)
     
-    aggregate = models.BooleanField(verbose_name='Aggregate ?')
-    agg_selection = models.BooleanField(verbose_name='Aggregate selection geometry ?', default=False)
+    aggregate = models.BooleanField(verbose_name='Spatial Average')
+    agg_selection = models.BooleanField(verbose_name='Combine Selection Region(s)', default=False)
     output_format = models.CharField(max_length=20, verbose_name='Output Format', blank=False)
     prefix = models.CharField(max_length=50, verbose_name='Prefix', blank=False, default='ocgis_output')
-    with_auxiliary_files = models.BooleanField(verbose_name='Include auxiliary files ?')
+    with_auxiliary_files = models.BooleanField(verbose_name='Include Auxiliary Files')
     
     def __init__(self, *args, **kwargs):
         
