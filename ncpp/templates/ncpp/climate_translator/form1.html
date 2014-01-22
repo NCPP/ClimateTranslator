@@ -138,12 +138,11 @@
 				<div id="temporal_grouping" style="text-align: left; float: left;">
 				<table align="left">
 					<tr>
-						<th nowrap="nowrap"><a href="http://ncpp.github.io/ocgis/api.html#calc-grouping" target="_blank">Time Frequency</a>:</th>
+						<th nowrap="nowrap">Time Frequency:</th>
 						<td colspan="2">
 							{% for radio in  wizard.form.calc_group %}
 								{{ radio }}<br/>
 							{% endfor %}
-							If performing a calculation, you <i>must</i> select one or more temporal groups.
 						    <br/><span class="error">{{ wizard.form.calc_group.errors }}</span></td>
 				    </tr>
 				</table>
