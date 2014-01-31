@@ -6,7 +6,7 @@ class AbstractARRM_CGCM3Dataset(base.AbstractFolderHarvestDataset):
     __metaclass__ = abc.ABCMeta
     folder = '/data/downscaled/arrm'
     dataset_category = dict(name='Downscaled',description='<tdk>')
-    dataset = dict(name='ARRM-CGCM3',description='<tdk>')
+    dataset = dict(name='Asynchronous Regional Regression Model CGCM3',description='<tdk>')
     type = 'variable'
     time_calendar = '365_day'
     

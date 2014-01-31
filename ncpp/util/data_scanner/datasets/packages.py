@@ -17,7 +17,7 @@ class MaurerPackage(base.AbstractDataPackage):
     
     
 class HayhoeGFDLPackage(base.AbstractDataPackage):
-    name = 'Hayhoe GFDL'
+    name = 'Asynchronous Regional Regression Model GFDL-CM2.1'
     description = '<tdk>'
     fields = [hayhoe.HayhoeGFDLPr,
               hayhoe.HayhoeGFDLTasmax,
@@ -27,7 +27,7 @@ class HayhoeGFDLPackage(base.AbstractDataPackage):
     
     
 class ARRM_CGCM3Package(base.AbstractDataPackage):
-    name = 'ARRM-CGCM3'
+    name = 'Asynchronous Regional Regression Model CGCM3'
     description = '<tdk>'
     fields = [arrm_cgcm3.ARRM_CGCM3Pr,
               arrm_cgcm3.ARRM_CGCM3Tas,
@@ -37,7 +37,7 @@ class ARRM_CGCM3Package(base.AbstractDataPackage):
     
     
 class BCCA_CCCMA_CGCM3Package(base.AbstractDataPackage):
-    name = 'BCCA-CCCMA-CGCM3'
+    name = 'Bias-Correction Constructed Analogs CGCM3'
     description = '<tdk>'
     fields = [bcca_cccma_cgcm3.BCCA_CCCMA_CGCM3Pr,
               bcca_cccma_cgcm3.BCCA_CCCMA_CGCM3Tas,
@@ -47,7 +47,7 @@ class BCCA_CCCMA_CGCM3Package(base.AbstractDataPackage):
     
     
 class BCCA_GFDL_CM2_1Package(base.AbstractDataPackage):
-    name = 'BCCA-GFDL-CM2.1'
+    name = 'Bias-Correction Constructed Analogs GFDL-CM2.1'
     description = '<tdk>'
     fields = [bcca_gfdl_cm2_1.BCCA_GFDL_CM_2_1Pr,
               bcca_gfdl_cm2_1.BCCA_GFDL_CM_2_1Tas,

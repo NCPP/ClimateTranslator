@@ -6,7 +6,7 @@ class AbstractBCCA_CCCMA_CGCM3(base.AbstractFolderHarvestDataset):
     __metaclass__ = abc.ABCMeta
     folder = '/data/downscaled/bcca'
     dataset_category = dict(name='Downscaled',description='<tdk>')
-    dataset = dict(name='BCCA-CCCMA-CGCM3',description='<tdk>')
+    dataset = dict(name='Bias-Correction Constructed Analogs CGCM3',description='<tdk>')
     type = 'variable'
     
     
