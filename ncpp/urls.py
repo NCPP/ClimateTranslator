@@ -34,7 +34,8 @@ urlpatterns = patterns('',
     url(r'^user/add/$', 'ncpp.views.user_add', name='user_add' ),
     
     # login/logout using django default authentication views and templates
-    url(r'^login/$', 'django.contrib.auth.views.login', {'template_name': 'admin/login.html'}, name='login'),
+    url(r'^login/$', 'django.contrib.auth.views.login', {'template_name': 'ncpp/accounts/login.html'}, name='login'),
+    #url(r'^login/$', 'django.contrib.auth.views.login', {'template_name': 'admin/login.html'}, name='login'),
     url(r'^logout/$', 'django.contrib.auth.views.logout_then_login', {'login_url': '/ncpp/login/'}, name='logout'),
 
 )

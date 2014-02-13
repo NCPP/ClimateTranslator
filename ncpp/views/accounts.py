@@ -13,8 +13,8 @@ def user_add(request):
                                    'last_name':'Cinquini',
                                    'email':'luca.cinquini@jpl.nasa.gov',
                                    'username':'luca123',
-                                   'password':'luca123',
-                                   'confirm_password:':'luca123' }) # empty form with no data
+                                   'password':'',
+                                   'confirm_password:':'' }) # empty form with no data
         return render_to_response('ncpp/accounts/user_form.html', {'form': form }, context_instance=RequestContext(request))
         
     # POST
