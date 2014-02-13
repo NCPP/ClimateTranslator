@@ -1,7 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.forms import ModelForm
-from django.forms import CharField, BooleanField, PasswordInput
+from django.forms import CharField, BooleanField, PasswordInput, TextInput
 import re
 
 # list of invalid characters in text fields
@@ -11,14 +11,14 @@ INVALID_USERNAME_CHARS = "[^a-zA-Z0-9_\-\+\@\.]"
 class UserForm(ModelForm):
     
     # override User form fields to make them required
-    first_name = CharField(required=True)
-    last_name = CharField(required=True)
-    username = CharField(required=True)
-    email = CharField(required=True)
-    password = CharField(required=True, widget=PasswordInput())
+    first_name = CharField(required=True, widget=TextInput(attrs={'size':'35'}))
+    last_name = CharField(required=True, widget=TextInput(attrs={'size':'35'}))
+    username = CharField(required=True, widget=TextInput(attrs={'size':'35'}))
+    email = CharField(required=True, widget=TextInput(attrs={'size':'35'}))
+    password = CharField(required=True, widget=PasswordInput(attrs={'size':'35'}))
     
     # additional fields not in User
-    confirm_password = CharField(required=True, widget=PasswordInput())
+    confirm_password = CharField(required=True, widget=PasswordInput(attrs={'size':'35'}))
     subscribed = BooleanField(required=False)
     
     class Meta:
