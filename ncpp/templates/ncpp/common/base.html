@@ -30,7 +30,8 @@
 					Welcome, {{ user.username }}.
 					<a href="{% url 'logout' %}?next=/ncpp/">Logout</a>
 				{% else %}
-					<a href="{% url 'login' %}?next=/ncpp/">Login</a> 
+					<a href="{% url 'user_add' %}">Create Account</a>
+					&nbsp;<a href="{% url 'login' %}?next=/ncpp/">Login</a> 
 				{% endif %}
 			</span>
 			<br/>

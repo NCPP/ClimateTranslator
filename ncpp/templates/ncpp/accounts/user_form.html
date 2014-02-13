@@ -1,0 +1,65 @@
+<!-- Template page used to create a user account -->
+{% extends "ncpp/common/base.html" %}
+
+{% block main %}
+    
+<div class="prepend-3 span-18">
+    
+    <h2>Climate Translator Registration</h2>
+    
+    <div class="box">
+	  	<form action="" method="post">        
+			{% csrf_token %}
+
+			<table>
+	            <tr>
+	                <td class="head required" nowrap="nowrap">First Name</td>
+	                <td class="long">{{ form.first_name }} {{ form.first_name.errors }}</td>
+	            </tr>
+	            <tr>
+	                <td class="head required" nowrap="nowrap"><b>Last Name</b></td>
+	                <td class="long">{{ form.last_name }} {{ form.last_name.errors }}</td>
+	            </tr>
+	            <tr>
+	                <td class="head required" nowrap="nowrap"><b>User Name</b></td>
+	                <td>{{ form.username }}
+	                    <i>[ 5 to 30 characters, letters, digits and @/./+/-/_ only ]</i>
+	                    {{ form.username.errors }}</td>
+	            </tr>
+	            <tr>
+	                <td class="head required" nowrap="nowrap"><b>Email</b></td>
+	                <td class="long">{{ form.email }} {{ form.email.errors }}</td>
+	            </tr>
+			    <tr>
+                    <td class="head required" nowrap="nowrap"><b>Password</b></td>
+                    <td>{{ form.password }} 
+                       <i>[ At least 6 characters, all characters are allowed ]</i>
+                       {{ form.password.errors }}</td>
+                </tr>
+                <tr>
+                    <td class="head required" nowrap="nowrap"><b>Confirm Password</b></td>
+                    <td>{{ form.confirm_password }} 
+                        <i>[ At least 6 characters, all characters are allowed ]</i>
+                        {{ form.confirm_password.errors }}</td>
+                </tr>
+			    <tr>
+                    <td class="optional" nowrap="nowrap">Subscribe to COG Email List ?</td>
+                    <td class="long">{{ form.subscribed }} <i>[ 'cog_info', low traffic list ]</i> {{ form.subscribed.errors }}</td>
+                </tr>                    		
+			</table>
+			
+			<div style="text-align:center">
+	                <hr/>
+	                Required fields are in <b>bold</b>.<br/>
+	                <input type="button" value="Cancel" onclick="window.location='{% url 'home' %}'"/>
+	                &nbsp; &nbsp;
+	                The following characters are not allowed: &lt; &gt; &amp; # % { } [ ] $ .
+	                &nbsp; &nbsp;
+	                <input type="submit" value="Submit" />
+	            </div>   
+			
+			
+		</form>
+    </div>
+        
+{% endblock %}

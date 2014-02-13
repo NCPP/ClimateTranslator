@@ -6,18 +6,14 @@ from django.contrib import admin
 admin.autodiscover()
 
 urlpatterns = patterns('',
-    # Example:
-    # (r'^mysite/', include('mysite.foo.urls')),
-
-    # Uncomment the admin/doc line below to enable admin documentation:
-    # (r'^admin/doc/', include('django.contrib.admindocs.urls')),
-    
+                           
     # site home
     url(r'^$', RedirectView.as_view(url='/ncpp/') ),
 
-    # Uncomment the next line to enable the admin:
+    # admin pages:
     (r'^admin/', include(admin.site.urls)),
     
+    # Climate Translator pages
     (r'^ncpp/', include('ncpp.urls')),
     
 )

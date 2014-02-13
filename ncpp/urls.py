@@ -30,6 +30,9 @@ urlpatterns = patterns('',
     url(r'^job/check/(?P<job_id>.+)/(?P<job_class>.+)/$', 'ncpp.views.job_check', name='job_check' ),
     url(r'^job/(?P<job_id>.+)/(?P<job_class>.+)/$', 'ncpp.views.job_detail', name='job_detail' ),
     
+    # user management
+    url(r'^user/add/$', 'ncpp.views.user_add', name='user_add' ),
+    
     # login/logout using django default authentication views and templates
     url(r'^login/$', 'django.contrib.auth.views.login', {'template_name': 'admin/login.html'}, name='login'),
     url(r'^logout/$', 'django.contrib.auth.views.logout_then_login', {'login_url': '/ncpp/login/'}, name='logout'),
