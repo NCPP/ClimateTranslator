@@ -2,19 +2,23 @@ from ncpp.forms import UserForm
 from django.shortcuts import render_to_response, HttpResponseRedirect
 from django.template import RequestContext
 from django.core.urlresolvers import reverse
+from ncpp.notification import notify, sendEmail
+from django.contrib.auth.models import User
 
+# view that handles user registration
 def user_add(request):
 
     # GET
     if (request.method=='GET'):
         
         # FIXME
-        form = UserForm( initial={ 'first_name':'Luca', 
-                                   'last_name':'Cinquini',
-                                   'email':'luca.cinquini@jpl.nasa.gov',
-                                   'username':'luca123',
-                                   'password':'',
-                                   'confirm_password:':'' }) # empty form with no data
+        #form = UserForm( initial={ 'first_name':'Test', 
+        #                           'last_name':'User',
+        #                           'email':'test.user@test.com',
+        #                           'username':'Tester123',
+        #                           'password':'',
+        #                           'confirm_password:':'' }) 
+        form = UserForm() # empty form with no data
         return render_to_response('ncpp/accounts/user_form.html', {'form': form }, context_instance=RequestContext(request))
         
     # POST
@@ -30,7 +34,13 @@ def user_add(request):
             user.set_password(form.cleaned_data['password'])
             # save user to database
             user.save()
-            print 'Created user=%s' % user.get_full_name()
+            
+            # subscription to mailing list ?
+            subscribed = form.cleaned_data['subscribed']
+            
+            # notify site administrators
+            notifyAdminsOfUserRegistration(user, subscribed)
+            
             
             # redirect to login page with special message
             message = 'Thank you for creating an account. You can now login.'
@@ -40,3 +50,22 @@ def user_add(request):
             print "Form is invalid: %s" % form.errors
             return render_to_response('ncpp/accounts/user_form.html', {'form': form }, context_instance=RequestContext(request))
 
+# function to notify the site administrators of a new user registration
+def notifyAdminsOfUserRegistration(user, subscribed):
+    
+    subject = 'New User Registration'
+    message = 'User %s has created a new account' % user.get_full_name()   
+    
+    # user attributes
+    message += "\nFirst Name: %s" % user.first_name
+    message += "\nLast Name: %s" % user.last_name
+    message += "\nUser Name: %s" % user.username
+    message += "\nEmail: %s" % user.email
+    message += "\nSubscribe to OCG email list? %s" % subscribed
+    
+    for admin in getSiteAdministrators():
+        notify(admin, subject, message)
+
+# function to return the site administrators (aka web masters) for this site
+def getSiteAdministrators():
+    return User.objects.filter(is_staff=True)
