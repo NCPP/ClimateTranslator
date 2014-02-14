@@ -14,7 +14,7 @@ class EmailConfig:
        email.server=smtp.gmail.com
        # leave port blank if default
        email.port=
-       email.sender=notify_esmf.esrl@noaa.gov
+       email.sender=Climate Translator
        email.username=<username>
        email.password=<password>
        # optional security, leave blank if not needed
