@@ -35,7 +35,6 @@ def user_add(request):
             # redirect to login page with special message
             message = 'Thank you for creating an account. You can now login.'
             return HttpResponseRedirect(reverse('login')+"?message=%s" % message)
-
         
         else:
             print "Form is invalid: %s" % form.errors

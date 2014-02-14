@@ -1,5 +1,6 @@
 # Django settings for mysite project.
 import os
+from django.conf.global_settings import TEMPLATE_CONTEXT_PROCESSORS
 rel = lambda *x: os.path.join(os.path.abspath(os.path.dirname(__file__)), *x)
 
 DEBUG = True
@@ -68,6 +69,11 @@ TEMPLATE_LOADERS = (
     'django.template.loaders.app_directories.Loader',
 #     'django.template.loaders.eggs.Loader',
 )
+
+# makes 'request' object available in templates
+TEMPLATE_CONTEXT_PROCESSORS += (
+     'django.core.context_processors.request',
+) 
 
 MIDDLEWARE_CLASSES = (
     'django.middleware.common.CommonMiddleware',
