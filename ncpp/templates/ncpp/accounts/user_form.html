@@ -9,7 +9,7 @@
 	  	<form action="" method="post">        
 			{% csrf_token %}
 
-			<table class="horizontalTable">
+			<table>
 	            <tr>
 	                <th nowrap="nowrap">First Name</th>
 	                <td>{{ form.first_name }}<br/><span class="error">{{ form.first_name.errors }}</span></td>

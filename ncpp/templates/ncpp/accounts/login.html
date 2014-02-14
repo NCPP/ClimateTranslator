@@ -1,0 +1,51 @@
+{% extends "ncpp/common/base.html" %}
+
+{% block main %}
+
+<div class="box" style="width:400px">
+        
+	<h2>User Login</h2>
+	
+	<!-- display extra message if available -->
+	{% if request.GET.message %}
+	   <div class="highlight"> {{ request.GET.message }}</div>
+	   <p/>
+	{% endif %}
+	
+	<!-- display authentication errors -->
+	{% if form.errors %}
+		<p class="error">Your username and password didn't match. Please try again.</p>
+	{% endif %}
+	
+	<!-- authentication form -->
+	<div style="font-style: italic; text-align:center;">
+		Please note that username and password are case-sensitive.
+	</div>
+	
+	<form method="post" action="{% url 'django.contrib.auth.views.login' %}">
+	   {% csrf_token %}	   
+	   
+	   <p/>	
+	   <fieldset class="fieldset_box">
+	   
+	   		<table>
+				<tr>
+				    <th>{{ form.username.label_tag }}</th>
+				    <td>{{ form.username }}</td>
+				    <td>&nbsp;</td>
+				</tr>
+				<tr>
+				    <th>{{ form.password.label_tag }}</th>
+				    <td>{{ form.password }}</td>
+				    <td><input type="submit" value="login" /></td>
+				</tr>
+			</table>
+         
+			<input type="hidden" name="next" value="{{ next }}" />
+			
+		</fieldset>
+	</form>
+        
+
+</div>
+{% endblock %}
