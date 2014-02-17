@@ -99,3 +99,19 @@ class UsernameReminderForm(Form):
         validate_field(self, 'email', email)
                 
         return self.cleaned_data
+    
+class PasswordResetForm(Form):
+    
+    username = CharField(required=True, widget=TextInput(attrs={'size':'50'}))
+    email = CharField(required=True, widget=TextInput(attrs={'size':'50'}))
+    
+    # validate data against bad characters
+    def clean(self):
+        
+        username = self.cleaned_data.get('username')
+        validate_field(self, 'username', username)
+        
+        email = self.cleaned_data.get('email')
+        validate_field(self, 'email', email)
+        
+        return self.cleaned_data

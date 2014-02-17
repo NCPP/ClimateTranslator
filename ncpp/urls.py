@@ -32,7 +32,7 @@ urlpatterns = patterns('',
     
     # user management
     url(r'^user/add/$', 'ncpp.views.user_add', name='user_add' ),
-    #url(r'^password/reset/$', 'ncpp.views.password_reset', name='password_reset'),
+    url(r'^password/reset/$', 'ncpp.views.password_reset', name='password_reset'),
     url(r'^username/reminder/$', 'ncpp.views.username_reminder', name='username_reminder'),
 
     
