@@ -1,6 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
-from django.forms import ModelForm
+from django.forms import ModelForm, Form
 from django.forms import CharField, BooleanField, PasswordInput, TextInput
 import re
 
@@ -87,3 +87,15 @@ def validate_field(form, field_name, field_value):
     if field_value:
         if re.search(INVALID_CHARS, field_value):
             form._errors[field_name] = form.error_class(["'%s' contains invalid characters." % field_name])
+            
+class UsernameReminderForm(Form):
+    
+    email = CharField(required=True, widget=TextInput(attrs={'size':'50'}))
+    
+    # validate data against bad characters
+    def clean(self):
+        
+        email = self.cleaned_data.get('email')
+        validate_field(self, 'email', email)
+                
+        return self.cleaned_data

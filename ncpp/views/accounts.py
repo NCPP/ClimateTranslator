@@ -1,4 +1,4 @@
-from ncpp.forms import UserForm
+from ncpp.forms import UserForm, UsernameReminderForm
 from django.shortcuts import render_to_response, HttpResponseRedirect
 from django.template import RequestContext
 from django.core.urlresolvers import reverse
@@ -49,6 +49,43 @@ def user_add(request):
         else:
             print "Form is invalid: %s" % form.errors
             return render_to_response('ncpp/accounts/user_form.html', {'form': form }, context_instance=RequestContext(request))
+        
+def username_reminder(request):
+    
+    if (request.method=='GET'):
+        form = UsernameReminderForm()
+        return render_to_response('ncpp/accounts/username_reminder.html', {'form':form }, context_instance=RequestContext(request))
+    
+    else:
+        form = UsernameReminderForm(request.POST)
+        
+        if form.is_valid():
+            email = form.cleaned_data.get('email')
+            
+            # look up username
+            users = User.objects.filter(email__iexact=email)
+            
+            if len(users)>0:
+                
+                # send email with username(s) to user
+                subject = "Username Reminder"
+                message = ""
+                for user in users:
+                    message +=  "Your username is: %s\n"  % user.username
+                notify(user, subject, message)
+
+                # redirect to login page with special message
+                message = 'Your username has been emailed to the address you provided. Please check your email box.'
+                return HttpResponseRedirect(reverse('login')+"?message=%s" % message)
+
+            # user not found
+            else:            
+                return render_to_response('ncpp/accounts/username_reminder.html', 
+                                          {'form':form, 'message':'This email address cannot be found' }, context_instance=RequestContext(request))
+            
+        else:
+            print "Form is invalid: %s" % form.errors
+            return render_to_response('ncpp/accounts/username_reminder.html', {'form':form }, context_instance=RequestContext(request))
 
 # function to notify the site administrators of a new user registration
 def notifyAdminsOfUserRegistration(user, subscribed):

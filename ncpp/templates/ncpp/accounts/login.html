@@ -18,7 +18,7 @@
 	{% endif %}
 	
 	<!-- authentication form -->
-	<div style="font-style: italic; text-align:center;">
+	<div class="instructions">
 		Please note that username and password are case-sensitive.
 	</div>
 	
@@ -45,7 +45,14 @@
 			
 		</fieldset>
 	</form>
-        
+    <p/>
+    <div>
+		<a href="{% url 'username_reminder' %}">Forgot Username?</a>
+		&nbsp;
+		<a href="{% url 'username_reminder' %}">Forgot Password?</a>
+	</div>
+     
+       
 
 </div>
 {% endblock %}

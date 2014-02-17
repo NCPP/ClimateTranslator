@@ -1,0 +1,45 @@
+<!-- Template page used to remind the username -->
+{% extends "ncpp/common/base.html" %}
+
+{% block main %}
+    
+	<div class="box" style="width:600px">
+    	<h2>Username Reminder</h2>
+        
+        <p/>
+	    <div class="instructions">
+	    	Please enter your email. Your username will be emailed to you.
+	    </div>
+        
+        {% if message %}
+        	<p/>
+            <div class="error">
+                {{ message }}
+            </div>
+        {% endif %}
+        
+        <fieldset class="fieldset_box">                
+            <form action="" method="post">          
+                {% csrf_token %}
+                
+                <table>
+                    <tr>
+                        <td class="head" nowrap="nowrap"><b>Email</b></td>
+                        <td class="long">{{ form.email }} 
+                                         &nbsp;<span class="error">{{ form.email.errors }}</span>
+                        </td>
+                    </tr>
+                </table>
+                
+                <div style="text-align:center">
+                    <input type="button" value="Cancel" onclick="window.location='{% url 'home' %}'"/>
+                    &nbsp; Please use only letters, numbers and the special characters: _ - + @ . &nbsp;
+                    <input type="submit" value="Submit" />
+                </div>     
+                
+            </form>
+        </fieldset>
+        
+    </div>
+        
+{% endblock %}
