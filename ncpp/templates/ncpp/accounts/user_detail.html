@@ -1,0 +1,40 @@
+<!-- Template page to display user's profile -->
+{% extends "ncpp/common/base.html" %}
+
+{% block main %}
+    
+    <div class="box" style="width:400px">
+        
+        <h2>User Profile</h2>
+        
+        <table>
+	        <tr>
+	         <th nowrap="nowrap"><b>First Name</b></th>
+	         <td class="long">{{ user.first_name }}</td>
+	        </tr>
+	        <tr>
+	            <th nowrap="nowrap"><b>Last Name</b></th>
+	            <td class="long">{{ user.last_name }}</td>
+	        </tr>
+	        <tr>
+	            <th nowrap="nowrap"><b>User Name</b></th>
+	            <td class="long">{{ user.username }}</td>
+	        </tr>
+	        <tr>
+	            <th nowrap="nowrap"><b>Email</b></th>
+	            <td class="long">{{ user.email }}</td>
+	        </tr>
+        </table>
+           	   	   	   	   			   	   				        
+        {% if request.user.id = user.id or request.user.is_staff %}
+            <div style="text-align:center">
+                <a href="{% url 'user_update' user.id %}">Update my profile</a>
+                &nbsp; &nbsp;
+                <a href="{% url 'user_update' user.id %}">Change my password</a>
+            </div>
+        {% endif %}	   
+	      
+   </div>
+        
+    
+{% endblock %}

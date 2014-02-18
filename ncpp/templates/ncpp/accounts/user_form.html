@@ -4,7 +4,12 @@
 {% block main %}
         
     <div class="box">
-    	<h2>Climate Translator Registration</h2>
+    
+    	{% if form.instance.id %}
+    		<h2>User Profile Update</h2>
+    	{% else %}
+    		<h2>Climate Translator Registration</h2>
+    	{% endif %}
     	    	
 	  	<form action="" method="post">        
 			{% csrf_token %}
@@ -26,30 +31,39 @@
 	            </tr>
 	            <tr>
 	                <th nowrap="nowrap">Email</th>
-	                <td>{{ form.email }}<br/>{{ form.email.errors }}</td>
+	                <td>{{ form.email }}<br/><span class="error">{{ form.email.errors }}</span></td>
 	            </tr>
-			    <tr>
-                    <th nowrap="nowrap">Password</th>
-                    <td>{{ form.password }} 
-                       <i>[ At least 6 characters, all characters are allowed ]</i>
-                       <br/><span class="error">{{ form.password.errors }}</span></td>
-                </tr>
-                <tr>
-                    <th nowrap="nowrap"><b>Confirm Password</td>
-                    <td>{{ form.confirm_password }} 
-                        <i>[ At least 6 characters, all characters are allowed ]</i>
-                        <br/><span class="error">{{ form.confirm_password.errors }}</span></td>
-                </tr>
-			    <tr>
-                    <td class="optional" nowrap="nowrap">Subscribe to Open Climate GIS Email List ?</td>
-                    <td class="long">{{ form.subscribed }} <i>[ 'ocg_info', low traffic list ]</i> 
-                    <br/><span class="error">{{ form.subscribed.errors }}</span></td>
-                </tr>                    		
+	            
+	            <!-- existing user --> 
+	            {% if form.instance.id %}	  
+                    {{ form.password.as_hidden }}
+                    {{ form.confirm_password.as_hidden }}	
+                    
+                <!-- new user -->                   
+	            {% else %}
+				    <tr>
+	                    <th nowrap="nowrap">Password</th>
+	                    <td>{{ form.password }} 
+	                       <i>[ At least 6 characters, all characters are allowed ]</i>
+	                       <br/><span class="error">{{ form.password.errors }}</span></td>
+	                </tr>
+	                <tr>
+	                    <th nowrap="nowrap"><b>Confirm Password</td>
+	                    <td>{{ form.confirm_password }} 
+	                        <i>[ At least 6 characters, all characters are allowed ]</i>
+	                        <br/><span class="error">{{ form.confirm_password.errors }}</span></td>
+	                </tr>
+				    <tr>
+	                    <td class="optional" nowrap="nowrap">Subscribe to Open Climate GIS Email List ?</td>
+	                    <td class="long">{{ form.subscribed }} <i>[ 'ocg_info', low traffic list ]</i> 
+	                    <br/><span class="error">{{ form.subscribed.errors }}</span></td>
+	                </tr>        
+                {% endif %}            		
 			</table>
 			
 			<div style="text-align:center">
 	        	<hr/>Required fields are in <b>bold</b>.
-	        	<br/>The following characters are not allowed: &lt; &gt; &amp; # % { } [ ] $ .
+	        	<br/>The following characters are not allowed: &lt; &gt; &amp; # % { } [ ] $
 	        	<br/>
 	            <input type="button" value="Cancel" onclick="window.location='{% url 'home' %}'"/>
 	            &nbsp; &nbsp;

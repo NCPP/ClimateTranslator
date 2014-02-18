@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.forms import ModelForm, Form
 from django.forms import CharField, BooleanField, PasswordInput, TextInput
+from django.core.exceptions import ObjectDoesNotExist
 import re
 
 # list of invalid characters in text fields
@@ -39,7 +40,8 @@ class UserForm(ModelForm):
         validate_password(self)
         
         # validate 'username' field
-        validate_username(self)
+        user_id = self.instance.id # flags an existing user
+        validate_username(self, user_id)
                 
         # validate all other fields against injection attacks
         for field in ['first_name','last_name', 'email']: 
@@ -64,7 +66,7 @@ def validate_password(form):
                 form._errors["confirm_password"] = form.error_class(["'Password' and 'Confirm Password' must match."])
 
 # method to validate the field 'username'
-def validate_username(form):
+def validate_username(form, user_id):
     
         cleaned_data = form.cleaned_data
     
@@ -76,10 +78,15 @@ def validate_username(form):
                 form._errors["username"] = form.error_class(["'Username' must not exceed 30 characters."])
             elif re.search(INVALID_USERNAME_CHARS, username):
                 form._errors["username"] = form.error_class(["'Username' can only contain letters, digits and @/./+/-/_"])
-                
-            # perform case-insensitive lookup of username, compare with id from form instance
-            if User.objects.filter(username__iexact=username).exists():
-                form._errors["username"] = form.error_class(["Username already taken in database"])
+                                
+            try:
+                # perform case-insensitive lookup of username, compare with id from form instance
+                user =  User.objects.all().get(username__iexact=username)
+                if user!=None and user.id != user_id:
+                    form._errors["username"] = form.error_class(["Username already taken in database"])
+            except ObjectDoesNotExist:
+                pass
+
                 
 # method to validate a generic field against bad characters
 def validate_field(form, field_name, field_value):

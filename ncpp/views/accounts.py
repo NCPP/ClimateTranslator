@@ -1,10 +1,11 @@
 from ncpp.forms import UserForm, UsernameReminderForm, PasswordResetForm
-from django.shortcuts import render_to_response, HttpResponseRedirect
+from django.shortcuts import render_to_response, HttpResponseRedirect, get_object_or_404
 from django.template import RequestContext
 from django.core.urlresolvers import reverse
 from ncpp.notification import notify, sendEmail
 from django.contrib.auth.models import User
 from django.contrib.auth import logout
+from django.contrib.auth.decorators import login_required
 
 # view that handles user registration
 def user_add(request):
@@ -50,6 +51,48 @@ def user_add(request):
         else:
             print "Form is invalid: %s" % form.errors
             return render_to_response('ncpp/accounts/user_form.html', {'form': form }, context_instance=RequestContext(request))
+        
+@login_required    
+def user_update(request, user_id):
+    
+    # security check
+    if str(request.user.id) != user_id:
+        raise Exception("User not authorized to change profile data")
+    
+    # get user
+    user = get_object_or_404(User, pk=user_id)
+    
+    if (request.method=='GET'):
+        
+        # pre-populate form, including value of extra field 'confirm_password'
+        form = UserForm(instance=user, initial={ 'confirm_password':user.password })
+                        
+        return render_to_response('ncpp/accounts/user_form.html', {'form': form }, context_instance=RequestContext(request))
+
+    else:
+        form = UserForm(request.POST, instance=user) # form with bounded data
+        
+        if form.is_valid():
+            
+            # update user
+            user = form.save()
+                                                
+            # redirect to user profile page
+            return HttpResponseRedirect(reverse('user_detail', kwargs={ 'user_id':user.id }))
+             
+        else: 
+            print "Form is invalid: %s" % form.errors
+            return render_to_response('ncpp/accounts/user_form.html', {'form': form }, context_instance=RequestContext(request))
+        
+# view to display user data
+# require login to limit exposure of user information
+@login_required 
+def user_detail(request, user_id):
+    
+    # load User object
+    user = get_object_or_404(User, pk=user_id)
+                
+    return render_to_response('ncpp/accounts/user_detail.html', context_instance=RequestContext(request))
         
 def username_reminder(request):
     

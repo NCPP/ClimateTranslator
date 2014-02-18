@@ -27,11 +27,12 @@
 			</span>
 			<span style="float:right">
 				{% if user.is_authenticated %}
-					Welcome, {{ user.username }}.
-					<a href="{% url 'logout' %}?next=/ncpp/">Logout</a>
+					Welcome, {{ user.username }}
+					| <a href="{% url 'user_detail' request.user.id %}">My Account</a>
+					| <a href="{% url 'logout' %}?next=/ncpp/">Logout</a>
 				{% else %}
 					<a href="{% url 'user_add' %}">Create Account</a>
-					&nbsp;<a href="{% url 'login' %}?next=/ncpp/">Login</a> 
+					| <a href="{% url 'login' %}?next=/ncpp/">Login</a> 
 				{% endif %}
 			</span>
 			<br/>
@@ -54,7 +55,7 @@
 			</h4>	
 			
 			<!-- version and NOAA mandatory links -->
-			ClimateTranslator v0.3.0 & OpenClimateGIS v0.07b-snapshot-05
+			ClimateTranslator v0.4.0 &amp; OpenClimateGIS v0.07b-snapshot-05
 			&nbsp;&nbsp;<a href="http://www.noaa.gov/privacy.html">Privacy Policy</a>
 			&nbsp;&nbsp;<a href="http://www.noaa.gov/disclaimer.html">Disclaimer</a>
 			&nbsp;&nbsp;<a href="http://www.usa.gov/">USA.gov</a>		    

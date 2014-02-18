@@ -32,6 +32,8 @@ urlpatterns = patterns('',
     
     # user management
     url(r'^user/add/$', 'ncpp.views.user_add', name='user_add' ),
+    url(r'^user/detail/(?P<user_id>\d+)/$', 'ncpp.views.user_detail', name='user_detail'),
+    url(r'^user/update/(?P<user_id>\d+)/$', 'ncpp.views.user_update', name='user_update' ),
     url(r'^password/reset/$', 'ncpp.views.password_reset', name='password_reset'),
     url(r'^username/reminder/$', 'ncpp.views.username_reminder', name='username_reminder'),
 
