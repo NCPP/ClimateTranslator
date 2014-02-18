@@ -17,7 +17,7 @@
 	            <td class="long">{{ user.last_name }}</td>
 	        </tr>
 	        <tr>
-	            <th nowrap="nowrap"><b>User Name</b></th>
+	            <th nowrap="nowrap"><b>Username</b></th>
 	            <td class="long">{{ user.username }}</td>
 	        </tr>
 	        <tr>
@@ -28,9 +28,9 @@
            	   	   	   	   			   	   				        
         {% if request.user.id = user.id or request.user.is_staff %}
             <div style="text-align:center">
-                <a href="{% url 'user_update' user.id %}">Update my profile</a>
+                <a href="{% url 'user_update' user.id %}">Update My Profile</a>
                 &nbsp; &nbsp;
-                <a href="{% url 'password_update' user.id %}">Change my password</a>
+                <a href="{% url 'password_update' user.id %}">Change My Password</a>
             </div>
         {% endif %}	   
 	      

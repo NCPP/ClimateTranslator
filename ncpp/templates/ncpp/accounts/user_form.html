@@ -6,9 +6,9 @@
     <div class="box">
     
     	{% if form.instance.id %}
-    		<h2>User Profile Update</h2>
+    		<h2>Updated User Profile</h2>
     	{% else %}
-    		<h2>Climate Translator Registration</h2>
+    		<h2>ClimateTranslator Registration</h2>
     	{% endif %}
     	    	
 	  	<form action="" method="post">        
@@ -24,9 +24,9 @@
 	                <td>{{ form.last_name }}<br/><span class="error">{{ form.last_name.errors }}</span></td>
 	            </tr>
 	            <tr>
-	                <th nowrap="nowrap">User Name</th>
+	                <th nowrap="nowrap">Username</th>
 	                <td>{{ form.username }}
-	                    <i>[ 5 to 30 characters, letters, digits and @/./+/-/_ only ]</i>
+	                    <i>5 to 30 characters, letters, digits and @/./+/-/_ only</i>
 	                    <br/><span class="error">{{ form.username.errors }}</span></td>
 	            </tr>
 	            <tr>
@@ -44,27 +44,29 @@
 				    <tr>
 	                    <th nowrap="nowrap">Password</th>
 	                    <td>{{ form.password }} 
-	                       <i>[ At least 6 characters, all characters are allowed ]</i>
+	                       <i>At least 6 characters, all characters are allowed</i>
 	                       <br/><span class="error">{{ form.password.errors }}</span></td>
 	                </tr>
 	                <tr>
 	                    <th nowrap="nowrap"><b>Confirm Password</td>
 	                    <td>{{ form.confirm_password }} 
-	                        <i>[ At least 6 characters, all characters are allowed ]</i>
+	                        <i>At least 6 characters. All characters are allowed.</i>
 	                        <br/><span class="error">{{ form.confirm_password.errors }}</span></td>
 	                </tr>
 				    <tr>
-	                    <td class="optional" nowrap="nowrap">Subscribe to Open Climate GIS Email List ?</td>
-	                    <td class="long">{{ form.subscribed }} <i>[ 'ocg_info', low traffic list ]</i> 
+	                    <td class="optional" nowrap="nowrap">Subscribe to ClimateTranslator Email List?</td>
+	                    <td class="long">{{ form.subscribed }} <i>Low-volume email list for periodic site upgrade notifications.</i> 
 	                    <br/><span class="error">{{ form.subscribed.errors }}</span></td>
 	                </tr>        
                 {% endif %}            		
 			</table>
 			
 			<div style="text-align:center">
+				<--
 	        	<hr/>Required fields are in <b>bold</b>.
 	        	<br/>The following characters are not allowed: &lt; &gt; &amp; # % { } [ ] $
 	        	<br/>
+	        	-->
 	            <input type="button" value="Cancel" onclick="window.location='{% url 'home' %}'"/>
 	            &nbsp; &nbsp;
 	            <input type="submit" value="Submit" />
