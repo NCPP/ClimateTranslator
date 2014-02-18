@@ -1,4 +1,4 @@
-from ncpp.forms import UserForm, UsernameReminderForm, PasswordResetForm
+from ncpp.forms import UserForm, UsernameReminderForm, PasswordResetForm, PasswordChangeForm
 from django.shortcuts import render_to_response, HttpResponseRedirect, get_object_or_404
 from django.template import RequestContext
 from django.core.urlresolvers import reverse
@@ -11,6 +11,7 @@ USER_FORM_PAGE = 'ncpp/accounts/user_form.html'
 USER_DETAIL_PAGE = 'ncpp/accounts/user_detail.html'
 USER_REMINDER_PAGE = 'ncpp/accounts/username_reminder.html'
 PASSWORD_RESET_PAGE = 'ncpp/accounts/password_reset.html'
+PASSWORD_CHANGE_PAGE = 'ncpp/accounts/password_change.html'
 
 # view that handles user registration
 def user_add(request):
@@ -83,7 +84,7 @@ def user_update(request, user_id):
             user = form.save()
                                                 
             # redirect to user profile page
-            return HttpResponseRedirect(reverse(USER_DETAIL_PAGE, kwargs={ 'user_id':user.id }))
+            return HttpResponseRedirect(reverse('user_detail', kwargs={ 'user_id':user.id }))
              
         else: 
             print "Form is invalid: %s" % form.errors
@@ -166,14 +167,14 @@ def password_reset(request):
                 logout(request)
                 
                 # user profile url
-                #url = reverse('user_detail', kwargs={ 'user_id': user.id })
-                #url = request.build_absolute_uri(url)
+                url = reverse('user_detail', kwargs={ 'user_id': user.id })
+                url = request.build_absolute_uri(url)
               
                 # send email to user
                 subject = "Password Reset"
                 message =  "Your new password has been set to: %s .\nFor security reasons, please change this password as soon as you log in."  % new_password
-                #message += "\nTo change your password, click on the 'My Profile' link on the top-right of each page, " \
-                #         + "\nor visit the following URL: %s" % url
+                message += "\nTo change your password, click on the 'My Account' link on the top-right of each page, " \
+                         + "\nor visit the following URL: %s" % url
                 notify(user, subject, message)
 
                 # redirect to login page with special message
@@ -189,6 +190,42 @@ def password_reset(request):
         else:
             print "Form is invalid: %s" % form.errors
             return render_to_response(PASSWORD_RESET_PAGE, {'form':form }, context_instance=RequestContext(request))
+        
+@login_required
+def password_update(request, user_id):
+    
+    # security check
+    if str(request.user.id) != user_id:
+        raise Exception("User not authorized to change password")
+    
+    # load user object
+    user = get_object_or_404(User, pk=user_id)
+    
+    if (request.method=='GET'):
+        
+        # create empty form
+        form = PasswordChangeForm(user)
+        return render_to_response(PASSWORD_CHANGE_PAGE, {'form': form }, context_instance=RequestContext(request))
+        
+    else:
+        form = PasswordChangeForm(user, request.POST)
+        
+        if form.is_valid():
+            
+            # change password in database
+            user.set_password(form.cleaned_data.get('password'))
+            user.save()            
+            
+            # logout user
+            logout(request)
+            
+            # redirect to login page with special message
+            message = 'Your password has been changed. Please login again.'
+            return HttpResponseRedirect(reverse('login')+"?message=%s" % message)
+
+        else:
+            print "Form is invalid: %s" % form.errors
+            return render_to_response(PASSWORD_CHANGE_PAGE, {'form': form }, context_instance=RequestContext(request))
 
 # function to notify the site administrators of a new user registration
 def notifyAdminsOfUserRegistration(user, subscribed):

@@ -1,5 +1,5 @@
 from django.db import models
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, check_password
 from django.forms import ModelForm, Form
 from django.forms import CharField, BooleanField, PasswordInput, TextInput
 from django.core.exceptions import ObjectDoesNotExist
@@ -120,5 +120,29 @@ class PasswordResetForm(Form):
         
         email = self.cleaned_data.get('email')
         validate_field(self, 'email', email)
+        
+        return self.cleaned_data
+    
+class PasswordChangeForm(Form):
+    
+    old_password = CharField(required=True, widget=PasswordInput())
+    password = CharField(required=True, widget=PasswordInput())
+    confirm_password = CharField(required=True, widget=PasswordInput())
+    
+    # override __init__ method to store the user object
+    def __init__(self, user, *args,**kwargs):
+        
+        super(PasswordChangeForm, self ).__init__(*args,**kwargs) # populates the post
+        self.user = user
+    
+    def clean(self):
+        
+        # check current password
+        old_password = self.cleaned_data.get('old_password')
+        if not check_password(old_password, self.user.password):
+            self._errors["old_password"] = self.error_class(["Wrong old password."])
+        
+        # validate 'password', 'confirm_password' fields
+        validate_password(self)
         
         return self.cleaned_data
