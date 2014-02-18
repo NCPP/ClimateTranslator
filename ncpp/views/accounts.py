@@ -7,6 +7,11 @@ from django.contrib.auth.models import User
 from django.contrib.auth import logout
 from django.contrib.auth.decorators import login_required
 
+USER_FORM_PAGE = 'ncpp/accounts/user_form.html'
+USER_DETAIL_PAGE = 'ncpp/accounts/user_detail.html'
+USER_REMINDER_PAGE = 'ncpp/accounts/username_reminder.html'
+PASSWORD_RESET_PAGE = 'ncpp/accounts/password_reset.html'
+
 # view that handles user registration
 def user_add(request):
 
@@ -21,7 +26,7 @@ def user_add(request):
         #                           'password':'',
         #                           'confirm_password:':'' }) 
         form = UserForm() # empty form with no data
-        return render_to_response('ncpp/accounts/user_form.html', {'form': form }, context_instance=RequestContext(request))
+        return render_to_response(USER_FORM_PAGE, {'form': form }, context_instance=RequestContext(request))
         
     # POST
     else:
@@ -50,7 +55,7 @@ def user_add(request):
         
         else:
             print "Form is invalid: %s" % form.errors
-            return render_to_response('ncpp/accounts/user_form.html', {'form': form }, context_instance=RequestContext(request))
+            return render_to_response(USER_FORM_PAGE, {'form': form }, context_instance=RequestContext(request))
         
 @login_required    
 def user_update(request, user_id):
@@ -67,7 +72,7 @@ def user_update(request, user_id):
         # pre-populate form, including value of extra field 'confirm_password'
         form = UserForm(instance=user, initial={ 'confirm_password':user.password })
                         
-        return render_to_response('ncpp/accounts/user_form.html', {'form': form }, context_instance=RequestContext(request))
+        return render_to_response(USER_FORM_PAGE, {'form': form }, context_instance=RequestContext(request))
 
     else:
         form = UserForm(request.POST, instance=user) # form with bounded data
@@ -78,11 +83,11 @@ def user_update(request, user_id):
             user = form.save()
                                                 
             # redirect to user profile page
-            return HttpResponseRedirect(reverse('user_detail', kwargs={ 'user_id':user.id }))
+            return HttpResponseRedirect(reverse(USER_DETAIL_PAGE, kwargs={ 'user_id':user.id }))
              
         else: 
             print "Form is invalid: %s" % form.errors
-            return render_to_response('ncpp/accounts/user_form.html', {'form': form }, context_instance=RequestContext(request))
+            return render_to_response(USER_FORM_PAGE, {'form': form }, context_instance=RequestContext(request))
         
 # view to display user data
 # require login to limit exposure of user information
@@ -92,13 +97,13 @@ def user_detail(request, user_id):
     # load User object
     user = get_object_or_404(User, pk=user_id)
                 
-    return render_to_response('ncpp/accounts/user_detail.html', context_instance=RequestContext(request))
+    return render_to_response(USER_DETAIL_PAGE, context_instance=RequestContext(request))
         
 def username_reminder(request):
     
     if (request.method=='GET'):
         form = UsernameReminderForm()
-        return render_to_response('ncpp/accounts/username_reminder.html', {'form':form }, context_instance=RequestContext(request))
+        return render_to_response(USER_REMINDER_PAGE, {'form':form }, context_instance=RequestContext(request))
     
     else:
         form = UsernameReminderForm(request.POST)
@@ -124,18 +129,18 @@ def username_reminder(request):
 
             # user not found
             else:            
-                return render_to_response('ncpp/accounts/username_reminder.html', 
+                return render_to_response(USER_REMINDER_PAGE, 
                                           {'form':form, 'message':'This email address cannot be found' }, context_instance=RequestContext(request))
             
         else:
             print "Form is invalid: %s" % form.errors
-            return render_to_response('ncpp/accounts/username_reminder.html', {'form':form }, context_instance=RequestContext(request))
+            return render_to_response(USER_REMINDER_PAGE, {'form':form }, context_instance=RequestContext(request))
         
 def password_reset(request):
     
     if (request.method=='GET'):
         form = PasswordResetForm()
-        return render_to_response('ncpp/accounts/password_reset.html', {'form':form }, context_instance=RequestContext(request))
+        return render_to_response(PASSWORD_RESET_PAGE, {'form':form }, context_instance=RequestContext(request))
     
     else:
         form = PasswordResetForm(request.POST)
@@ -177,13 +182,13 @@ def password_reset(request):
               
             # user not found
             except User.DoesNotExist: 
-                return render_to_response('ncpp/accounts/password_reset.html', 
+                return render_to_response(PASSWORD_RESET_PAGE, 
                                           {'form':form, 'message':'Invalid username/email combination' }, 
                                           context_instance=RequestContext(request))
                 
         else:
             print "Form is invalid: %s" % form.errors
-            return render_to_response('ncpp/accounts/password_reset.html', {'form':form }, context_instance=RequestContext(request))
+            return render_to_response(PASSWORD_RESET_PAGE, {'form':form }, context_instance=RequestContext(request))
 
 # function to notify the site administrators of a new user registration
 def notifyAdminsOfUserRegistration(user, subscribed):
