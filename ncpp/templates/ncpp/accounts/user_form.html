@@ -26,7 +26,7 @@
 	            <tr>
 	                <th nowrap="nowrap">Username</th>
 	                <td>{{ form.username }}
-	                    <i>5 to 30 characters, letters, digits and @/./+/-/_ only</i>
+	                    <i>(5 to 30 characters, letters, digits and @/./+/-/_ only.)</i>
 	                    <br/><span class="error">{{ form.username.errors }}</span></td>
 	            </tr>
 	            <tr>
@@ -44,18 +44,18 @@
 				    <tr>
 	                    <th nowrap="nowrap">Password</th>
 	                    <td>{{ form.password }} 
-	                       <i>At least 6 characters, all characters are allowed</i>
+	                       <i>(At least 6 characters. All characters allowed.)</i>
 	                       <br/><span class="error">{{ form.password.errors }}</span></td>
 	                </tr>
 	                <tr>
 	                    <th nowrap="nowrap"><b>Confirm Password</td>
 	                    <td>{{ form.confirm_password }} 
-	                        <i>At least 6 characters. All characters are allowed.</i>
+	                        <--<i>At least 6 characters. All characters are allowed.</i>-->
 	                        <br/><span class="error">{{ form.confirm_password.errors }}</span></td>
 	                </tr>
 				    <tr>
-	                    <td class="optional" nowrap="nowrap">Subscribe to ClimateTranslator Email List?</td>
-	                    <td class="long">{{ form.subscribed }} <i>Low-volume email list for periodic site upgrade notifications.</i> 
+	                    <td class="optional" nowrap="nowrap">Subscribe to Email List?</td>
+	                    <td class="long">{{ form.subscribed }} <i>(Low-volume list for periodic site upgrade notifications.)</i> 
 	                    <br/><span class="error">{{ form.subscribed.errors }}</span></td>
 	                </tr>        
                 {% endif %}            		
