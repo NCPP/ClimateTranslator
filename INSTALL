@@ -1,0 +1,20 @@
+DEPENDENCIES
+
+sudo pip install owslib
+sudo pip install sqlalchemy
+
+DEPLOYMENT
+
+python manage.py syncdb
+python manage.py migrate ncpp
+python manage.py collectstatic
+
+CONFIGURATION FILES
+/usr/local/ocgis/ocgis.cfg
+/usr/local/ocgis/ocgis_calc.json
+/usr/local/ocgis/ocgis_geometries.json
+
+
+OPERATION
+
+python manage.py runserver
