@@ -16,10 +16,10 @@
 {% endblock %}
 
 {% block main %}
-	
+
   <!-- do not display anything unless user is authenticated -->
   {% if user.is_authenticated %}
-		
+
 	<!-- body -->
 	<div class="box">
 		<h2>ClimateTranslator Workflow: Step {{ wizard.steps.step1 }} of {{ wizard.steps.count }}</h2>
@@ -27,20 +27,20 @@
 		<form action="" method="post">
 			{% csrf_token %}
 			{{ wizard.management_form }}
-			
-			
+
+
 			{% if wizard.steps.current == '0' %}
 				{% include "ncpp/climate_translator/form0.html" %}
 			{% endif %}
-			
+
 			{% if wizard.steps.current == '1' %}
 				{% include "ncpp/climate_translator/form1.html" %}
 			{% endif %}
-						
+
 			{% if wizard.steps.current == '2' %}
 				{% include "ncpp/climate_translator/form2.html" %}
 			{% endif %}
-			
+
 			<br/>
 			{% if wizard.steps.prev %}
 				<button name="wizard_goto_step" type="submit" value="{{ wizard.steps.first }}">Restart</button>
@@ -51,10 +51,45 @@
 			{% else %}
 				<input type="submit" value="Next &gt;"/>
 			{% endif %}
-		
+
 		</form>
 	</div>
-	
+
+	{% else %}
+
+		<div style="float: center; display: block; width: 950px; padding: 5px; margin: 10 auto;">
+
+			<p style="margin-top: 10px">
+			ClimateTranslator is in an the early stages of development.
+			The current interface is a step towards improved access to derived climate products such as indices of climate-related stress on the environment.
+			It is primarily an interface to <a href="https://earthsystemcog.org/projects/openclimategis/">OpenClimateGIS</a>.
+			</p>
+
+			<p style="margin-top: 10px">
+			ClimateTranslator allows users to:
+			<ul>
+				<li>Create spatial and temporal subsets of select climate datasets for a region and period of interest.</li>
+			    <li>Calculate derived products such as climate indices.</li>
+			    <li>Output results in widely used data formats that can be imported into GIS tools or spreadsheet programs.</li>
+			</ul>
+			</p>
+
+			<p style="margin-top: 10px">
+			To get started: <a href="{% url 'login' %}?next=/ncpp/">LOGIN</a> or <a href="{% url 'user_add' %}">CREATE AN ACCOUNT</a>.
+			</p>
+
+			<p style="margin-top: 10px">
+			For a more complete vision of ClimateTranslator see:
+			<a href="https://earthsystemcog.org/projects/climatetranslator/">https://earthsystemcog.org/projects/climatetranslator/</a>
+			</p>
+
+			<p style="margin-top: 10px">
+			To ask a quesiton, get involved, or request a feature, please contact
+			<a href="mailto:ct_support@list.woc.noaa.gov">ClimateTranslator support</a>.
+			</p>
+
+		</div>
+
 	{% endif %}
-	
+
 {% endblock %}

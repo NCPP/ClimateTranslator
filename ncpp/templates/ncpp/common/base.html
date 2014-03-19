@@ -3,63 +3,93 @@
 <html>
 
 	<head>
-	
+
 		<!-- CSS styles -->
 		<link rel="stylesheet" href="{{STATIC_URL}}ncpp/openlayers/dev/theme/default/style.css" type="text/css" />
 		<link rel="stylesheet" href="{{STATIC_URL}}ncpp/openlayers/dev/examples/style.css" type="text/css" />
 		{% include "ncpp/common/ncpp_css.html" %}
 		{% include "ncpp/common/ncpp_js.html" %}
-						
+
 		{% block extrahead %}
 			<!-- insert custom JavaScript code here -->
 		{% endblock %}
-		
+
 	</head>
 
 	<body>
-	
+
 		<!-- header -->
 		<div style="text-align:center; padding:10px">
-		
+
 			<!-- login/logout -->
 			<span style="float:left">
-				<a href="{% url 'home' %}">Home</a>
+				<img src="{{ STATIC_URL }}ncpp/img/ct_logo.png" height="50px" alt="Climate Translator logo"/>
 			</span>
 			<span style="float:right">
+				<a href="{% url 'home' %}">Home</a>
 				{% if user.is_authenticated %}
-					Welcome, {{ user.username }}
+					| Welcome, {{ user.username }}
 					| <a href="{% url 'user_detail' request.user.id %}">My Account</a>
 					| <a href="{% url 'logout' %}?next=/ncpp/">Logout</a>
 				{% else %}
-					<a href="{% url 'user_add' %}">Create Account</a>
-					| <a href="{% url 'login' %}?next=/ncpp/">Login</a> 
+					| <a href="{% url 'user_add' %}">Create Account</a>
+					| <a href="{% url 'login' %}?next=/ncpp/">Login</a>
 				{% endif %}
 			</span>
 			<br/>
 			<!-- title -->
-			<h1>NCPP (National Climate Predictions and Projections Platform)</h1>
-			
+			<h1><div style="padding:10px">Climate Translator</div></h1>
+
 		</div>
-	
+
 		<!-- main body content -->
 		{% block main %}
 			<!-- insert HTML body content here -->
 		{% endblock %}
-		
-		<!-- footer -->
-		<div style="text-align:center; padding:10px">		
-			<!-- acknowledgments -->
-			<h4>NCPP is a project of the National Oceanic and Atmospheric Administration (NOAA) 
-			    <br/>in collaboration with the National Center for Atmospheric Research (NCAR)
-			    and the United States Geological Survey (USGS).
-			</h4>	
-			
-			<!-- version and NOAA mandatory links -->
-			ClimateTranslator v0.3.0 &amp; OpenClimateGIS v0.07.1b
-			&nbsp;&nbsp;<a href="http://www.noaa.gov/privacy.html">Privacy Policy</a>
-			&nbsp;&nbsp;<a href="http://www.noaa.gov/disclaimer.html">Disclaimer</a>
-			&nbsp;&nbsp;<a href="http://www.usa.gov/">USA.gov</a>		    
-						
+
+		<p/>
+
+		<div>
+			<hr />
+
+			<table>
+				<tr>
+					<td>
+						<img src="{{ STATIC_URL }}ncpp/img/logo_ncpp.bmp" height="50px" alt="NCPP logo"/>
+					</td>
+					<td>
+						<div style="text-align:center; padding:10px">
+							<h4>
+								ClimateTranslator is being developed by the National Climate Predictions and Projections Platform (NCPP),
+								a project of the National Oceanic and Atmospheric Administration (NOAA),
+								in collaboration with the National Center for Atmospheric Research (NCAR).
+							</h4>
+		            	</div>
+		            	<div style="text-align:center; font-size: 8pt; padding-top: 0px; padding-bottom:10px;">
+				             ClimateTranslator v0.3.1
+							&nbsp;&nbsp; OpenClimateGIS v0.07.1b
+							&nbsp;&nbsp;<a href="http://www.commerce.gov/">Department of Commerce</a>
+							&nbsp;&nbsp;<a href="http://www.noaa.gov/">NOAA</a>
+							&nbsp;&nbsp;<a href="http://www.noaa.gov/privacy.html">Privacy Policy</a>
+							&nbsp;&nbsp;<a href="http://www.noaa.gov/foia/">FOIA</a>
+							&nbsp;&nbsp;<a href="http://www.noaa.gov/disclaimer.html">Disclaimer</a>
+							&nbsp;&nbsp;<a href="http://www.usa.gov/">USA.gov</a>
+						</div>
+					</td>
+					<td>
+						<table>
+							<tr>
+								<td>
+								<img src="{{ STATIC_URL }}ncpp/img/noaa_large.jpg" height="50px" alt="NOAA logo"/>
+								</td>
+								<td>
+								<img src="{{ STATIC_URL }}ncpp/img/NCAR.jpg" height="50px" alt="NCAR logo"/>
+								</td>
+							</tr>
+						</table>
+					</td>
+				</tr>
+			</table>
 		</div>
 
 	</body>
