@@ -42,7 +42,11 @@
 		</td></tr>
 		<tr><th nowrap="nowrap">Submission Date :</th><td>{{ job.submissionDateTime }}</td></tr>
 		<tr><th nowrap="nowrap">Last Update Date :</th><td>{{ job.updateDateTime }}</td></tr>
-		<tr><th nowrap="nowrap">Error:</th><td><span class="highlight">{{ job.error }}</span></td></tr>
+		{% if job.status == 'Process Succeeded' %}
+			<tr><th nowrap="nowrap">Error:</th><td>{{ job.error }}</td></tr>
+		{% else %}
+			<tr><th nowrap="nowrap">Error:</th><td><span class="highlight">{{ job.error }}</span></td></tr>
+		{% endif %}
 	
 	</table>
 	<p/>
