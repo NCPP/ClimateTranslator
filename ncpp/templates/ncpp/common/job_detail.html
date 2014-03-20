@@ -55,7 +55,7 @@
 	<a href="{% url 'jobs_list' user job.class_name %}">Jobs List</a>
 	&nbsp;
 	{% if job.status == 'Process Succeeded' %}
-		<a href="{{ job.url }}">Download Output</a>
+		<a id="output" href="{{ job.url }}">Download Output</a>
 	{% endif %}	
 		
   </div>

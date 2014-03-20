@@ -34,7 +34,7 @@
 						<td nowrap="nowrap">{{ job.status }}</td>
 						<td nowrap="nowrap">
 							{% if job.status == 'ProcessSucceeded' %}
-								<a href="{{ job.url }}">Download Output</a>
+								<a id="output" href="{{ job.url }}">Download Output</a>
 							{% else %}
 								<a href="{% url 'job_check' job.id job.class_name %}">Check Status</a>
 							{% endif %}
