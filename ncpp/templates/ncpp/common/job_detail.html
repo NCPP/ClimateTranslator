@@ -45,7 +45,7 @@
 		{% if job.status == 'Process Succeeded' %}
 			<tr><th nowrap="nowrap">Error:</th><td>{{ job.error }}</td></tr>
 		{% else %}
-			<tr><th nowrap="nowrap">Error:</th><td><span class="highlight">{{ job.error }}</span></td></tr>
+			<tr><th nowrap="nowrap"><span class="highlight">Error:</span></th><td><span class="highlight">{{ job.error }}</span></td></tr>
 		{% endif %}
 	
 	</table>
