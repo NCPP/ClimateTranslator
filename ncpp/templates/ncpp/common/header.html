@@ -1,31 +1,25 @@
-<div style="text-align:center; padding:10px">
-
-	<table>
-		<tr>
-			<td>
-				<img src="{{ STATIC_URL }}ncpp/img/ct_logo.png" height="50px" alt="Climate Translator logo"/>
-			</td>
-			<td width="100%">
-				<!-- title -->
-				<div class="title">Climate Translator</div>
-			</td>
-			<td nowrap="nowrap">
-			
-				<!-- login/logout -->
-				<a href="{% url 'home' %}">Home</a>
-				{% if user.is_authenticated %}
-					| Welcome, {{ user.username }}
-					| <a href="{% url 'user_detail' request.user.id %}">My Account</a>
-					| <a href="{% url 'logout' %}?next=/ncpp/">Logout</a>
-				{% else %}
-					| <a href="{% url 'user_add' %}">Create Account</a>
-					| <a href="{% url 'login' %}?next=/ncpp/">Login</a>
-				{% endif %}
-				
-			</td>
-		</tr>
-	</table>
+<div style="text-align:center; padding:5px">
 	
+	
+	<div style="float:right">
+		<!-- login/logout -->
+		<a href="{% url 'home' %}">Home</a>
+		{% if user.is_authenticated %}
+			| Welcome, {{ user.username }}
+			| <a href="{% url 'user_detail' request.user.id %}">My Account</a>
+			| <a href="{% url 'logout' %}?next=/ncpp/">Logout</a>
+		{% else %}
+			| <a href="{% url 'user_add' %}">Create Account</a>
+			| <a href="{% url 'login' %}?next=/ncpp/">Login</a>
+		{% endif %}
+	</div>		
+	
+	<div style="float:left">
+		<img src="{{ STATIC_URL }}ncpp/img/ct_logo.png" height="50px" alt="Climate Translator logo"/>
+	</div>
+	
+	<div class="title">Climate Translator</div>
+		
 	<hr/>
 
 </div>
