@@ -1,25 +1,27 @@
 <div class="header">
-	
-	
+
+
 	<div style="float:right">
 		<!-- login/logout -->
 		<a href="{% url 'home' %}">Home</a>
 		{% if user.is_authenticated %}
 			| Welcome, {{ user.username }}
 			| <a href="{% url 'user_detail' request.user.id %}">My Account</a>
+			<!-- NOTE: job type is hardwired for now -->
+			| <a href="{% url 'jobs_list' request.user 'ncpp.models.climate_translator.OpenClimateGisJob' %}">My Jobs</a>
 			| <a href="{% url 'logout' %}?next=/ncpp/">Logout</a>
 		{% else %}
 			| <a href="{% url 'user_add' %}">Create Account</a>
 			| <a href="{% url 'login' %}?next=/ncpp/">Login</a>
 		{% endif %}
-	</div>		
-	
+	</div>
+
 	<div style="float:left">
 		<img src="{{ STATIC_URL }}ncpp/img/ct_logo.png" height="50px" alt="Climate Translator logo"/>
 	</div>
-	
+
 	<div class="title">Climate Translator</div>
-		
+
 	<hr/>
 
 </div>
