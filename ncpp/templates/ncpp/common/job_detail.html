@@ -16,9 +16,9 @@
 
 	<h2>Job Identifier: {{ job.id }}</h2>
 	<p/>
-	
+
 	<table class="horizontalTable">
-		
+
 		<!-- job data -->
 		{% for tuple in job_data %}
 			{% if tuple.0 == 'Supporting Information' %}
@@ -40,17 +40,17 @@
 				<span class="highlight">Status</span> :</th><td><span class="highlight">{{ job.status }}</span>
 			{% endif %}
 		</td></tr>
-		<tr><th nowrap="nowrap">Submission Date :</th><td>{{ job.submissionDateTime }}</td></tr>
-		<tr><th nowrap="nowrap">Last Update Date :</th><td>{{ job.updateDateTime }}</td></tr>
+		<tr><th nowrap="nowrap">Submission Date :</th><td>{{ job.submissionDateTime }} MT</td></tr>
+		<tr><th nowrap="nowrap">Last Update Date :</th><td>{{ job.updateDateTime }} MT</td></tr>
 		{% if job.status == 'Process Succeeded' %}
 			<tr><th nowrap="nowrap">Error:</th><td>{{ job.error }}</td></tr>
 		{% else %}
 			<tr><th nowrap="nowrap"><span class="highlight">Error:</span></th><td><span class="highlight">{{ job.error }}</span></td></tr>
 		{% endif %}
-	
+
 	</table>
 	<p/>
-	
+
 	<!-- links -->
 	<a href="{% url 'job_request' job.id job.class_name %}">Display Job Request</a>
 	&nbsp;
@@ -60,8 +60,8 @@
 	&nbsp;
 	{% if job.status == 'Process Succeeded' %}
 		<a id="output" href="{{ job.url }}">Download Output</a>
-	{% endif %}	
-		
+	{% endif %}
+
   </div>
   <p/>
   <div style="text-align:center">This page will automatically reload every 5 seconds.</div>
