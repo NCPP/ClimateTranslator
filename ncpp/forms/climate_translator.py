@@ -13,105 +13,105 @@ import re
 INVALID_CHARS = "[^a-zA-Z0-9_\-]"
 
 class DynamicChoiceField(ChoiceField):
-   """ Class that extends the ChoiceField to suppress validation on valid choices, 
-       to support the case when they are assigned dynamically."""
-       
-   def validate(self, value):
-       """This method only checks that a value exist, not which value it is."""
-       
-       if self.required and not value:
-           raise ValidationError(self.error_messages['required'])
-       
+    """ Class that extends the ChoiceField to suppress validation on valid choices,
+        to support the case when they are assigned dynamically."""
+
+    def validate(self, value):
+        """This method only checks that a value exist, not which value it is."""
+
+        if self.required and not value:
+            raise ValidationError(self.error_messages['required'])
+
 class DynamicMultipleChoiceField(MultipleChoiceField):
-   """ Class that extends MultipleChoiceField to suppress validation on valid choices, 
-       to support the case when they are assigned dynamically."""
-       
-   def validate(self, value):
-       """This method only checks that a value exist, not which value it is."""
-       
-       if self.required and not value:
-           raise ValidationError(self.error_messages['required'])
+    """ Class that extends MultipleChoiceField to suppress validation on valid choices,
+        to support the case when they are assigned dynamically."""
+
+    def validate(self, value):
+        """This method only checks that a value exist, not which value it is."""
+
+        if self.required and not value:
+            raise ValidationError(self.error_messages['required'])
 
 class ClimateTranslatorForm1(Form):
-    '''Form that backs up the first selection page. 
+    '''Form that backs up the first selection page.
        The argument passed to ocgisChoices must correspond to a valid key in the file OCGIS configuration file.'''
-           
+
     # data selection
     data_type = ChoiceField(choices=[ NO_VALUE_OPTION ] + ocgisDatasets.getDataTypes(), required=True,
                                  widget=Select(attrs={'onchange': 'getDatasets(this);'}))
-    
+
     # The following widgets have no initial choices. The choices are assigned dynamically through Ajax
-    
+
     # 1) variable or index selection
     long_name = DynamicChoiceField(choices=[ NO_VALUE_OPTION ], required=False,
                                    widget=Select(attrs={'onchange': 'getDatasets(this);'}))
-    
+
     time_frequency = DynamicChoiceField(choices=[ NO_VALUE_OPTION ], required=False,
                                         widget=Select(attrs={'onchange': 'getDatasets(this);'}))
-    
+
     dataset_category = DynamicChoiceField(choices=[ NO_VALUE_OPTION ], required=False,
                                           widget=Select(attrs={'onchange': 'getDatasets(this);'}))
-    
+
     dataset = DynamicChoiceField(choices=[ NO_VALUE_OPTION ], required=False,
                                  widget=Select(attrs={'onchange': 'getDatasets(this);'}) )
-    
+
     # 2) package selection
     dataset_category2 = DynamicChoiceField(choices=[ NO_VALUE_OPTION ], required=False,
                                            widget=Select(attrs={'onchange': 'getDatasets(this);'}))
-    
+
     package_name = DynamicChoiceField(choices=[ NO_VALUE_OPTION ], required=False,
                                       widget=Select(attrs={'onchange': 'getDatasets(this);'}))
 
-     
+
     # geometry selection
-    geometry_category = ChoiceField(choices=ocgisGeometries.getCategories(), required=False, 
+    geometry_category = ChoiceField(choices=ocgisGeometries.getCategories(), required=False,
                                     widget=Select(attrs={'onchange': 'populateGeometrySubCategories();'}))
-    geometry_subcategory = DynamicChoiceField(choices=[ NO_VALUE_OPTION ], required=False, 
+    geometry_subcategory = DynamicChoiceField(choices=[ NO_VALUE_OPTION ], required=False,
                                           widget=Select(attrs={'onchange': 'populateGeometryIds();'}))
     geometry_id = DynamicMultipleChoiceField(choices=[ NO_VALUE_OPTION ], required=False, widget=SelectMultiple(attrs={'size':6}))
-    
+
     latmin = FloatField(required=False, min_value=-90, max_value=+90, widget=TextInput(attrs={'size':6}))
     latmax = FloatField(required=False, min_value=-90, max_value=+90, widget=TextInput(attrs={'size':6}))
     lonmin = FloatField(required=False, min_value=-180, max_value=+180, widget=TextInput(attrs={'size':6}))
     lonmax = FloatField(required=False, min_value=-180, max_value=+180, widget=TextInput(attrs={'size':6}))
-    
+
     lat = FloatField(required=False, min_value=-90, max_value=+90, widget=TextInput(attrs={'size':6}))
-    lon = FloatField(required=False, min_value=-180, max_value=+180, widget=TextInput(attrs={'size':6}))   
-    
+    lon = FloatField(required=False, min_value=-180, max_value=+180, widget=TextInput(attrs={'size':6}))
+
     agg_selection = BooleanField(initial=False, required=False)
-    
+
     spatial_operation = ChoiceField(required=True, choices=ocgisChoices(Config.SPATIAL_OPERATION).items(),
                                     widget=RadioSelect, initial='intersects')
 
-    
+
     datetime_start = DateTimeField(required=False, widget=TextInput(attrs={'size':24}))
     datetime_stop = DateTimeField(required=False, widget=TextInput(attrs={'size':24}))
-    
+
     timeregion_month = MultipleChoiceField(choices=MONTH_CHOICES, required=False, widget=CheckboxSelectMultiple)                                    #initial = range(12))
     timeregion_year = CharField(required=False, widget=TextInput(attrs={'size':50}))
-    
+
     def _validateFields(self, field_names):
         '''Method for bulk validation of a list of field.'''
         for field_name in field_names:
             if not hasText( self.cleaned_data[field_name] ):
                 self._errors[field_name] = self.error_class(["This field is required"])
-        
+
     # custom validation
     def clean(self):
-        
+
         # invoke superclass cleaning method
         super(ClimateTranslatorForm1, self).clean()
-        
+
         # validate data selection
         if 'data_type' in self.cleaned_data and hasText( self.cleaned_data['data_type']):
             data_type = self.cleaned_data['data_type']
             if data_type == 'variable':
                 self._validateFields(['long_name', 'time_frequency', 'dataset_category', 'dataset'])
             elif data_type == 'package':
-                self._validateFields(['dataset_category2', 'package_name'])    
+                self._validateFields(['dataset_category2', 'package_name'])
         else:
             self._errors['data_type'] = self.error_class(["Please select a Data Type"])
-        
+
         # validate geometry
         ngeometries = 0
         geometry = None
@@ -127,31 +127,31 @@ class ClimateTranslatorForm1(Form):
             geometry = 'box'
         if (   ('lat' in self.cleaned_data and hasText(self.cleaned_data['lat']))
             or ('lon' in self.cleaned_data and hasText(self.cleaned_data['lon'])) ):
-             ngeometries += 1
-             geometry = 'point'
+            ngeometries += 1
+            geometry = 'point'
         if ngeometries > 1:
-            self._errors["geometry_category"] = self.error_class(["Please choose only one geometry: shape, bounding box or point."]) 
-       
+            self._errors["geometry_category"] = self.error_class(["Please choose only one geometry: shape, bounding box or point."])
+
         elif ngeometries==1:
             if geometry =='shape':
-              if not hasText(self.cleaned_data['geometry_category']):
-                  self._errors["geometry_category"] = self.error_class(["Please select a geometry category."]) 
-              if not hasText(self.cleaned_data['geometry_subcategory']):
-                  self._errors["geometry_subcategory"] = self.error_class(["Please select a geometry sub-category."]) 
-              if len(self.cleaned_data['geometry_id'])==0:
-                  self._errors["geometry_id"] = self.error_class(["Please select a geometry shape."])
+                if not hasText(self.cleaned_data['geometry_category']):
+                    self._errors["geometry_category"] = self.error_class(["Please select a geometry category."])
+                if not hasText(self.cleaned_data['geometry_subcategory']):
+                    self._errors["geometry_subcategory"] = self.error_class(["Please select a geometry sub-category."])
+                if len(self.cleaned_data['geometry_id'])==0:
+                    self._errors["geometry_id"] = self.error_class(["Please select a geometry shape."])
             elif geometry == 'box':
-                if (   not 'latmin' in self.cleaned_data or not hasText(self.cleaned_data['latmin']) 
+                if (   not 'latmin' in self.cleaned_data or not hasText(self.cleaned_data['latmin'])
                     or not 'latmax' in self.cleaned_data or not hasText(self.cleaned_data['latmax'])
-                    or not 'lonmin' in self.cleaned_data or not hasText(self.cleaned_data['lonmin']) 
+                    or not 'lonmin' in self.cleaned_data or not hasText(self.cleaned_data['lonmin'])
                     or not 'lonmax' in self.cleaned_data or not hasText(self.cleaned_data['lonmax']) ):
-                    self._errors["latmin"] = self.error_class(["Invalid bounding box latitude or longitude values."])                    
+                    self._errors["latmin"] = self.error_class(["Invalid bounding box latitude or longitude values."])
             elif geometry == 'point':
                 if not 'lat' in self.cleaned_data or not hasText(self.cleaned_data['lat']):
-                    self._errors["lat"] = self.error_class(["Invalid point latitude."])   
+                    self._errors["lat"] = self.error_class(["Invalid point latitude."])
                 if not 'lon' in self.cleaned_data or not hasText(self.cleaned_data['lon']):
-                     self._errors["lon"] = self.error_class(["Invalid point longitude."])   
-                     
+                    self._errors["lon"] = self.error_class(["Invalid point longitude."])
+
         # validate time range
         datetime_start = None
         datetime_stop = None
@@ -169,8 +169,8 @@ class ClimateTranslatorForm1(Form):
             time_range = [datetime_start, datetime_stop]
         else:
             time_range = None
-                
-        # validate years time region 
+
+        # validate years time region
         time_region = {}
         if 'timeregion_year' in self.cleaned_data and hasText(self.cleaned_data['timeregion_year']):
             years = str(self.cleaned_data['timeregion_year'].replace(" ","")) # remove blanks
@@ -188,7 +188,7 @@ class ClimateTranslatorForm1(Form):
                         self._errors["timeregion_year"] = self.error_class(["Invalid year selection"])
                         break
                     time_region['year'].append( int(year) )
-        
+
         # validate months time region
         if 'timeregion_month' in self.cleaned_data and len(self.cleaned_data['timeregion_month'])>0:
             time_region['month'] = map(int, self.cleaned_data['timeregion_month'])
@@ -197,18 +197,18 @@ class ClimateTranslatorForm1(Form):
         if time_range is not None and len(time_region)>0:
             if not validate_time_subset(time_range, time_region):
                 self._errors["timeregion_year"] = self.error_class(["Time Range must contain Time Region."])
-                    
-         
+
+
         if not self.is_valid():
             print 'VALIDATION ERRORS: %s' % self.errors
-        
+
         # return cleaned data
         return self.cleaned_data
 
-    
+
 class ClimateTranslatorForm2(Form):
     '''Form that backs up the second selection page.'''
-        
+
     calc = ChoiceField(choices=ocgisCalculations.getChoices(), required=False, initial='none',
                        widget=Select(attrs={'onchange': 'populateParameters(); displayTemporalGrouping()'}))
     par1 = CharField(required=False, widget=TextInput(attrs={'size':6}), initial="")
@@ -217,23 +217,24 @@ class ClimateTranslatorForm2(Form):
     calc_group = ChoiceField(choices=ocgisChoices(Config.CALCULATION_GROUP).items(), required=False, widget=RadioSelect, initial='month,year')
     calc_raw = BooleanField(initial=False, required=False)
     aggregate = BooleanField(initial=False, required=False)
-    output_format = ChoiceField(choices=ocgisChoices(Config.OUTPUT_FORMAT).items(), required=True, initial='csv')
+    #output_format = ChoiceField(choices=ocgisChoices(Config.OUTPUT_FORMAT).items(), required=True, initial='csv')
+    output_format = DynamicChoiceField(choices=[ NO_VALUE_OPTION ], required=True, initial='csv')
     prefix = CharField(required=True, widget=TextInput(attrs={'size':20}), initial='ocgis_output')
     with_auxiliary_files = BooleanField(initial=True, required=False)
-    
+
     # custom validation
     def clean(self):
-        
+
         # invoke superclass cleaning method
         super(ClimateTranslatorForm2, self).clean()
-        
+
         # validate calculation
         if 'calc' in self.cleaned_data and hasText(self.cleaned_data['calc']) and self.cleaned_data['calc'].lower() != 'none':
-            
+
             # calculation group must be selected
             if len( self.cleaned_data['calc_group'] ) == 0:
-                self._errors["calc_group"] = self.error_class(["Calculation Group(s) not selected."]) 
-            
+                self._errors["calc_group"] = self.error_class(["Calculation Group(s) not selected."])
+
             # validate keyword values
             func = self.cleaned_data['calc']
             calc = ocgisCalculations.getCalc(func)
@@ -249,15 +250,15 @@ class ClimateTranslatorForm2(Form):
                     elif keyword["type"] == "string":
                         if "values" in keyword:
                             if not value.lower() in keyword["values"]:
-                                self._errors[parN] = self.error_class(["Invalid string value for keyword: "+keyword["name"]])     
-                                               
+                                self._errors[parN] = self.error_class(["Invalid string value for keyword: "+keyword["name"]])
+
         # if no calculation is selected, there cannot be any temporal grouping
         else:
             self.cleaned_data['calc_group'] = None
-            
+
         if 'prefix' in self.cleaned_data and re.search(INVALID_CHARS, self.cleaned_data['prefix']):
             self._errors['prefix'] = self.error_class(["The prefix contains invalid characters."])
-        
+
         if not self.is_valid():
             print 'VALIDATION ERRORS: %s' % self.errors
 
@@ -265,8 +266,8 @@ class ClimateTranslatorForm2(Form):
         return self.cleaned_data
 
 
-    
+
 class ClimateTranslatorForm3(Form):
     '''Dummy form that presents a summary of all previous choices'''
-    
+
     pass

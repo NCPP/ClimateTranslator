@@ -4,53 +4,71 @@
 <script language="javascript">
 
     var TEMPORAL_GROUPING = "temporal_grouping";
-    
+
     // function called every time the window is loaded.
     function init() {
-    	populateParameters(); 
+    	populateParameters();
     	displayTemporalGrouping();
+    	populateOutputFormats();
     }
-    
+
     function displayTemporalGrouping() {
-    	
+
     	calcSelect = document.getElementById("id_1-calc");
     	if (calcSelect.value!=null && calcSelect.value!='') {
     		setVisibility(TEMPORAL_GROUPING, true);
     	} else {
     		setVisibility(TEMPORAL_GROUPING, false);
     	}
-    	
+
+    }
+
+	// function that sets the available output formats based on the selected data_type
+    function populateOutputFormats() {
+		outSelect = document.getElementById("id_1-output_format");
+		outSelect.options.length = 0;
+		var i = 0;
+		var selectedIndex = 0;
+		{% for value, name in output_formats %}
+			outSelect.options[outSelect.options.length ] = new Option('{{name}}','{{value}}');
+			{% if wizard.form.output_format.value = value %}
+				selectedIndex = i;
+			{% endif %}
+			i += 1;
+		{% endfor %}
+		// preserve user selection
+		outSelect.options[selectedIndex].selected = true;
     }
 
 	function populateParameters() {
-		
+
 		// parse calculations JSON from server
 		calculations = JSON.parse("{{calculations}}".unescapeHtml());
-		
+
 		calcSelect = document.getElementById("id_1-calc");
-		var html1 = ""	
+		var html1 = ""
 		var html2 = ""
 		if (calcSelect.value!=null && calcSelect.value!='') {
-		
-			// update calculation description					
+
+			// update calculation description
 			var calc = calculations[calcSelect.value]
 			calcDescription = document.getElementById("calcDescription")
 			for (i=0; i<calc["description"].length; i++) {
 				if (i==0) html1 += "<b>"+calc["description"][i] +"</b></br>";
 				else html1 += calc["description"][i] +"</br>";
 			}
-		
+
 			// update calculation parameters
-			// parameter 1: <input id="id_1-par1" type="text" name="1-par1" size="6" />			
+			// parameter 1: <input id="id_1-par1" type="text" name="1-par1" size="6" />
 			calcParameters = document.getElementById("calcParameters");
 			if (calc["keywords"]!=null) {
 				html2 += "<div style='float:left'><table>"
-				for (var i=0; i<calc["keywords"].length; i++) {					
+				for (var i=0; i<calc["keywords"].length; i++) {
 					var keyword = calc["keywords"][i];
 					var name = keyword["name"];
 					var type = keyword["type"];
 					var values = keyword["values"];
-					
+
 					html2 += "<tr>";
 					if (i==0) html2 += "<td>Parameters:</td>";
 					else html2 += "<td>&nbsp;</td>";
@@ -72,7 +90,7 @@
 						}
 					}
 					if (values) {
-						// use select widget						
+						// use select widget
 						html2 += '<td><select id="id_1-par'+j+'" name="1-par'+j+'">';
 						for (var k=0; k<values.length; k++) {
 							var selected = "";
@@ -89,29 +107,29 @@
 				}
 				html2 += "</table></div>"
 			}
-		
+
 		} // calcultaion != None
-		
+
 		calcDescription.innerHTML = html1;
 		calcParameters.innerHTML = html2;
-		
+
 	}
-	
+
 	// load parameters widget every time
 	window.onload = init;
 
 </script>
 
 <fieldset class="fieldset_box">
-	<legend class="fieldset_legend">Calculation (Optional)</legend>	
+	<legend class="fieldset_legend">Calculation (Optional)</legend>
 	If no calculation is selected, the raw data will be returned.
 	<p/>&nbsp;
-         
+
 	<table class="horizontalTable">
 		<tr>
 			<th nowrap="nowrap"><a href="http://ncpp.github.io/ocgis/appendix.html#aggregate-union" target="_blank">Spatial Average</a>:</th>
 			<td>{{ wizard.form.aggregate }}</td>
-			<td>Return one value / time series of the statistic for the area of interest based on average of all intersecting grid cells (area-weighted). 
+			<td>Return one value / time series of the statistic for the area of interest based on average of all intersecting grid cells (area-weighted).
 				Otherwise, statistic will be reported separately for each grid cell.
 				<br/><span class="error">{{ wizard.form.aggregate.errors }}</span>
 			</td>
@@ -132,7 +150,7 @@
 			    </div>
 			 </td>
 		</tr>
-		
+
 		<tr>
 			<td colspan="3">
 				<div id="temporal_grouping" style="text-align: left; float: left;">
@@ -160,7 +178,7 @@
 </fieldset>
 
 <fieldset class="fieldset_box">
-	<legend class="fieldset_legend">Output Format</legend>	
+	<legend class="fieldset_legend">Output Format</legend>
 	<table class="horizontalTable">
 		<tr>
 			<th nowrap="nowrap"><b>Output Format:</b></th>
@@ -177,6 +195,6 @@
 			<td>{{ wizard.form.with_auxiliary_files }} &nbsp;Return a compressed file including auxiliary metadata files.
 			<br/><span class="error">{{ wizard.form.with_auxiliary_files.errors }}</span></td>
 		</tr>
-		
+
 	</table>
 </fieldset>
