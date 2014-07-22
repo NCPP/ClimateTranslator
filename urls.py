@@ -1,8 +1,8 @@
-from django.conf.urls.defaults import *
+from django.conf.urls import patterns, url, include
+from django.contrib import admin
 from django.views.generic import RedirectView
 
-# Uncomment the next two lines to enable the admin:
-from django.contrib import admin
+
 admin.autodiscover()
 
 urlpatterns = patterns('',
